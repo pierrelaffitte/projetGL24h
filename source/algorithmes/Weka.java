@@ -5,21 +5,17 @@ import java.util.Random;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 import weka.classifiers.evaluation.Evaluation;
-import weka.classifiers.trees.J48;
+import weka.classifiers.trees.*;
 
-public class Weka {
+public class Weka implements algoInterface {
 
-	public static Instances importer(String file) throws Exception {
-		DataSource source = new DataSource("resources/iris.csv");
-		Instances data = source.getDataSet();
-		if (!file.equals("resources/iris.csv")) {
-			try {
-				source = new DataSource(file);
-				data = source.getDataSet();
-			}catch (Exception e) {
-				System.out.println("Le fichier "+file+" n'existe pas. \n"+
-			"le fichier iris.csv a été chargé à la place.");
-			}
+	public Instances importer(String file) {
+		Instances data = null;
+		try {
+			DataSource source = new DataSource(file);
+			data = source.getDataSet();
+		}catch (Exception e) {
+			System.out.println("Le fichier "+file+" n'existe pas. \n");
 		}
 		return data;
 	}
@@ -29,7 +25,8 @@ public class Weka {
 		int seed = 1; //graine pour la reproductibilité des résultats
 		
 		String file = "resources/iris.csv";
-		Instances data = Weka.importer(file);
+		Weka weka = new Weka();
+		Instances data = weka.importer(file);
 		data.setClassIndex(data.numAttributes()-1);
 
 		// le choix du modele : J48 = C4.5
@@ -70,6 +67,28 @@ public class Weka {
 
 		tree.buildClassifier(train);
 		// evaluate on test echantillon
+		Evaluation eval = new Evaluation(test);
+		eval.evaluateModel(tree, test);
+		System.out.println(eval.toSummaryString());
+	}
+
+	public Object fit(Instances train) throws Exception {
+		// TODO Auto-generated method stub
+		J48 tree = new J48();
+		tree.buildClassifier(train);
+		return null;
+	}
+
+	public Object[] split(Instances data) {
+		// TODO Auto-generated method stub
+		Instances[] res = new Instances[2];
+		res[0] = data.trainCV(5, 4);
+		res[1] = data.testCV(5, 4);
+		return res;		
+	}
+
+	public void evaluate(Object tree, Instances test) {
+		// TODO Auto-generated method stub
 		Evaluation eval = new Evaluation(test);
 		eval.evaluateModel(tree, test);
 		System.out.println(eval.toSummaryString());
