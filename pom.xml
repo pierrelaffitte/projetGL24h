@@ -10,6 +10,11 @@
 			<artifactId>renjin-script-engine</artifactId>
 			<version>0.8.2527</version>
 		</dependency>
+		<dependency>
+    		<groupId>nz.ac.waikato.cms.weka</groupId>
+    		<artifactId>weka-stable</artifactId>
+   			<version>3.8.0</version>
+		</dependency>
 	</dependencies>
 	<repositories>
 		<repository>
