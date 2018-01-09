@@ -65,7 +65,6 @@ public class Weka {
 			double correct = eval.pctCorrect();
 			averagecorrect = averagecorrect + correct;
 			System.out.println("the "+n+"th cross validation:"+eval.toSummaryString());
-
 		}
 		System.out.println("the average correction rate of "+fold+" cross validation: "+averagecorrect/fold);
 
