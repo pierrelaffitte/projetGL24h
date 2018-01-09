@@ -11,9 +11,15 @@
 			<version>0.8.2527</version>
 		</dependency>
 		<dependency>
-    		<groupId>nz.ac.waikato.cms.weka</groupId>
-    		<artifactId>weka-stable</artifactId>
-   			<version>3.8.0</version>
+			<groupId>nz.ac.waikato.cms.weka</groupId>
+			<artifactId>weka-stable</artifactId>
+			<version>3.8.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-csv -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-csv</artifactId>
+			<version>1.4</version>
 		</dependency>
 	</dependencies>
 	<repositories>
