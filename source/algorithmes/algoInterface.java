@@ -2,7 +2,9 @@ package algorithmes;
 
 public interface algoInterface {
 
-	public void importer(String file);
-	public void fit(String file);
-	public void evaluate(String file);
+	public Object importer(String file);
+	public Object fit(Object o);
+	public Object split(Object o);
+	public void evaluate(Object o);
+
 }
