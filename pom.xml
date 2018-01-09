@@ -31,6 +31,11 @@
 			<artifactId>spark-core_2.10</artifactId>
 			<version>1.3.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.renjin.cran</groupId>
+			<artifactId>rpart</artifactId>
+			<version>4.1-11-b27</version>
+		</dependency>
 	</dependencies>
 	<repositories>
 		<repository>
