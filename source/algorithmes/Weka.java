@@ -43,6 +43,7 @@ public class Weka {
 		if (randData.classAttribute().isNominal())
 			randData.stratify(fold);
 		double averagecorrect = 0;
+		
 
 		// CV
 		for (int n=0;n<fold;n++){
