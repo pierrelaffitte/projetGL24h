@@ -10,6 +10,11 @@ n<-nrow(data)
 # Nombre de blocs
 K<-10
 
+# Échantillons
+test_rows = sample.int(nrow(data), nrow(data)/4)
+test = data[test_rows,]
+base = data[-test_rows,]
+  
 # Tirer une permutation
 alea=runif(n)
 rang=rank(alea)
@@ -25,10 +30,7 @@ table(block)
 
 err.cv=numeric(0)
 for(k in 1:K){
-  test_rows = sample.int(nrow(data), nrow(data)/4)
-  test = data[test_rows,]
-  base = data[-test_rows,]
-  CART=rpart(Species~.,data[block!=k,], method="class",
+  CART=rpart(Species~.,base[block!=k,], method="class",
              parms=list( split='gini'))
   predCART=predict(CART,test,type="class")
   matCART=table(test$Species,predCART)
