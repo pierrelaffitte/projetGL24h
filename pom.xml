@@ -21,6 +21,11 @@
 			<artifactId>commons-csv</artifactId>
 			<version>1.4</version>
 		</dependency>
+		<dependency>
+			<groupId>org.renjin.cran</groupId>
+			<artifactId>rpart</artifactId>
+			<version>4.1-11-b27</version>
+		</dependency>
 	</dependencies>
 	<repositories>
 		<repository>
