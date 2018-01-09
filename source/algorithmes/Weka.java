@@ -44,15 +44,24 @@ public class Weka {
 			randData.stratify(fold);
 		double averagecorrect = 0;
 		
+		// split train and test
+		System.out.println(randData.size());
+		Instances train = randData.trainCV(5, 4);
+		Instances test = randData.testCV(5, 4);		
+		System.out.println(train);
+		System.out.println("\n\n\n");
+		System.out.println(test);
+		System.out.println("\n\n\n");
 
+		
 		// CV
 		for (int n=0;n<fold;n++){
 			Evaluation eval = new Evaluation(randData);
-			Instances train = randData.trainCV(fold, n); // construit train sur data sauf nieme fold
-			Instances test = randData.testCV(fold, n); // construit test sur data avec nieme fold
+			Instances app = train.trainCV(fold, n); // construit train sur data sauf nieme fold
+			Instances val = train.testCV(fold, n); // construit test sur data avec nieme fold
 
-			tree.buildClassifier(train);
-			eval.evaluateModel(tree, test);
+			tree.buildClassifier(app);
+			eval.evaluateModel(tree, val);
 			double correct = eval.pctCorrect();
 			averagecorrect = averagecorrect + correct;
 			System.out.println("the "+n+"th cross validation:"+eval.toSummaryString());
@@ -60,6 +69,11 @@ public class Weka {
 		}
 		System.out.println("the average correction rate of "+fold+" cross validation: "+averagecorrect/fold);
 
+		tree.buildClassifier(train);
+		// evaluate on test echantillon
+		Evaluation eval = new Evaluation(test);
+		eval.evaluateModel(tree, test);
+		System.out.println(eval.toSummaryString());
 	}
 
 }
