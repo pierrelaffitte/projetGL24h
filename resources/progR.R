@@ -1,3 +1,5 @@
+set.seed(1)
+
 library(rpart)
 
 # Données
