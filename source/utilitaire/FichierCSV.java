@@ -38,9 +38,10 @@ public class FichierCSV {
 		CSVParser in2 = CSVFormat.DEFAULT.withHeader().withDelimiter(delimiter)
 				.parse(in);
 		List<CSVRecord> records = in2.getRecords();
+		int taille = records.size();
 		
 		// Génération des nombres aléa
-		List<Integer> nbAlea = generateNbAlea(records);
+		List<Integer> nbAlea = generateNbAlea(taille);
 		
 		// Découpage du fichier csv en 2 listes de CSV record
 		for(int i=0; i<records.size(); i++) {
@@ -62,18 +63,18 @@ public class FichierCSV {
 		writeCSV("resources/train_iris.csv",headers,fichierApp);
 	}
 	
-	public List<Integer> generateNbAlea(List<CSVRecord> records){
+	public List<Integer> generateNbAlea(int taille){
 		List<Integer> nbAlea = new ArrayList<Integer>();
 		
 		// Graine
 		Random generator = new Random(1);
 				
 		// Détermine la taille de l'échantillon test
-		int nbLigneTest = (int) (0.2 * records.size());
+		int nbLigneTest = (int) (0.2 * taille);
 				
 		// Génération des nombres aléatoires
 		while(nbAlea.size() < nbLigneTest) {
-			int alea = (int) (generator.nextInt(records.size()+1));
+			int alea = (int) (generator.nextInt(taille+1));
 			if(!nbAlea.contains(alea)) {
 				nbAlea.add(alea);
 			}
