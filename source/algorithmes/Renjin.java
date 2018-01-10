@@ -17,8 +17,9 @@ public class Renjin implements algoInterface {
 		
 		// Essai méthodes
 		Renjin rj = new Renjin();
-		Object data = rj.importer("resources/iris.csv");
-		System.out.println(data.toString());
+		Object train = rj.importer("resources/iris_train.csv");
+		Object test = rj.importer("resources/iris_test.csv");
+		//System.out.println(data.toString());
 	}
 
 	public Object importer(String file) {
