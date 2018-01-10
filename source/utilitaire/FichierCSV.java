@@ -58,8 +58,8 @@ public class FichierCSV {
 		}
 		
 		// Ecriture des CSV
-		writeCSV("resources/test.csv",headers,fichierTest);
-		writeCSV("resources/train.csv",headers,fichierApp);
+		writeCSV("resources/test_iris.csv",headers,fichierTest);
+		writeCSV("resources/train_iris.csv",headers,fichierApp);
 	}
 	
 	public List<Integer> generateNbAlea(List<CSVRecord> records){
