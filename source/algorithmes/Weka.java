@@ -1,16 +1,16 @@
 package algorithmes;
 
-import java.util.Random;
+import java.util.Enumeration;
 
-import utilitaire.FichierCSV;
 import weka.core.Instances;
+import weka.core.Attribute;
 import weka.core.converters.ConverterUtils.DataSource;
 import weka.classifiers.evaluation.Evaluation;
 import weka.classifiers.trees.*;
 
 public class Weka implements algoInterface {
 
-	public Instances importer(String file) {
+	public Object importer(String file) {
 		Instances data = null;
 		try {
 			DataSource source = new DataSource(file);
@@ -21,9 +21,64 @@ public class Weka implements algoInterface {
 		return data;
 	}
 	
+	/**
+	 * retourne l'indice de position de la variable Y reçue en paramètre
+	 * @param data le chemin du fichier CSV
+	 * @param y le nom de la colonne Y 
+	 * @return pos
+	 */
+	public int posY(Instances data, String y) {
+		Enumeration<Attribute> liste= data.enumerateAttributes();
+		int compteur = 0;
+		int pos = data.numAttributes();
+		while (liste.hasMoreElements() & compteur < data.numAttributes()) {
+			if(liste.nextElement().name().equals(y)) {
+				pos = compteur;
+				compteur = data.numAttributes();
+			}
+			compteur++;
+		}
+		return pos;
+	}
+	
+	public Object fit(String train, String y){
+		// TODO Auto-generated method stub
+		J48 tree = null;
+		try {
+			Instances train1 = ((Instances) importer(train));
+			train1.setClassIndex(posY(train1,y));
+			train1.setClassIndex(train1.numAttributes()-1);
+			tree = new J48();
+			tree.buildClassifier(train1);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return tree;
+	}
+
+	public void evaluate(Object model, String test, String y) {
+		// TODO Auto-generated method stub
+		weka.classifiers.AbstractClassifier tree = (weka.classifiers.AbstractClassifier) model;
+		Instances test1 = (Instances) importer(test);
+		test1.setClassIndex(posY(test1,y));
+		//test1.setClassIndex(test1.numAttributes()-1); // indique le y => inclure le string y
+		Evaluation eval;
+		try {
+			eval = new Evaluation(test1);
+			eval.evaluateModel(tree, test1);
+			System.out.println(eval.toSummaryString());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
 	public static void main(String[] args) throws Exception {
 		int fold = 10; // nombre k de groupes pour la cross validation
 		int seed = 1; //graine pour la reproductibilité des résultats
+		
 		/*
 		String file = "resources/iris.csv";
 		Weka weka = new Weka();
@@ -66,45 +121,11 @@ public class Weka implements algoInterface {
 		}
 		System.out.println("the average correction rate of "+fold+" cross validation: "+averagecorrect/fold);
 		*/
-		/*
+		
 		Weka weka = new Weka();
 		J48 tree = (J48) weka.fit("resources/train_iris.csv","Species");
 		// evaluate on test echantillon
 		weka.evaluate(tree, "resources/test_iris.csv","Species");
-		*/
-		
-	}
-
-	public Object fit(String train, String y){
-		// TODO Auto-generated method stub
-		J48 tree = null;
-		try {
-			Instances train1 = ((Instances) importer(train));
-			train1.setClassIndex(train1.numAttributes()-1);
-			tree = new J48();
-			tree.buildClassifier(train1);
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return tree;
-	}
-
-	public void evaluate(Object model, String test, String y) {
-		// TODO Auto-generated method stub
-		weka.classifiers.AbstractClassifier tree = (weka.classifiers.AbstractClassifier) model;
-		Instances test1 = (Instances) importer(test);
-		test1.setClassIndex(test1.numAttributes()-1); // indique le y => inclure le string y
-		Evaluation eval;
-		try {
-			eval = new Evaluation(test1);
-			eval.evaluateModel(tree, test1);
-			System.out.println(eval.toSummaryString());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 	}
 
 }
