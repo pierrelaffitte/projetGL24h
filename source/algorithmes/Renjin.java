@@ -15,8 +15,9 @@ public class Renjin implements algoInterface {
 		
 		// Essai méthodes
 		Renjin rj = new Renjin();
-		Object modCart = rj.fit("resources/train_iris.csv");
-		rj.evaluate(modCart, "resources/test_iris.csv");
+		//System.out.println(rj.returnVar("resources/train_iris.csv", "Species"));
+		Object modCart = rj.fit("resources/train_iris.csv","Species");
+		rj.evaluate(modCart, "resources/test_iris.csv","Species");
 		
 		//Class objectType = modCart.getClass();
 		//System.out.println("Java class of 'res' is: " + objectType.getName());
@@ -35,16 +36,33 @@ public class Renjin implements algoInterface {
 		return data;
 	}
 
-	//TODO mettre en paramètre la variable à expliquer
-	public Object fit(String train) {
+	public Object returnVar(Object data, String var) {
+		Object variable = null;
+		
+		String code = "col <- which(colnames(data) == y)\n" + 
+		              "var <- data[,col]";
+	
+		try {
+			engine.put("data", data);
+			engine.put("y", var);
+			variable = engine.eval(code);
+		} catch (ScriptException e) {
+			e.printStackTrace();
+		}
+	
+		return variable;
+	}
+	
+	public Object fit(String train, String y) {
 		Object trainCSV = importer(train);
 		Object modCart = null;
 		
 		String code = "library(rpart)\n" +
-					  "rpart(Species~.,data_train, method=\"class\",parms=list( split='gini'))";
+					  "rpart(y~.,data_train, method=\"class\",parms=list( split='gini'))";
 		
 		try {
 			engine.put("data_train", trainCSV);
+			engine.put("y", returnVar(trainCSV,y));
 			modCart = engine.eval(code);
 		} catch (ScriptException e) {
 			e.printStackTrace();
@@ -53,15 +71,16 @@ public class Renjin implements algoInterface {
 		return modCart;
 	}
 
-	public void evaluate(Object model, String test) {
+	public void evaluate(Object model, String test, String y) {
 		Object testCSV = importer(test);
 		String code = "modpredCART=predict(mod,data_test,type=\"class\")\n" +  
-				"modmatCART=table(data_test$Species,modpredCART)\n" + 
-				"modtaux_err_CART= sum(modpredCART!= data_test$Species)/nrow(data_test)\n" + 
+				"modmatCART=table(y,modpredCART)\n" + 
+				"modtaux_err_CART= sum(modpredCART!= y)/nrow(data_test)\n" + 
 				"print(modtaux_err_CART)";
 		try {
 			engine.put("data_test", testCSV);
 			engine.put("mod", model);
+			engine.put("y", returnVar(testCSV, y));
 			engine.eval(code);
 		} catch (ScriptException e) {
 			e.printStackTrace();
