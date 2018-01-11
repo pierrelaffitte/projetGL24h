@@ -13,11 +13,16 @@ public class Renjin implements algoInterface {
 		// code R    
 		//engine.eval(new java.io.FileReader("resources/progR.R"));
 		
-		// Essai méthodes
+		// Essai méthodes d'arbres de classification
 		Renjin rj = new Renjin();
-		//System.out.println(rj.returnVar("resources/train_iris.csv", "Species"));
+		
+		System.out.println("Fichier 1 : iris ---------------------------------------");
 		Object modCart = rj.fit("resources/train_iris.csv","Species");
 		rj.evaluate(modCart, "resources/test_iris.csv","Species");
+		
+		System.out.println("Fichier 2 : statsFSEVary ---------------------------------------");
+		Object modCart2 = rj.fit("resources/train_statsFSEVary.csv","ACK");
+		rj.evaluate(modCart2, "resources/test_statsFSEVary.csv","ACK");
 		
 		//Class objectType = modCart.getClass();
 		//System.out.println("Java class of 'res' is: " + objectType.getName());

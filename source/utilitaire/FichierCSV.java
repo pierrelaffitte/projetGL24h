@@ -28,7 +28,7 @@ public class FichierCSV {
 		}
 	}*/
 	
-	public void splitCSV(String file,char delimiter) throws IOException  {
+	public void splitCSV(String file,char delimiter, String nameFile) throws IOException  {
 		
 		List<CSVRecord> fichierTest = new ArrayList<CSVRecord>();
 		List<CSVRecord> fichierApp = new ArrayList<CSVRecord>();
@@ -59,8 +59,8 @@ public class FichierCSV {
 		}
 		
 		// Ecriture des CSV
-		writeCSV("resources/test_iris.csv",headers,fichierTest);
-		writeCSV("resources/train_iris.csv",headers,fichierApp);
+		writeCSV("resources/test_" + nameFile +".csv",headers,fichierTest);
+		writeCSV("resources/train_" + nameFile +".csv",headers,fichierApp);
 	}
 	
 	public List<Integer> generateNbAlea(int taille){
@@ -102,6 +102,7 @@ public class FichierCSV {
 	public static void main(String[] args) throws Exception {
 		FichierCSV f = new FichierCSV();
 		// Split du fichier "iris"
-		f.splitCSV("resources/iris.csv", ',');
+		f.splitCSV("resources/iris.csv", ',', "iris");
+		f.splitCSV("resources/statsFSEVary.csv", ',', "statsFSEVary");
 	}
 }
