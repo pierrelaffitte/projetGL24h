@@ -2,6 +2,7 @@ package algorithmes;
 
 import java.util.Random;
 
+import utilitaire.FichierCSV;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 import weka.classifiers.evaluation.Evaluation;
@@ -23,7 +24,7 @@ public class Weka implements algoInterface {
 	public static void main(String[] args) throws Exception {
 		int fold = 10; // nombre k de groupes pour la cross validation
 		int seed = 1; //graine pour la reproductibilité des résultats
-		
+		/*
 		String file = "resources/iris.csv";
 		Weka weka = new Weka();
 		Instances data = weka.importer(file);
@@ -64,34 +65,46 @@ public class Weka implements algoInterface {
 			System.out.println("the "+n+"th cross validation:"+eval.toSummaryString());
 		}
 		System.out.println("the average correction rate of "+fold+" cross validation: "+averagecorrect/fold);
-
-		tree.buildClassifier(train);
+		*/
+		/*
+		Weka weka = new Weka();
+		J48 tree = (J48) weka.fit("resources/train_iris.csv","Species");
 		// evaluate on test echantillon
-		Evaluation eval = new Evaluation(test);
-		eval.evaluateModel(tree, test);
-		System.out.println(eval.toSummaryString());
+		weka.evaluate(tree, "resources/test_iris.csv","Species");
+		*/
+		
 	}
 
-	public Object fit(Instances train) throws Exception {
+	public Object fit(String train, String y){
 		// TODO Auto-generated method stub
-		J48 tree = new J48();
-		tree.buildClassifier(train);
-		return null;
+		J48 tree = null;
+		try {
+			Instances train1 = ((Instances) importer(train));
+			train1.setClassIndex(train1.numAttributes()-1);
+			tree = new J48();
+			tree.buildClassifier(train1);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return tree;
 	}
 
-	public Object[] split(Instances data) {
+	public void evaluate(Object model, String test, String y) {
 		// TODO Auto-generated method stub
-		Instances[] res = new Instances[2];
-		res[0] = data.trainCV(5, 4);
-		res[1] = data.testCV(5, 4);
-		return res;		
-	}
-
-	public void evaluate(Object tree, Instances test) {
-		// TODO Auto-generated method stub
-		Evaluation eval = new Evaluation(test);
-		eval.evaluateModel(tree, test);
-		System.out.println(eval.toSummaryString());
+		weka.classifiers.AbstractClassifier tree = (weka.classifiers.AbstractClassifier) model;
+		Instances test1 = (Instances) importer(test);
+		test1.setClassIndex(test1.numAttributes()-1); // indique le y => inclure le string y
+		Evaluation eval;
+		try {
+			eval = new Evaluation(test1);
+			eval.evaluateModel(tree, test1);
+			System.out.println(eval.toSummaryString());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 }
