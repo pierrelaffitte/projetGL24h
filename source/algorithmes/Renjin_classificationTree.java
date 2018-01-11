@@ -4,7 +4,7 @@ import javax.script.*;
 
 import org.renjin.script.*;
 
-public class Renjin implements algoInterface {
+public class Renjin_classificationTree implements algoInterface {
 
 	private static RenjinScriptEngineFactory factory = new RenjinScriptEngineFactory();
 	private static ScriptEngine engine = factory.getScriptEngine();	
@@ -14,7 +14,7 @@ public class Renjin implements algoInterface {
 		//engine.eval(new java.io.FileReader("resources/progR.R"));
 		
 		// Essai méthodes d'arbres de classification
-		Renjin rj = new Renjin();
+		Renjin_classificationTree rj = new Renjin_classificationTree();
 		
 		System.out.println("Fichier 1 : iris ---------------------------------------");
 		Object modCart = rj.fit("resources/train_iris.csv","Species");
