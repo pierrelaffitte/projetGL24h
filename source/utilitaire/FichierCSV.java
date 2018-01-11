@@ -101,8 +101,9 @@ public class FichierCSV {
 	
 	public static void main(String[] args) throws Exception {
 		FichierCSV f = new FichierCSV();
-		// Split du fichier "iris"
-		f.splitCSV("resources/iris.csv", ',', "iris");
-		f.splitCSV("resources/statsFSEVary.csv", ',', "statsFSEVary");
+		// Split des fichiers
+		//f.splitCSV("resources/iris.csv", ',', "iris");
+		//f.splitCSV("resources/statsFSEVary.csv", ',', "statsFSEVary");
+		f.splitCSV("resources/winequality.csv", ',', "winequality");
 	}
 }
