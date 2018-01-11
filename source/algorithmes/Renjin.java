@@ -35,6 +35,7 @@ public class Renjin implements algoInterface {
 		return data;
 	}
 
+	//TODO mettre en paramètre la variable à expliquer
 	public Object fit(String train) {
 		Object trainCSV = importer(train);
 		Object modCart = null;
