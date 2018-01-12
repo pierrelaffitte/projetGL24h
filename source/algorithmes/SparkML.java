@@ -76,4 +76,14 @@ public class SparkML implements algoInterface{
 		
 	}
 
+	public Object fit(String train, String y) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void evaluate(Object model, String test, String y) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
