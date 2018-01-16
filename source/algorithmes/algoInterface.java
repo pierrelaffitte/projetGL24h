@@ -2,6 +2,7 @@ package algorithmes;
 
 public interface algoInterface {
 
+	// TODO : evaluateMSE, evaluateAUC
 	/**
 	 * Importe le fichier CSV dont le chemin est en paramètre
 	 * @param file : chemin du fichier CSV

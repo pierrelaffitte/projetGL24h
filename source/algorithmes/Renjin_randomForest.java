@@ -68,7 +68,7 @@ public class Renjin_randomForest implements algoInterface {
 		Object modCart = null;
 		
 		String code = "library(randomForest)\n" +
-					  "randomForest(y ~ ., data = data_train, ntree = 1000, na.action = na.omit)";
+					  "randomForest(y ~ ., data = data_train, ntree = 5, mtry = 2, na.action = na.omit)";
 		
 		try {
 			engine.put("data_train", trainCSV);

@@ -1,5 +1,8 @@
 package algorithmes;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.script.*;
 
 import org.renjin.script.*;
@@ -17,17 +20,22 @@ public class Renjin_classificationTree implements algoInterface {
 		// Essai méthodes d'arbres de classification
 		Renjin_classificationTree rj = new Renjin_classificationTree();
 		
+		/*List<String> x = new ArrayList<String>();
+		x.add("Sepal.Length");
+		x.add("Sepal.Width");
+		x.add("Petal.Length");
+		x.add("Petal.Width");*/
 		System.out.println("Fichier 1 : iris ---------------------------------------");
 		Object modCart = rj.fit("resources/train_iris.csv","Species");
 		rj.evaluate(modCart, "resources/test_iris.csv","Species");
 		
-		System.out.println("Fichier 2 : statsFSEVary ---------------------------------------");
+		/*System.out.println("Fichier 2 : statsFSEVary ---------------------------------------");
 		Object modCart2 = rj.fit("resources/train_statsFSEVary.csv","nbPages");
 		rj.evaluate(modCart2, "resources/test_statsFSEVary.csv","nbPages");
 		
 		System.out.println("Fichier 3 : winequality ---------------------------------------");
 		Object modCart3 = rj.fit("resources/train_winequality.csv","quality");
-		rj.evaluate(modCart3, "resources/test_winequality.csv","quality");
+		rj.evaluate(modCart3, "resources/test_winequality.csv","quality");*/
 		
 		//Class objectType = modCart.getClass();
 		//System.out.println("Java class of 'res' is: " + objectType.getName());
@@ -65,6 +73,7 @@ public class Renjin_classificationTree implements algoInterface {
 		return variable;
 	}
 	
+	//  TODO : variables explicatives, poids, split=deviance
 	@SuppressWarnings("restriction")
 	public Object fit(String train, String y) {
 		Object trainCSV = importer(train);
@@ -88,9 +97,11 @@ public class Renjin_classificationTree implements algoInterface {
 	public void evaluate(Object model, String test, String y) {
 		Object testCSV = importer(test);
 		String code = "modpredCART=predict(mod,data_test,type=\"class\")\n" +  
-				//"modmatCART=table(y,modpredCART)\n" + 
-				"modtaux_err_CART= sum(modpredCART!= y)/nrow(data_test)\n" + 
-				"print(modtaux_err_CART)";
+				"modmatCART=table(y,modpredCART)\n" + 
+				//"modtaux_err_CART= sum(modpredCART!= y)/nrow(data_test)\n" + 
+				//"cat(\"Taux de mal classés :\",modtaux_err_CART)";
+				"accuracy <- sum(diag(modmatCART))/sum(modmatCART)\n" + 
+				"cat(\"Accuracy :\",accuracy)";
 		try {
 			engine.put("data_test", testCSV);
 			engine.put("mod", model);
@@ -99,6 +110,6 @@ public class Renjin_classificationTree implements algoInterface {
 		} catch (ScriptException e) {
 			e.printStackTrace();
 		}
-		
 	}
+
 }
