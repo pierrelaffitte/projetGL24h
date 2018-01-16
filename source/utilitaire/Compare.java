@@ -5,19 +5,20 @@ import java.io.IOException;
 import algorithmes.Renjin_classificationTree;
 import algorithmes.SparkML;
 import algorithmes.Weka;
+import algorithmes.algoInterface;
 
 public class Compare {
 
 	public static void main(String[] args) {
 		Compare c = new Compare();
 		try {
-			c.afficheRes("", "iris", ',', "Species");
+			c.afficheRes(EnumAlgo.classificationTree, "iris", ',', "Species");
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
 	}
 	
-	public void afficheRes(String method, String nom_CSV, 
+	public void afficheRes(EnumAlgo method, String nom_CSV, 
 			char delimiter, String y) throws IOException {
 		
 		// Split du csv
@@ -28,12 +29,24 @@ public class Compare {
 		String train = "resources/train_"+ nom_CSV + ".csv";
 		String test = "resources/test_" + nom_CSV + ".csv";
 		
-		// les 3 méthodes
-		Renjin_classificationTree rj = new Renjin_classificationTree();
-		Weka wk = new Weka();
-		SparkML sp = new SparkML();
+		// Méthodes
+		algoInterface rj = null;
+		algoInterface wk = null;
+		algoInterface sp = null;
+	
+		switch(method) {
+			case classificationTree:
+				rj = new Renjin_classificationTree();
+				wk = new Weka();
+				//sp = new SparkML();
+				break;
+			case randomForest:
+				break;
+			default:
+				break;
+		}
 		
-		// evaluate 
+		// Evaluate 
 		rj.evaluate(train, test, y);
 		wk.evaluate(train, test, y);
 	}
