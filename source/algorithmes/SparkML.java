@@ -88,7 +88,6 @@ public class SparkML {
 		System.out.println("Test Error: " + (1-testErr));
 		System.out.println("Learned classification tree model:\n" + model.toDebugString());
 		//ArrayList<String> var = (ArrayList<String>) lines.collect();
-
 		/*
 		SparkSession spark = SparkSession.builder().appName("JavaModelSelectionViaCrossValidation").getOrCreate();
 		Dataset<Row> training = spark.read().format("libsvm").load("resources/train.csv");
