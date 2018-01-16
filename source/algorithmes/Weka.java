@@ -67,7 +67,8 @@ public class Weka implements algoInterface {
 		try {
 			eval = new Evaluation(test1);
 			eval.evaluateModel(tree, test1);
-			System.out.println(eval.toSummaryString());
+			System.out.println(eval.correct()*100.0/test1.size());
+			//System.out.println(eval.toSummaryString());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
