@@ -13,8 +13,7 @@ public class Compare {
 		try {
 			c.afficheRes("", "iris", ',', "Species");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 	}
 	
