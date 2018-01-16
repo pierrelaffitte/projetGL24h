@@ -26,12 +26,11 @@ public class Renjin_randomForest implements algoInterface {
 		rj.evaluate(modRF2, "resources/test_statsFSEVary.csv","nbPages");
 		
 		System.out.println("Fichier 3 : winequality ---------------------------------------");
-		Object modRF3 = rj.fit("resources/train_winequality.csv","quality");
-		rj.evaluate(modRF3, "resources/test_winequality.csv","quality");
+		//Object modRF3 = rj.fit("resources/train_winequality.csv","quality");
+		rj.evaluate("resources/train_winequality.csv", "resources/test_winequality.csv","quality");
 		
 	}
 
-	@SuppressWarnings("restriction")
 	public Object importer(String file) {	
 		Object data = null;
 		String code = "data <- read.csv(\""+ file +"\")";
@@ -43,7 +42,6 @@ public class Renjin_randomForest implements algoInterface {
 		return data;
 	}
 
-	@SuppressWarnings("restriction")
 	public Object returnVar(Object data, String var) {
 		Object variable = null;
 		
@@ -62,13 +60,12 @@ public class Renjin_randomForest implements algoInterface {
 	}
 	
 	// TODO paramètre de l'arbre à intégrer --> nombre d'arbres (ntree)
-	@SuppressWarnings("restriction")
 	public Object fit(String train, String y) {
 		Object trainCSV = importer(train);
 		Object modCart = null;
 		
 		String code = "library(randomForest)\n" +
-					  "randomForest(y ~ ., data = data_train, ntree = 1000, na.action = na.omit)";
+					  "randomForest(y ~ ., data = data_train, ntree = 5, mtry = 2, na.action = na.omit)";
 		
 		try {
 			engine.put("data_train", trainCSV);
@@ -81,9 +78,9 @@ public class Renjin_randomForest implements algoInterface {
 		return modCart;
 	}
 
-	@SuppressWarnings("restriction")
-	public void evaluate(Object model, String test, String y) {
+	public void evaluate(String train, String test, String y) {
 		Object testCSV = importer(test);
+		Object model=fit(train, y);
 		String code = "modpredRF=predict(mod,data_test,type=\"class\")\n" +  
 				//"modmatRF=table(y,modpredRF)\n" + 
 				"modtaux_err_RF= sum(modpredRF != y)/nrow(data_test)\n" + 
