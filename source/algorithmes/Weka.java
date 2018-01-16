@@ -57,7 +57,8 @@ public class Weka implements algoInterface {
 		return tree;
 	}
 
-	public void evaluate(Object model, String test, String y) {
+	public void evaluate(String train, String test, String y) {
+		Object model=fit(train,y);
 		// TODO Auto-generated method stub
 		weka.classifiers.AbstractClassifier tree = (weka.classifiers.AbstractClassifier) model;
 		Instances test1 = (Instances) importer(test);
@@ -126,7 +127,8 @@ public class Weka implements algoInterface {
 		Weka weka = new Weka();
 		//J48 tree = (J48) weka.fit("resources/train_iris.csv","Species");
 		// evaluate on test echantillon
-		weka.evaluate(tree, "resources/test_iris.csv","Species");
+		//weka.evaluate(tree, "resources/test_iris.csv","Species");
+		weka.evaluate("resources/train_iris.csv","resources/test_iris.csv","Species");
 	}
 
 }

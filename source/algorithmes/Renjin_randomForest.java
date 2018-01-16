@@ -7,7 +7,6 @@ import org.renjin.script.*;
 public class Renjin_randomForest implements algoInterface {
 
 	private static RenjinScriptEngineFactory factory = new RenjinScriptEngineFactory();
-	@SuppressWarnings("restriction")
 	private static ScriptEngine engine = factory.getScriptEngine();	
 	
 	public static void main(String[] args) throws Exception {
@@ -18,12 +17,12 @@ public class Renjin_randomForest implements algoInterface {
 		Renjin_randomForest rj = new Renjin_randomForest();
 		
 		System.out.println("Fichier 1 : iris ---------------------------------------");
-		Object modRF = rj.fit("resources/train_iris.csv","Species");
-		rj.evaluate(modRF, "resources/test_iris.csv","Species");
+		//Object modRF = rj.fit("resources/train_iris.csv","Species");
+		rj.evaluate("resources/train_iris.csv", "resources/test_iris.csv","Species");
 		
 		System.out.println("Fichier 2 : statsFSEVary ---------------------------------------");
-		Object modRF2 = rj.fit("resources/train_statsFSEVary.csv","nbPages");
-		rj.evaluate(modRF2, "resources/test_statsFSEVary.csv","nbPages");
+		//Object modRF2 = rj.fit("resources/train_statsFSEVary.csv","nbPages");
+		rj.evaluate("resources/train_statsFSEVary.csv", "resources/test_statsFSEVary.csv","nbPages");
 		
 		System.out.println("Fichier 3 : winequality ---------------------------------------");
 		//Object modRF3 = rj.fit("resources/train_winequality.csv","quality");

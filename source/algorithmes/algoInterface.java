@@ -27,6 +27,6 @@ public interface algoInterface {
 	 * @param test : chemin du fichier CSV de test
 	 * @param y : nom de la variable à expliquer
 	 */
-	public void evaluate(Object model, String test, String y);
+	public void evaluate(String train, String test, String y);
 
 }
