@@ -1,8 +1,5 @@
 package algorithmes;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.script.*;
 
 import org.renjin.script.*;
@@ -10,7 +7,6 @@ import org.renjin.script.*;
 public class Renjin_classificationTree implements algoInterface {
 
 	private static RenjinScriptEngineFactory factory = new RenjinScriptEngineFactory();
-	@SuppressWarnings("restriction")
 	private static ScriptEngine engine = factory.getScriptEngine();	
 	
 	public static void main(String[] args) throws Exception {
@@ -43,7 +39,6 @@ public class Renjin_classificationTree implements algoInterface {
 		//System.out.println(modCart);
 	}
 
-	@SuppressWarnings("restriction")
 	public Object importer(String file) {	
 		Object data = null;
 		String code = "data <- read.csv(\""+ file +"\")";
@@ -55,7 +50,6 @@ public class Renjin_classificationTree implements algoInterface {
 		return data;
 	}
 
-	@SuppressWarnings("restriction")
 	public Object returnVar(Object data, String var) {
 		Object variable = null;
 		
@@ -74,7 +68,6 @@ public class Renjin_classificationTree implements algoInterface {
 	}
 	
 	//  TODO : variables explicatives, poids, split=deviance
-	@SuppressWarnings("restriction")
 	public Object fit(String train, String y) {
 		Object trainCSV = importer(train);
 		Object modCart = null;
@@ -93,7 +86,6 @@ public class Renjin_classificationTree implements algoInterface {
 		return modCart;
 	}
 
-	@SuppressWarnings("restriction")
 	public void evaluate(Object model, String test, String y) {
 		Object testCSV = importer(test);
 		String code = "modpredCART=predict(mod,data_test,type=\"class\")\n" +  

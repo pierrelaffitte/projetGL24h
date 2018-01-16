@@ -1,7 +1,5 @@
 package utilitaire;
 
-import algorithmes.algoInterface;
-
 public class Compare {
 
 	public static void main(String[] args) {
@@ -10,7 +8,10 @@ public class Compare {
 	}
 	
 	public Compare(String method, FichierCSV csv) {
-		
+		switch(method) {
+			case "classificationTree":
+		}
+			
 	}
 
 }
