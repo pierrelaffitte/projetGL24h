@@ -17,6 +17,16 @@ import org.apache.commons.csv.CSVRecord;
 
 public class FichierCSV {
 	
+	private String nameFile;
+	
+	public FichierCSV(String name) {
+		nameFile = name;
+	}
+	
+	public String getNameFile() {
+		return nameFile;
+	}
+	
 	/*public void importCSV(String file,char delimiter) throws IOException  {
 		Reader in = null;
 		in = new FileReader(file);
@@ -28,13 +38,13 @@ public class FichierCSV {
 		}
 	}*/
 	
-	public void splitCSV(String file,char delimiter, String nameFile) throws IOException  {
+	public void splitCSV(char delimiter) throws IOException  {
 		
 		List<CSVRecord> fichierTest = new ArrayList<CSVRecord>();
 		List<CSVRecord> fichierApp = new ArrayList<CSVRecord>();
 
 		// Lecture du CSV
-		Reader in = new FileReader(file);
+		Reader in = new FileReader("resources/" + nameFile + ".csv");
 		CSVParser in2 = CSVFormat.DEFAULT.withHeader().withDelimiter(delimiter)
 				.parse(in);
 		List<CSVRecord> records = in2.getRecords();
@@ -100,10 +110,10 @@ public class FichierCSV {
 	}
 	
 	public static void main(String[] args) throws Exception {
-		FichierCSV f = new FichierCSV();
+		FichierCSV f = new FichierCSV("winequality");
 		// Split des fichiers
 		//f.splitCSV("resources/iris.csv", ',', "iris");
 		//f.splitCSV("resources/statsFSEVary.csv", ',', "statsFSEVary");
-		f.splitCSV("resources/winequality.csv", ',', "winequality");
+		f.splitCSV(',');
 	}
 }

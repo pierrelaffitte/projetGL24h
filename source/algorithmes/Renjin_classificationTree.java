@@ -25,13 +25,13 @@ public class Renjin_classificationTree implements algoInterface {
 		//Object modCart = rj.fit("resources/train_iris.csv","Species");
 		rj.evaluate("resources/train_iris.csv", "resources/test_iris.csv","Species");
 		
-		/*System.out.println("Fichier 2 : statsFSEVary ---------------------------------------");
-		Object modCart2 = rj.fit("resources/train_statsFSEVary.csv","nbPages");
-		rj.evaluate(modCart2, "resources/test_statsFSEVary.csv","nbPages");
+		System.out.println("Fichier 2 : statsFSEVary ---------------------------------------");
+		//Object modCart2 = rj.fit("resources/train_statsFSEVary.csv","nbPages");
+		rj.evaluate("resources/train_statsFSEVary.csv", "resources/test_statsFSEVary.csv","nbPages");
 		
 		System.out.println("Fichier 3 : winequality ---------------------------------------");
-		Object modCart3 = rj.fit("resources/train_winequality.csv","quality");
-		rj.evaluate(modCart3, "resources/test_winequality.csv","quality");*/
+		//Object modCart3 = rj.fit("resources/train_winequality.csv","quality");
+		rj.evaluate("resources/train_winequality.csv", "resources/test_winequality.csv","quality");
 		
 		//Class objectType = modCart.getClass();
 		//System.out.println("Java class of 'res' is: " + objectType.getName());
