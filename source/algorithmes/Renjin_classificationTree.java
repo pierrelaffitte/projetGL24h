@@ -22,8 +22,8 @@ public class Renjin_classificationTree implements algoInterface {
 		x.add("Petal.Length");
 		x.add("Petal.Width");*/
 		System.out.println("Fichier 1 : iris ---------------------------------------");
-		Object modCart = rj.fit("resources/train_iris.csv","Species");
-		rj.evaluate(modCart, "resources/test_iris.csv","Species");
+		//Object modCart = rj.fit("resources/train_iris.csv","Species");
+		rj.evaluate("resources/train_iris.csv", "resources/test_iris.csv","Species");
 		
 		/*System.out.println("Fichier 2 : statsFSEVary ---------------------------------------");
 		Object modCart2 = rj.fit("resources/train_statsFSEVary.csv","nbPages");
@@ -86,7 +86,8 @@ public class Renjin_classificationTree implements algoInterface {
 		return modCart;
 	}
 
-	public void evaluate(Object model, String test, String y) {
+	public void evaluate(String train, String test, String y) {
+		Object model=fit(train, y);
 		Object testCSV = importer(test);
 		String code = "modpredCART=predict(mod,data_test,type=\"class\")\n" +  
 				"modmatCART=table(y,modpredCART)\n" + 
