@@ -5,41 +5,53 @@
 	<artifactId>projetGL24h</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<dependencies>
+		<!-- dependancies for Renjin -->
 		<dependency>
 			<groupId>org.renjin</groupId>
 			<artifactId>renjin-script-engine</artifactId>
 			<version>0.8.2527</version>
 		</dependency>
 		<dependency>
+			<groupId>org.renjin.cran</groupId>
+			<artifactId>rpart</artifactId>
+			<version>4.1-11-b27</version>
+		</dependency>
+		<dependency>
+			<groupId>org.renjin.cran</groupId>
+			<artifactId>randomForest</artifactId>
+			<version>4.6-12-b66</version>
+		</dependency>
+		<!-- dependancies for Weka -->
+		<dependency>
 			<groupId>nz.ac.waikato.cms.weka</groupId>
 			<artifactId>weka-stable</artifactId>
 			<version>3.8.0</version>
 		</dependency>
+		<!-- dependancies for CSV -->
 		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-csv -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-csv</artifactId>
 			<version>1.4</version>
 		</dependency>
+		<!-- dependancies for Spark -->
+		<!-- https://mvnrepository.com/artifact/org.apache.spark/spark-mllib -->
 		<dependency>
 			<groupId>org.apache.spark</groupId>
-			<artifactId>spark-mllib_2.11</artifactId>
-			<version>2.2.0</version>
+			<artifactId>spark-mllib_2.10</artifactId>
+			<version>2.2.1</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.spark/spark-mllib-local -->
+		<dependency>
+			<groupId>org.apache.spark</groupId>
+			<artifactId>spark-mllib-local_2.11</artifactId>
+			<version>2.0.2</version>
+		</dependency>
+		<!-- Spark -->
 		<dependency>
 			<groupId>org.apache.spark</groupId>
 			<artifactId>spark-core_2.11</artifactId>
-			<version>2.2.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.spark</groupId>
-			<artifactId>spark-sql_2.11</artifactId>
-			<version>2.2.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.renjin.cran</groupId>
-			<artifactId>rpart</artifactId>
-			<version>4.1-11-b27</version>
+			<version>2.1.0</version>
 		</dependency>
 	</dependencies>
 	<repositories>

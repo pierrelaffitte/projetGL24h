@@ -1,35 +1,89 @@
 package algorithmes;
 
-import java.util.Random;
+import java.util.Enumeration;
 
 import weka.core.Instances;
+import weka.core.Attribute;
 import weka.core.converters.ConverterUtils.DataSource;
 import weka.classifiers.evaluation.Evaluation;
-import weka.classifiers.trees.J48;
+import weka.classifiers.trees.*;
 
-public class Weka {
+public class Weka implements algoInterface {
 
-	public static Instances importer(String file) throws Exception {
-		DataSource source = new DataSource("resources/iris.csv");
-		Instances data = source.getDataSet();
-		if (!file.equals("resources/iris.csv")) {
-			try {
-				source = new DataSource(file);
-				data = source.getDataSet();
-			}catch (Exception e) {
-				System.out.println("Le fichier "+file+" n'existe pas. \n"+
-			"le fichier iris.csv a été chargé à la place.");
-			}
+	public Object importer(String file) {
+		Instances data = null;
+		try {
+			DataSource source = new DataSource(file);
+			data = source.getDataSet();
+		}catch (Exception e) {
+			System.out.println("Le fichier "+file+" n'existe pas. \n");
 		}
 		return data;
+	}
+	
+	/**
+	 * retourne l'indice de position de la variable Y reçue en paramètre
+	 * @param data le chemin du fichier CSV
+	 * @param y le nom de la colonne Y 
+	 * @return pos
+	 */
+	public int posY(Instances data, String y) {
+		Enumeration<Attribute> liste= data.enumerateAttributes();
+		int compteur = 0;
+		int pos = data.numAttributes();
+		while (liste.hasMoreElements() & compteur < data.numAttributes()) {
+			if(liste.nextElement().name().equals(y)) {
+				pos = compteur;
+				compteur = data.numAttributes();
+			}
+			compteur++;
+		}
+		return pos;
+	}
+	
+	public Object fit(String train, String y){
+		// TODO Auto-generated method stub
+		J48 tree = null;
+		try {
+			Instances train1 = ((Instances) importer(train));
+			train1.setClassIndex(posY(train1,y));
+			train1.setClassIndex(train1.numAttributes()-1);
+			tree = new J48();
+			tree.buildClassifier(train1);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return tree;
+	}
+
+	public void evaluate(Object model, String test, String y) {
+		// TODO Auto-generated method stub
+		weka.classifiers.AbstractClassifier tree = (weka.classifiers.AbstractClassifier) model;
+		Instances test1 = (Instances) importer(test);
+		test1.setClassIndex(posY(test1,y));
+		//test1.setClassIndex(test1.numAttributes()-1); // indique le y => inclure le string y
+		Evaluation eval;
+		try {
+			eval = new Evaluation(test1);
+			eval.evaluateModel(tree, test1);
+			System.out.println(eval.correct()*100.0/test1.size());
+			//System.out.println(eval.toSummaryString());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public static void main(String[] args) throws Exception {
 		int fold = 10; // nombre k de groupes pour la cross validation
 		int seed = 1; //graine pour la reproductibilité des résultats
 		
+		/*
 		String file = "resources/iris.csv";
-		Instances data = Weka.importer(file);
+		Weka weka = new Weka();
+		Instances data = weka.importer(file);
 		data.setClassIndex(data.numAttributes()-1);
 
 		// le choix du modele : J48 = C4.5
@@ -67,12 +121,12 @@ public class Weka {
 			System.out.println("the "+n+"th cross validation:"+eval.toSummaryString());
 		}
 		System.out.println("the average correction rate of "+fold+" cross validation: "+averagecorrect/fold);
-
-		tree.buildClassifier(train);
+		*/
+		
+		Weka weka = new Weka();
+		J48 tree = (J48) weka.fit("resources/train_iris.csv","Species");
 		// evaluate on test echantillon
-		Evaluation eval = new Evaluation(test);
-		eval.evaluateModel(tree, test);
-		System.out.println(eval.toSummaryString());
+		weka.evaluate(tree, "resources/test_iris.csv","Species");
 	}
 
 }
