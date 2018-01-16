@@ -17,16 +17,16 @@ public class Renjin_randomForest implements algoInterface {
 		Renjin_randomForest rj = new Renjin_randomForest();
 		
 		System.out.println("Fichier 1 : iris ---------------------------------------");
-		Object modRF = rj.fit("resources/train_iris.csv","Species");
-		rj.evaluate(modRF, "resources/test_iris.csv","Species");
+		//Object modRF = rj.fit("resources/train_iris.csv","Species");
+		rj.evaluate("resources/train_iris.csv", "resources/test_iris.csv","Species");
 		
 		System.out.println("Fichier 2 : statsFSEVary ---------------------------------------");
-		Object modRF2 = rj.fit("resources/train_statsFSEVary.csv","nbPages");
-		rj.evaluate(modRF2, "resources/test_statsFSEVary.csv","nbPages");
+		//Object modRF2 = rj.fit("resources/train_statsFSEVary.csv","nbPages");
+		rj.evaluate("resources/train_statsFSEVary.csv", "resources/test_statsFSEVary.csv","nbPages");
 		
 		System.out.println("Fichier 3 : winequality ---------------------------------------");
-		Object modRF3 = rj.fit("resources/train_winequality.csv","quality");
-		rj.evaluate(modRF3, "resources/test_winequality.csv","quality");
+		//Object modRF3 = rj.fit("resources/train_winequality.csv","quality");
+		rj.evaluate("resources/train_winequality.csv", "resources/test_winequality.csv","quality");
 		
 	}
 
@@ -77,8 +77,9 @@ public class Renjin_randomForest implements algoInterface {
 		return modCart;
 	}
 
-	public void evaluate(Object model, String test, String y) {
+	public void evaluate(String train, String test, String y) {
 		Object testCSV = importer(test);
+		Object model=fit(train, y);
 		String code = "modpredRF=predict(mod,data_test,type=\"class\")\n" +  
 				//"modmatRF=table(y,modpredRF)\n" + 
 				"modtaux_err_RF= sum(modpredRF != y)/nrow(data_test)\n" + 
