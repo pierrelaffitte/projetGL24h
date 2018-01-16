@@ -8,10 +8,7 @@ public class Compare {
 	}
 	
 	public Compare(String method, FichierCSV csv) {
-		switch(method) {
-			case "classificationTree":
-		}
-			
+		
 	}
 
 }
