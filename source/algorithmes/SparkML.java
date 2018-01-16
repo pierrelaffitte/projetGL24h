@@ -78,8 +78,6 @@ public class SparkML {
 
 		DecisionTreeModel model = DecisionTree.trainClassifier(train, numClasses,
 				categoricalFeaturesInfo, impurity, maxDepth, maxBins);
-
-
 		JavaPairRDD<Double, Double> predictionAndLabel =
 				test.mapToPair(p -> new Tuple2<>(model.predict(p.features()), p.label()));
 		double testErr =
