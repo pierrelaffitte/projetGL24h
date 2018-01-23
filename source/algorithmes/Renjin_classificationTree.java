@@ -3,6 +3,7 @@ package algorithmes;
 import javax.script.*;
 
 import org.renjin.script.*;
+import org.renjin.sexp.SEXP;
 
 public class Renjin_classificationTree implements algoInterface {
 
@@ -20,7 +21,9 @@ public class Renjin_classificationTree implements algoInterface {
 		x.add("Sepal.Length");
 		x.add("Sepal.Width");
 		x.add("Petal.Length");
-		x.add("Petal.Width");*/
+		x.add("Petal.Width");
+		*/
+		
 		System.out.println("Fichier 1 : iris ---------------------------------------");
 		rj.evaluate("resources/train_iris.csv", "resources/test_iris.csv","Species");
 		System.out.println("");
@@ -29,8 +32,13 @@ public class Renjin_classificationTree implements algoInterface {
 		rj.evaluate("resources/train_statsFSEVary.csv", "resources/test_statsFSEVary.csv","nbPages");
 		System.out.println("");
 		
+		
 		System.out.println("Fichier 3 : winequality ---------------------------------------");
 		rj.evaluate("resources/train_winequality.csv", "resources/test_winequality.csv","quality");
+		System.out.println("");
+		
+		System.out.println("Fichier 4 : mushrooms ---------------------------------------");
+		rj.evaluate("resources/train_mushrooms.csv", "resources/test_mushrooms.csv","class");
 		System.out.println("");
 		
 		//Class objectType = modCart.getClass();
@@ -64,6 +72,9 @@ public class Renjin_classificationTree implements algoInterface {
 			e.printStackTrace();
 		}
 	
+		//SEXP va = (SEXP) variable;
+		//System.out.println(va);
+		
 		return variable;
 	}
 	
@@ -73,7 +84,8 @@ public class Renjin_classificationTree implements algoInterface {
 		Object modCart = null;
 		
 		String code = "library(rpart)\n" +
-					  "rpart(y~.,data_train, method=\"class\",parms=list( split='gini'))";
+					  "col <- which(colnames(data) ==\""+ y +"\")\n" +
+					  "rpart(y~.,data_train[c(-col)], method=\"class\",parms=list( split='gini'))";
 		
 		try {
 			engine.put("data_train", trainCSV);
@@ -90,10 +102,12 @@ public class Renjin_classificationTree implements algoInterface {
 		Object model=fit(train, y);
 		Object testCSV = importer(test);
 		String code = "modpredCART=predict(mod,data_test,type=\"class\")\n" +  
-				"modmatCART=table(y,modpredCART)\n" + 
-				//"modtaux_err_CART= sum(modpredCART!= y)/nrow(data_test)\n" + 
+				"modmatCART=table(y,modpredCART)\n"+
+				"print(modmatCART)\n" +
+				"modtaux_err_CART= sum(modpredCART!= y)/nrow(data_test)\n" +
 				//"cat(\"Taux de mal classés :\",modtaux_err_CART)";
-				"accuracy <- sum(diag(modmatCART))/sum(modmatCART)\n" + 
+				//"accuracy <- sum(diag(modmatCART))/sum(modmatCART)\n" + 
+				"accuracy <- 1-modtaux_err_CART\n" +
 				"cat(\"Accuracy :\",accuracy)";
 		try {
 			engine.put("data_test", testCSV);
