@@ -4,6 +4,7 @@ import java.util.Enumeration;
 
 import weka.core.Instances;
 import weka.core.Attribute;
+import weka.core.Instance;
 import weka.core.converters.ConverterUtils.DataSource;
 import weka.classifiers.evaluation.Evaluation;
 import weka.classifiers.trees.*;
@@ -58,9 +59,9 @@ public class Weka implements algoInterface {
 	}
 
 	public void evaluate(String train, String test, String y) {
-		Object model=fit(train,y);
+		//Object model=fit(train,y);
 		// TODO Auto-generated method stub
-		weka.classifiers.AbstractClassifier tree = (weka.classifiers.AbstractClassifier) model;
+		J48 tree = (J48) fit(train,y);
 		Instances test1 = (Instances) importer(test);
 		test1.setClassIndex(posY(test1,y));
 		//test1.setClassIndex(test1.numAttributes()-1); // indique le y => inclure le string y
@@ -128,7 +129,7 @@ public class Weka implements algoInterface {
 		//J48 tree = (J48) weka.fit("resources/train_iris.csv","Species");
 		// evaluate on test echantillon
 		//weka.evaluate(tree, "resources/test_iris.csv","Species");
-		weka.evaluate("resources/train_iris.csv","resources/test_iris.csv","Species");
+		weka.evaluate("resources/train_statsFSEVary.csv","resources/test_statsFSEVary.csv","ACK");
 	}
 
 }
