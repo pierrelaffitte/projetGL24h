@@ -50,6 +50,9 @@ public class FichierCSV {
 		List<CSVRecord> records = in2.getRecords();
 		int taille = records.size();
 		
+		//TODO
+		//Suppression de la premiere colonne : PENSER A LE FAIRE
+		
 		// Génération des nombres aléa
 		List<Integer> nbAlea = generateNbAlea(taille);
 		
