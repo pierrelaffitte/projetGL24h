@@ -52,6 +52,9 @@ public class FichierCSV {
 		
 		//TODO
 		//Suppression de la premiere colonne : PENSER A LE FAIRE
+		//
+		//
+		//
 		
 		// Génération des nombres aléa
 		List<Integer> nbAlea = generateNbAlea(taille);
