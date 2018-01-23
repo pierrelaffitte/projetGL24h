@@ -139,9 +139,9 @@ public class Weka implements algoInterface {
 	}
 
 
-public void evaluate(String train, String test, String y) {
-	//Object model=fit(train,y);
+public Object evaluate(String train, String test, String y) {
 	// TODO Auto-generated method stub
+	Object res= null;
 	J48 tree = (J48) fit(train,y);
 	Instances test1 = (Instances) importer(test);
 	if (!this.isString(test1, y) ){
@@ -153,13 +153,13 @@ public void evaluate(String train, String test, String y) {
 	try {
 		eval = new Evaluation(test1);
 		eval.evaluateModel(tree, test1);
-		System.out.println(eval.correct()*100.0/test1.size());
+		res = eval.correct()*100.0/test1.size();
 		//System.out.println(eval.toSummaryString());
 	} catch (Exception e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
-
+	return res;
 }
 
 public static void main(String[] args) throws Exception {
