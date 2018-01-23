@@ -98,12 +98,12 @@ public class Renjin_classificationTree implements algoInterface {
 		return modCart;
 	}
 
-	public void evaluate(String train, String test, String y) {
+	public Object evaluate(String train, String test, String y) {
 		Object model=fit(train, y);
 		Object testCSV = importer(test);
+		Object accuracy= null;
 		String code = "modpredCART=predict(mod,data_test,type=\"class\")\n" +  
 				"modmatCART=table(y,modpredCART)\n"+
-				"print(modmatCART)\n" +
 				"modtaux_err_CART= sum(modpredCART!= y)/nrow(data_test)\n" +
 				//"cat(\"Taux de mal classés :\",modtaux_err_CART)";
 				//"accuracy <- sum(diag(modmatCART))/sum(modmatCART)\n" + 
@@ -113,10 +113,11 @@ public class Renjin_classificationTree implements algoInterface {
 			engine.put("data_test", testCSV);
 			engine.put("mod", model);
 			engine.put("y", returnVar(testCSV, y));
-			engine.eval(code);
+		 accuracy= engine.eval(code);
 		} catch (ScriptException e) {
 			e.printStackTrace();
 		}
+		return accuracy;
 	}
 
 }

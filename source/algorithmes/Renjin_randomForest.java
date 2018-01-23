@@ -77,7 +77,7 @@ public class Renjin_randomForest implements algoInterface {
 		return modCart;
 	}
 
-	public void evaluate(String train, String test, String y) {
+	public Object evaluate(String train, String test, String y) {
 		Object testCSV = importer(test);
 		Object model=fit(train, y);
 		String code = "modpredRF=predict(mod,data_test,type=\"class\")\n" +  
@@ -92,6 +92,7 @@ public class Renjin_randomForest implements algoInterface {
 		} catch (ScriptException e) {
 			e.printStackTrace();
 		}
+		return null;
 		
 	}
 }
