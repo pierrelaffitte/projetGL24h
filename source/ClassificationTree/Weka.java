@@ -1,9 +1,10 @@
-package algorithmes;
+package ClassificationTree;
 
 import java.util.Enumeration;
 
 import org.netlib.lapack.Ssycon;
 
+import interfaces.algoInterface;
 import weka.core.Instances;
 import weka.core.Attribute;
 import weka.core.Instance;
@@ -73,7 +74,7 @@ public class Weka implements algoInterface {
 		return row.attribute(pos).isString();
 	}
 
-	public Object fit(String train, String y){
+	public Object fit(String train, String y,String...args){
 		// TODO Auto-generated method stub
 		J48 tree = null;
 		try {
@@ -139,9 +140,10 @@ public class Weka implements algoInterface {
 	}
 
 
-public void evaluate(String train, String test, String y) {
+public Object evaluate(String train, String test, String y,String...args) {
 	//Object model=fit(train,y);
 	// TODO Auto-generated method stub
+	Object resultat = null;
 	J48 tree = (J48) fit(train,y);
 	Instances test1 = (Instances) importer(test);
 	if (!this.isString(test1, y) ){
@@ -153,13 +155,14 @@ public void evaluate(String train, String test, String y) {
 	try {
 		eval = new Evaluation(test1);
 		eval.evaluateModel(tree, test1);
-		System.out.println(eval.correct()*100.0/test1.size());
+		resultat = eval.correct()*100.0/test1.size();
+		//System.out.println(eval.correct()*100.0/test1.size());
 		//System.out.println(eval.toSummaryString());
 	} catch (Exception e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
-
+	return resultat;
 }
 
 public static void main(String[] args) throws Exception {

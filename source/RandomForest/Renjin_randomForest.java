@@ -1,11 +1,14 @@
-package algorithmes;
+package RandomForest;
 
 import javax.script.*;
 
 import org.renjin.script.*;
-import org.renjin.sexp.SEXP;
 
-public class Renjin_classificationTree implements algoInterface {
+import interfaces.algoInterface;
+
+// TODO 1er argument => ntree
+
+public class Renjin_randomForest implements algoInterface {
 
 	private static RenjinScriptEngineFactory factory = new RenjinScriptEngineFactory();
 	private static ScriptEngine engine = factory.getScriptEngine();	
@@ -15,36 +18,20 @@ public class Renjin_classificationTree implements algoInterface {
 		//engine.eval(new java.io.FileReader("resources/progR.R"));
 		
 		// Essai méthodes d'arbres de classification
-		Renjin_classificationTree rj = new Renjin_classificationTree();
-		
-		/*List<String> x = new ArrayList<String>();
-		x.add("Sepal.Length");
-		x.add("Sepal.Width");
-		x.add("Petal.Length");
-		x.add("Petal.Width");
-		*/
+		Renjin_randomForest rj = new Renjin_randomForest();
 		
 		System.out.println("Fichier 1 : iris ---------------------------------------");
+		//Object modRF = rj.fit("resources/train_iris.csv","Species");
 		rj.evaluate("resources/train_iris.csv", "resources/test_iris.csv","Species");
-		System.out.println("");
 		
 		System.out.println("Fichier 2 : statsFSEVary ---------------------------------------");
+		//Object modRF2 = rj.fit("resources/train_statsFSEVary.csv","nbPages");
 		rj.evaluate("resources/train_statsFSEVary.csv", "resources/test_statsFSEVary.csv","nbPages");
-		System.out.println("");
-		
 		
 		System.out.println("Fichier 3 : winequality ---------------------------------------");
+		//Object modRF3 = rj.fit("resources/train_winequality.csv","quality");
 		rj.evaluate("resources/train_winequality.csv", "resources/test_winequality.csv","quality");
-		System.out.println("");
 		
-		System.out.println("Fichier 4 : mushrooms ---------------------------------------");
-		rj.evaluate("resources/train_mushrooms.csv", "resources/test_mushrooms.csv","class");
-		System.out.println("");
-		
-		//Class objectType = modCart.getClass();
-		//System.out.println("Java class of 'res' is: " + objectType.getName());
-		//System.out.println("In R, typeof(res) would give '" + modCart.getTypeName() + "'");
-		//System.out.println(modCart);
 	}
 
 	public Object importer(String file) {	
@@ -72,20 +59,16 @@ public class Renjin_classificationTree implements algoInterface {
 			e.printStackTrace();
 		}
 	
-		//SEXP va = (SEXP) variable;
-		//System.out.println(va);
-		
 		return variable;
 	}
 	
-	//  TODO : variables explicatives, poids, split=deviance
-	public Object fit(String train, String y) {
+	// TODO paramètre de l'arbre à intégrer --> nombre d'arbres (ntree)
+	public Object fit(String train, String y,String... otherArgs) {
 		Object trainCSV = importer(train);
 		Object modCart = null;
 		
-		String code = "library(rpart)\n" +
-					  "col <- which(colnames(data) ==\""+ y +"\")\n" +
-					  "rpart(y~.,data_train[c(-col)], method=\"class\",parms=list( split='gini'))";
+		String code = "library(randomForest)\n" +
+					  "randomForest(y ~ ., data = data_train, ntree = 5, mtry = 2, na.action = na.omit)";
 		
 		try {
 			engine.put("data_train", trainCSV);
@@ -98,26 +81,22 @@ public class Renjin_classificationTree implements algoInterface {
 		return modCart;
 	}
 
-	public Object evaluate(String train, String test, String y) {
-		Object model=fit(train, y);
+	public Object evaluate(String train, String test, String y,String... otherArgs) {
 		Object testCSV = importer(test);
-		Object accuracy= null;
-		String code = "modpredCART=predict(mod,data_test,type=\"class\")\n" +  
-				"modmatCART=table(y,modpredCART)\n"+
-				"modtaux_err_CART= sum(modpredCART!= y)/nrow(data_test)\n" +
-				//"cat(\"Taux de mal classés :\",modtaux_err_CART)";
-				//"accuracy <- sum(diag(modmatCART))/sum(modmatCART)\n" + 
-				"accuracy <- 1-modtaux_err_CART\n" +
-				"cat(\"Accuracy :\",accuracy)";
+		Object model=fit(train, y);
+		String code = "modpredRF=predict(mod,data_test,type=\"class\")\n" +  
+				//"modmatRF=table(y,modpredRF)\n" + 
+				"modtaux_err_RF= sum(modpredRF != y)/nrow(data_test)\n" + 
+				"print(modtaux_err_RF)";
 		try {
 			engine.put("data_test", testCSV);
 			engine.put("mod", model);
 			engine.put("y", returnVar(testCSV, y));
-		 accuracy= engine.eval(code);
+			engine.eval(code);
 		} catch (ScriptException e) {
 			e.printStackTrace();
 		}
-		return accuracy;
+		return null;
+		
 	}
-
 }

@@ -1,4 +1,4 @@
-package algorithmes;
+package interfaces;
 
 public interface algoInterface {
 
@@ -18,7 +18,7 @@ public interface algoInterface {
 	 * @param y : nom de la variable à expliquer (attention à la casse)
 	 * @return model
 	 */
-	public Object fit(String train, String y); 
+	public Object fit(String train, String y, String... otherArgs); 
 	
 	/**
 	 * Affiche le taux d'erreur du modèle appliqué sur l'échantillon test
@@ -27,6 +27,6 @@ public interface algoInterface {
 	 * @param test : chemin du fichier CSV de test
 	 * @param y : nom de la variable à expliquer
 	 */
-	public Object evaluate(String train, String test, String y);
+	public Object evaluate(String train, String test, String y, String... otherArgs);
 
 }

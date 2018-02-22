@@ -1,4 +1,4 @@
-package algorithmes;
+package ClassificationTree;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,6 +16,8 @@ import scala.Tuple2;
 import org.apache.spark.mllib.tree.DecisionTree;
 import org.apache.spark.mllib.tree.model.DecisionTreeModel;
 
+import interfaces.algoInterface;
+
 public class SparkML implements algoInterface{
 
 	public static SparkML sparkML = new SparkML();
@@ -29,7 +31,7 @@ public class SparkML implements algoInterface{
 	}
 	
 	@Override
-	public Object fit(String train, String y) {
+	public Object fit(String train, String y,String... args) {
 		// TODO Auto-generated method stub
 		SparkML sp = new SparkML();
 		JavaRDD<LabeledPoint> train2 = (JavaRDD<LabeledPoint>) sp.importer(train);
@@ -46,7 +48,7 @@ public class SparkML implements algoInterface{
 	}
 
 	@Override
-	public void evaluate(String train, String test, String y) {
+	public Object evaluate(String train, String test, String y,String... args) {
 		// TODO Auto-generated method stub
 		SparkML sp = new SparkML();
 		JavaRDD<LabeledPoint> test2 = (JavaRDD<LabeledPoint>) sp.importer(test);
@@ -57,8 +59,9 @@ public class SparkML implements algoInterface{
 		double testErr =
 				predictionAndLabel.filter(pl -> !pl._1().equals(pl._2())).count() / (double) test2.count();
 
-		System.out.println("Test Error: " + (1-testErr));
-		System.out.println("Learned classification tree model:\n" + model.toDebugString());
+		/*System.out.println("Test Error: " + (1-testErr));
+		System.out.println("Learned classification tree model:\n" + model.toDebugString());*/
+		return 1-testErr;
 	}
 
 	public List<LabeledPoint> convert(JavaRDD<String> lines){

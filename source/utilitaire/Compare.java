@@ -2,10 +2,10 @@ package utilitaire;
 
 import java.io.IOException;
 
-import algorithmes.Renjin_classificationTree;
-import algorithmes.SparkML;
-import algorithmes.Weka;
-import algorithmes.algoInterface;
+import ClassificationTree.Renjin_classificationTree;
+import ClassificationTree.SparkML;
+import ClassificationTree.Weka;
+import interfaces.algoInterface;
 
 public class Compare {
 
