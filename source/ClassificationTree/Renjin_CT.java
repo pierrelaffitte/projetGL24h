@@ -6,7 +6,7 @@ import org.renjin.script.*;
 
 import interfaces.algoInterface;
 
-public class Renjin_classificationTree implements algoInterface {
+public class Renjin_CT implements algoInterface {
 
 	private static RenjinScriptEngineFactory factory = new RenjinScriptEngineFactory();
 	private static ScriptEngine engine = factory.getScriptEngine();	
@@ -16,7 +16,7 @@ public class Renjin_classificationTree implements algoInterface {
 		//engine.eval(new java.io.FileReader("resources/progR.R"));
 		
 		// Essai méthodes d'arbres de classification
-		Renjin_classificationTree rj = new Renjin_classificationTree();
+		Renjin_CT rj = new Renjin_CT();
 		
 		/*List<String> x = new ArrayList<String>();
 		x.add("Sepal.Length");

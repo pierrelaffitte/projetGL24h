@@ -18,9 +18,9 @@ import org.apache.spark.mllib.tree.model.DecisionTreeModel;
 
 import interfaces.algoInterface;
 
-public class SparkML implements algoInterface{
+public class SparkML_CT implements algoInterface{
 
-	public static SparkML sparkML = new SparkML();
+	public static SparkML_CT sparkML = new SparkML_CT();
 	public static SparkConf conf = new SparkConf().setAppName("Workshop").setMaster("local[*]");
 	public static JavaSparkContext sc = new JavaSparkContext(conf);
 	
@@ -33,7 +33,7 @@ public class SparkML implements algoInterface{
 	@Override
 	public Object fit(String train, String y,String... args) {
 		// TODO Auto-generated method stub
-		SparkML sp = new SparkML();
+		SparkML_CT sp = new SparkML_CT();
 		JavaRDD<LabeledPoint> train2 = (JavaRDD<LabeledPoint>) sp.importer(train);
 		
 		int numClasses = 3;
@@ -50,7 +50,7 @@ public class SparkML implements algoInterface{
 	@Override
 	public Object evaluate(String train, String test, String y,String... args) {
 		// TODO Auto-generated method stub
-		SparkML sp = new SparkML();
+		SparkML_CT sp = new SparkML_CT();
 		JavaRDD<LabeledPoint> test2 = (JavaRDD<LabeledPoint>) sp.importer(test);
 		
 		DecisionTreeModel model = (DecisionTreeModel) fit(train, y);
@@ -96,7 +96,7 @@ public class SparkML implements algoInterface{
 		JavaRDD<String> linesTrain = sc.textFile("resources/train_iris.csv");
 		JavaRDD<String> linesTest = sc.textFile("resources/test_iris.csv");
 		*/
-		SparkML sp = new SparkML();
+		SparkML_CT sp = new SparkML_CT();
 		sp.evaluate("resources/train_iris.csv","resources/test_iris.csv", "Species");
 		/*
 		System.out.println("Lines count: " + lines.count());

@@ -2,9 +2,9 @@ package utilitaire;
 
 import java.io.IOException;
 
-import ClassificationTree.Renjin_classificationTree;
-import ClassificationTree.SparkML;
-import ClassificationTree.Weka;
+import ClassificationTree.Renjin_CT;
+import ClassificationTree.SparkML_CT;
+import ClassificationTree.Weka_CT;
 import interfaces.algoInterface;
 
 public class Compare {
@@ -36,8 +36,8 @@ public class Compare {
 	
 		switch(method) {
 			case classificationTree:
-				rj = new Renjin_classificationTree();
-				wk = new Weka();
+				rj = new Renjin_CT();
+				wk = new Weka_CT();
 				//sp = new SparkML();
 				break;
 			case randomForest:

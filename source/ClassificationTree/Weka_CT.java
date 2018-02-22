@@ -14,7 +14,7 @@ import weka.classifiers.trees.*;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.NumericToNominal;
 
-public class Weka implements algoInterface {
+public class Weka_CT implements algoInterface {
 
 	public Object importer(String file) {
 		Instances data = null;
@@ -67,7 +67,7 @@ public class Weka implements algoInterface {
 	}*/
 
 	public static boolean isString(Instances data, String y) {
-		Weka weka = new Weka();
+		Weka_CT weka = new Weka_CT();
 		Instance row = data.get(0);
 		int pos = weka.posY(data, y);
 		System.out.println(row.attribute(pos).isNumeric());
@@ -79,7 +79,7 @@ public class Weka implements algoInterface {
 		J48 tree = null;
 		try {
 			Instances train1 = ((Instances) importer(train));
-			if (!Weka.isString(train1, y) ){
+			if (!Weka_CT.isString(train1, y) ){
 				System.err.println("do conversion");
 				train1 = this.convertNumToString(train1, y);
 			}
@@ -212,7 +212,7 @@ public static void main(String[] args) throws Exception {
 		System.out.println("the average correction rate of "+fold+" cross validation: "+averagecorrect/fold);
 	 */
 
-	Weka weka = new Weka();
+	Weka_CT weka = new Weka_CT();
 	//J48 tree = (J48) weka.fit("resources/train_iris.csv","Species");
 	// evaluate on test echantillon
 	//weka.evaluate(tree, "resources/test_iris.csv","Species");
