@@ -46,7 +46,7 @@ public class SparkML implements algoInterface{
 	}
 
 	@Override
-	public void evaluate(String train, String test, String y) {
+	public Object evaluate(String train, String test, String y) {
 		// TODO Auto-generated method stub
 		SparkML sp = new SparkML();
 		JavaRDD<LabeledPoint> test2 = (JavaRDD<LabeledPoint>) sp.importer(test);
@@ -59,6 +59,7 @@ public class SparkML implements algoInterface{
 
 		System.out.println("Test Error: " + (1-testErr));
 		System.out.println("Learned classification tree model:\n" + model.toDebugString());
+		return 1-testErr;
 	}
 
 	public List<LabeledPoint> convert(JavaRDD<String> lines){
