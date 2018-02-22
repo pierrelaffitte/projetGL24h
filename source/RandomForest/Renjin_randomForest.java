@@ -22,16 +22,16 @@ public class Renjin_randomForest implements algoInterface {
 		
 		System.out.println("Fichier 1 : iris ---------------------------------------");
 		//Object modRF = rj.fit("resources/train_iris.csv","Species");
-		rj.evaluate("resources/train_iris.csv", "resources/test_iris.csv","Species");
-		
-		System.out.println("Fichier 2 : statsFSEVary ---------------------------------------");
+		Object accuracy = rj.evaluate("resources/train_iris.csv", "resources/test_iris.csv","Species","2");
+		System.out.println(accuracy);
+		/*System.out.println("Fichier 2 : statsFSEVary ---------------------------------------");
 		//Object modRF2 = rj.fit("resources/train_statsFSEVary.csv","nbPages");
 		rj.evaluate("resources/train_statsFSEVary.csv", "resources/test_statsFSEVary.csv","nbPages");
 		
 		System.out.println("Fichier 3 : winequality ---------------------------------------");
 		//Object modRF3 = rj.fit("resources/train_winequality.csv","quality");
 		rj.evaluate("resources/train_winequality.csv", "resources/test_winequality.csv","quality");
-		
+		*/
 	}
 
 	public Object importer(String file) {	
@@ -67,12 +67,12 @@ public class Renjin_randomForest implements algoInterface {
 		Object trainCSV = importer(train);
 		Object modCart = null;
 		
-		
-		
 		String code = "library(randomForest)\n" +
-					  "randomForest(y ~ ., data = data_train, ntree = 5, mtry = 2, na.action = na.omit)";
+				      "col <- which(colnames(data) ==\""+ y +"\")\n" +
+					  "randomForest(y ~ ., data = data_train[c(-col)], ntree = nb_tree, mtry = 2, na.action = na.omit)";
 		
 		try {
+			engine.put("nb_tree", Double.valueOf(otherArgs[0]));
 			engine.put("data_train", trainCSV);
 			engine.put("y", returnVar(trainCSV,y));
 			modCart = engine.eval(code);
@@ -85,20 +85,22 @@ public class Renjin_randomForest implements algoInterface {
 
 	public Object evaluate(String train, String test, String y,String... otherArgs) {
 		Object testCSV = importer(test);
-		Object model=fit(train, y);
+		Object model=fit(train, y,otherArgs);
+		Object accuracy=null;
 		String code = "modpredRF=predict(mod,data_test,type=\"class\")\n" +  
-				//"modmatRF=table(y,modpredRF)\n" + 
+				"modmatRF=table(y,modpredRF)\n" + 
 				"modtaux_err_RF= sum(modpredRF != y)/nrow(data_test)\n" + 
-				"print(modtaux_err_RF)";
+				//"print(modtaux_err_RF)";
+				"accuracy <- 1-modtaux_err_RF\n";
 		try {
 			engine.put("data_test", testCSV);
 			engine.put("mod", model);
 			engine.put("y", returnVar(testCSV, y));
-			engine.eval(code);
+			accuracy = engine.eval(code);
 		} catch (ScriptException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return accuracy;
 		
 	}
 }
