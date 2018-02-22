@@ -24,14 +24,16 @@ public class Renjin_randomForest implements algoInterface {
 		//Object modRF = rj.fit("resources/train_iris.csv","Species");
 		Object accuracy = rj.evaluate("resources/train_iris.csv", "resources/test_iris.csv","Species","2");
 		System.out.println(accuracy);
-		/*System.out.println("Fichier 2 : statsFSEVary ---------------------------------------");
+		
+		System.out.println("Fichier 2 : statsFSEVary ---------------------------------------");
 		//Object modRF2 = rj.fit("resources/train_statsFSEVary.csv","nbPages");
-		rj.evaluate("resources/train_statsFSEVary.csv", "resources/test_statsFSEVary.csv","nbPages");
+		accuracy = rj.evaluate("resources/train_statsFSEVary.csv", "resources/test_statsFSEVary.csv","nbPages","1");
+		System.out.println(accuracy);
 		
 		System.out.println("Fichier 3 : winequality ---------------------------------------");
 		//Object modRF3 = rj.fit("resources/train_winequality.csv","quality");
-		rj.evaluate("resources/train_winequality.csv", "resources/test_winequality.csv","quality");
-		*/
+		accuracy = rj.evaluate("resources/train_winequality.csv", "resources/test_winequality.csv","quality","1");
+		System.out.println(accuracy);
 	}
 
 	public Object importer(String file) {	
