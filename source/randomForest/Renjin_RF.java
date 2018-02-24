@@ -8,7 +8,7 @@ import interfaces.algoInterface;
 
 // TODO 1er argument => ntree
 
-public class Renjin_randomForest implements algoInterface {
+public class Renjin_RF implements algoInterface {
 
 	private static RenjinScriptEngineFactory factory = new RenjinScriptEngineFactory();
 	private static ScriptEngine engine = factory.getScriptEngine();	
@@ -18,11 +18,11 @@ public class Renjin_randomForest implements algoInterface {
 		//engine.eval(new java.io.FileReader("resources/progR.R"));
 		
 		// Essai méthodes d'arbres de classification
-		Renjin_randomForest rj = new Renjin_randomForest();
+		Renjin_RF rj = new Renjin_RF();
 		
 		System.out.println("Fichier 1 : iris ---------------------------------------");
 		//Object modRF = rj.fit("resources/train_iris.csv","Species");
-		Object accuracy = rj.evaluate("resources/train_iris.csv", "resources/test_iris.csv","Species","2");
+		Object accuracy = rj.evaluate("resources/train_iris.csv", "resources/test_iris.csv","Species","1");
 		System.out.println(accuracy);
 		
 		System.out.println("Fichier 2 : statsFSEVary ---------------------------------------");
@@ -33,6 +33,10 @@ public class Renjin_randomForest implements algoInterface {
 		System.out.println("Fichier 3 : winequality ---------------------------------------");
 		//Object modRF3 = rj.fit("resources/train_winequality.csv","quality");
 		accuracy = rj.evaluate("resources/train_winequality.csv", "resources/test_winequality.csv","quality","1");
+		System.out.println(accuracy);
+		
+		System.out.println("Fichier 4 : mushrooms ---------------------------------------");
+		accuracy = rj.evaluate("resources/train_mushrooms.csv", "resources/test_mushrooms.csv","class","1");
 		System.out.println(accuracy);
 	}
 
@@ -64,7 +68,6 @@ public class Renjin_randomForest implements algoInterface {
 		return variable;
 	}
 	
-	// TODO paramètre de l'arbre à intégrer --> nombre d'arbres (ntree)
 	public Object fit(String train, String y,String... otherArgs) {
 		Object trainCSV = importer(train);
 		Object modCart = null;

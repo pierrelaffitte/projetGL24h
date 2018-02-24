@@ -6,6 +6,7 @@ import classificationTree.Renjin_CT;
 import classificationTree.SparkML_CT;
 import classificationTree.Weka_CT;
 import interfaces.algoInterface;
+import java_cup.sym;
 
 public class Compare {
 
@@ -38,7 +39,7 @@ public class Compare {
 			case classificationTree:
 				rj = new Renjin_CT();
 				wk = new Weka_CT();
-				//sp = new SparkML();
+				sp = new SparkML_CT();
 				break;
 			case randomForest:
 				break;
@@ -47,8 +48,14 @@ public class Compare {
 		}
 		
 		// Evaluate 
-		rj.evaluate(train, test, y);
-		wk.evaluate(train, test, y);
+		Object rj_eval = rj.evaluate(train, test, y);
+		Object wk_eval = wk.evaluate(train, test, y);
+		Object sp_eval = sp.evaluate(train, test, y);
+		
+		// Affichage
+		System.out.println("Renjin : " + rj_eval);
+		System.out.println("Weka : " + wk_eval);
+		System.out.println("Spark ML : " + sp_eval);
 	}
 
 }

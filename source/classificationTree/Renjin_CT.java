@@ -26,21 +26,21 @@ public class Renjin_CT implements algoInterface {
 		*/
 		
 		System.out.println("Fichier 1 : iris ---------------------------------------");
-		rj.evaluate("resources/train_iris.csv", "resources/test_iris.csv","Species");
-		System.out.println("");
+		Object eval = rj.evaluate("resources/train_iris.csv", "resources/test_iris.csv","Species");
+		System.out.println(eval);
 		
 		System.out.println("Fichier 2 : statsFSEVary ---------------------------------------");
-		rj.evaluate("resources/train_statsFSEVary.csv", "resources/test_statsFSEVary.csv","nbPages");
-		System.out.println("");
+		eval = rj.evaluate("resources/train_statsFSEVary.csv", "resources/test_statsFSEVary.csv","nbPages");
+		System.out.println(eval);
 		
 		
 		System.out.println("Fichier 3 : winequality ---------------------------------------");
-		rj.evaluate("resources/train_winequality.csv", "resources/test_winequality.csv","quality");
-		System.out.println("");
+		eval = rj.evaluate("resources/train_winequality.csv", "resources/test_winequality.csv","quality");
+		System.out.println(eval);
 		
 		System.out.println("Fichier 4 : mushrooms ---------------------------------------");
-		rj.evaluate("resources/train_mushrooms.csv", "resources/test_mushrooms.csv","class");
-		System.out.println("");
+		eval = rj.evaluate("resources/train_mushrooms.csv", "resources/test_mushrooms.csv","class");
+		System.out.println(eval);
 		
 		//Class objectType = modCart.getClass();
 		//System.out.println("Java class of 'res' is: " + objectType.getName());

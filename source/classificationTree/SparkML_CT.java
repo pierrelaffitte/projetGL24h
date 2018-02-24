@@ -18,6 +18,7 @@ import org.apache.spark.mllib.tree.model.DecisionTreeModel;
 
 import interfaces.algoInterface;
 
+// TODO : à généraliser à n'importe quel CSV
 public class SparkML_CT implements algoInterface{
 
 	public static SparkML_CT sparkML = new SparkML_CT();
@@ -32,7 +33,6 @@ public class SparkML_CT implements algoInterface{
 	
 	@Override
 	public Object fit(String train, String y,String... args) {
-		// TODO Auto-generated method stub
 		SparkML_CT sp = new SparkML_CT();
 		JavaRDD<LabeledPoint> train2 = (JavaRDD<LabeledPoint>) sp.importer(train);
 		
@@ -49,7 +49,6 @@ public class SparkML_CT implements algoInterface{
 
 	@Override
 	public Object evaluate(String train, String test, String y,String... args) {
-		// TODO Auto-generated method stub
 		SparkML_CT sp = new SparkML_CT();
 		JavaRDD<LabeledPoint> test2 = (JavaRDD<LabeledPoint>) sp.importer(test);
 		

@@ -75,7 +75,6 @@ public class Weka_CT implements algoInterface {
 	}
 
 	public Object fit(String train, String y,String...args){
-		// TODO Auto-generated method stub
 		J48 tree = null;
 		try {
 			Instances train1 = ((Instances) importer(train));
@@ -142,7 +141,6 @@ public class Weka_CT implements algoInterface {
 
 public Object evaluate(String train, String test, String y,String...args) {
 	//Object model=fit(train,y);
-	// TODO Auto-generated method stub
 	Object resultat = null;
 	J48 tree = (J48) fit(train,y);
 	Instances test1 = (Instances) importer(test);
@@ -159,7 +157,6 @@ public Object evaluate(String train, String test, String y,String...args) {
 		//System.out.println(eval.correct()*100.0/test1.size());
 		//System.out.println(eval.toSummaryString());
 	} catch (Exception e) {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
 	return resultat;
