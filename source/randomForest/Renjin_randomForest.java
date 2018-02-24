@@ -1,4 +1,4 @@
-package RandomForest;
+package randomForest;
 
 import javax.script.*;
 

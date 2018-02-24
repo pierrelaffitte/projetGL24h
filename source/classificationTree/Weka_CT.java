@@ -1,4 +1,4 @@
-package ClassificationTree;
+package classificationTree;
 
 import java.util.Enumeration;
 

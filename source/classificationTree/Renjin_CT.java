@@ -1,4 +1,4 @@
-package ClassificationTree;
+package classificationTree;
 
 import javax.script.*;
 

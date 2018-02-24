@@ -1,4 +1,4 @@
-package ClassificationTree;
+package classificationTree;
 
 import java.util.ArrayList;
 import java.util.HashMap;

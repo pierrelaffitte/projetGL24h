@@ -2,9 +2,9 @@ package utilitaire;
 
 import java.io.IOException;
 
-import ClassificationTree.Renjin_CT;
-import ClassificationTree.SparkML_CT;
-import ClassificationTree.Weka_CT;
+import classificationTree.Renjin_CT;
+import classificationTree.SparkML_CT;
+import classificationTree.Weka_CT;
 import interfaces.algoInterface;
 
 public class Compare {
