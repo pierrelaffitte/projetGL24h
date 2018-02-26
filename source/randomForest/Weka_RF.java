@@ -57,6 +57,8 @@ public class Weka_RF implements algoInterface {
 
 	public Object fit(String train, String y,String...args){
 		RandomForest rf = null;
+		int nbtrees = Integer.valueOf(args[0]);
+		System.out.println(nbtrees);
 		try {
 			Instances train1 = ((Instances) importer(train));
 			if (!Weka_RF.isString(train1, y) ){
@@ -124,7 +126,8 @@ public class Weka_RF implements algoInterface {
 	public Object evaluate(String train, String test, String y,String...args) {
 		//Object model=fit(train,y);
 		Object resultat = null;
-		RandomForest rf = (RandomForest) fit(train,y);
+		RandomForest rf = (RandomForest) fit(train,y, args);
+		rf.setNumIterations(10);
 		Instances test1 = (Instances) importer(test);
 		if (!this.isString(test1, y) ){
 			test1 = this.convertNumToString(test1, y);
@@ -155,7 +158,7 @@ public class Weka_RF implements algoInterface {
                 "-t", "resources/train_iris.csv", "-T", "resources/test_iris.csv",
                 "-c", Integer.toString(y+1) 
                 });
-		//System.out.println(weka.evaluate("resources/train_iris.csv","resources/test_iris.csv","Species"));
+		System.out.println(weka.evaluate("resources/train_iris.csv","resources/test_iris.csv","Species", "50"));
 	}
 
 }
