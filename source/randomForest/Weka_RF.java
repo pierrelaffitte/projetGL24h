@@ -66,6 +66,7 @@ public class Weka_RF implements algoInterface {
 			train1.setClassIndex(posY(train1,y));
 			//train1.setClassIndex(train1.numAttributes()-1);
 			rf = new RandomForest();
+			//rf.;
 			rf.buildClassifier(train1);
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -147,7 +148,14 @@ public class Weka_RF implements algoInterface {
 		int fold = 10; // nombre k de groupes pour la cross validation
 		int seed = 1; //graine pour la reproductibilité des résultats
 		Weka_RF weka = new Weka_RF();
-		System.out.println(weka.evaluate("resources/train_iris.csv","resources/test_iris.csv","Species"));
+		int y = weka.posY((Instances)weka.importer("resources/train_iris.csv"), "Species");
+		RandomForest rf = new RandomForest();
+		RandomForest.main(new String[] {"-h"});
+		RandomForest.main(new String[] {"-I", "1000", // Number of trees to build
+                "-t", "resources/train_iris.csv", "-T", "resources/test_iris.csv",
+                "-c", Integer.toString(y+1) 
+                });
+		//System.out.println(weka.evaluate("resources/train_iris.csv","resources/test_iris.csv","Species"));
 	}
 
 }
