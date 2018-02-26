@@ -56,7 +56,7 @@ public class Weka_RF implements algoInterface {
 	}
 
 	public Object fit(String train, String y,String...args){
-		RandomForest tree = null;
+		RandomForest rf = null;
 		try {
 			Instances train1 = ((Instances) importer(train));
 			if (!Weka_RF.isString(train1, y) ){
@@ -65,13 +65,13 @@ public class Weka_RF implements algoInterface {
 			}
 			train1.setClassIndex(posY(train1,y));
 			//train1.setClassIndex(train1.numAttributes()-1);
-			tree = new RandomForest();
-			tree.buildClassifier(train1);
+			rf = new RandomForest();
+			rf.buildClassifier(train1);
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return tree;
+		return rf;
 	}
 
 	public  Instances convertNumToString(Instances data, String y) {
@@ -123,7 +123,7 @@ public class Weka_RF implements algoInterface {
 	public Object evaluate(String train, String test, String y,String...args) {
 		//Object model=fit(train,y);
 		Object resultat = null;
-		RandomForest tree = (RandomForest) fit(train,y);
+		RandomForest rf = (RandomForest) fit(train,y);
 		Instances test1 = (Instances) importer(test);
 		if (!this.isString(test1, y) ){
 			test1 = this.convertNumToString(test1, y);
@@ -133,7 +133,7 @@ public class Weka_RF implements algoInterface {
 		Evaluation eval;
 		try {
 			eval = new Evaluation(test1);
-			eval.evaluateModel(tree, test1);
+			eval.evaluateModel(rf, test1);
 			resultat = eval.correct()*100.0/test1.size();
 			//System.out.println(eval.correct()*100.0/test1.size());
 			//System.out.println(eval.toSummaryString());
