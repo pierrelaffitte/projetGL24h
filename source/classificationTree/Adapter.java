@@ -1,5 +1,6 @@
 package classificationTree;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -27,12 +28,12 @@ import scala.Tuple2;
 
 
 // TODO : à généraliser à n'importe quel CSV
-public class Adapter {
+public class Adapter implements Serializable{
 
 	public static Adapter sparkML = new Adapter();
 	public static SparkConf conf = new SparkConf().setAppName("Workshop").setMaster("local[*]");
 	public static JavaSparkContext sc = new JavaSparkContext(conf);
-	
+
 	public int chooseY(String y, String header, String sep, boolean id) {
 		String[] colnames = header.split(sep);
 		int res = 0;
@@ -46,13 +47,12 @@ public class Adapter {
 		}
 		return res;
 	}
-	
+
 	public String getHeader(JavaRDD<String> data) {
 		return data.first();
 	}
-	
-	public JavaRDD<String> removeHeader(JavaRDD<String> data){
-		String header = getHeader(data);
+
+	public JavaRDD<String> removeHeader(JavaRDD<String> data, String header){
 		JavaRDD<String> res = (JavaRDD) data.filter(new Function<String, Boolean>(){
 			@Override
 			public Boolean call(String s) {
@@ -61,7 +61,7 @@ public class Adapter {
 		});
 		return res;
 	}
-	
+
 	public JavaRDD<List<String>> splitData(JavaRDD<String> data){
 		JavaRDD<List<String>> res = data.map(new Function<String, List<String>>(){
 			@Override
@@ -71,7 +71,7 @@ public class Adapter {
 		});
 		return res;
 	}
-		
+
 	public JavaRDD<ArrayList<ArrayList<Boolean>>> typeOfDataByIndividu(JavaRDD<List<String>> data) {
 		JavaRDD<ArrayList<ArrayList<Boolean>>> res = data.map(new Function<List<String>, ArrayList<ArrayList<Boolean>>>(){
 			public ArrayList<ArrayList<Boolean>> call(List<String> s) {
@@ -98,8 +98,8 @@ public class Adapter {
 		});
 		return res;
 	}
-	
-	public HashMap<String, List<Integer>> typeOfVar(JavaRDD<List<String>> data, JavaRDD<ArrayList<ArrayList<Boolean>>> typesOfInd) {
+
+	public HashMap<String, List<Integer>> typeOfVar(JavaRDD<List<String>> data, JavaRDD<ArrayList<ArrayList<Boolean>>> typesOfInd, int varY) {
 		HashMap<String, List<Integer>> prop = new HashMap<String, List<Integer>>();
 		prop.put("Double", new ArrayList<Integer>());
 		prop.put("Boolean", new ArrayList<Integer>());
@@ -108,51 +108,56 @@ public class Adapter {
 		//System.out.println("nb de var : "+col.collect().get(0).size());
 		//System.out.println("nb de type"+col.collect().size());
 		for (int var = 1; var < data.collect().get(0).size(); var++) {
-			int mavar = var;
-			boolean find = false;
-			for (int type = 0; type < 3; type++) {
-				int montype = type;
-				Boolean temp = typesOfInd.map(new Function<ArrayList<ArrayList<Boolean>>, Boolean>(){
-					@Override
-					public Boolean call(ArrayList<ArrayList<Boolean>> ligne) {
-						return ligne.get(mavar).get(montype);
+			if (var == varY) {
+				prop.get("String").add(var);	
+			}else {
+				int mavar = var;
+				boolean find = false;
+				for (int type = 0; type < 3; type++) {
+					int montype = type;
+					Boolean temp = typesOfInd.map(new Function<ArrayList<ArrayList<Boolean>>, Boolean>(){
+						@Override
+						public Boolean call(ArrayList<ArrayList<Boolean>> ligne) {
+							return ligne.get(mavar).get(montype);
+						}
+					}).reduce(new Function2<Boolean, Boolean, Boolean>(){
+						@Override
+						public Boolean call(Boolean b1, Boolean b2) {
+							return b1 & b2;
+						}
+					});
+					System.out.println(mavar+ " "+montype+ "  "+ temp);
+					if (temp) {
+						find = true;
+						if (montype == 0) {
+							prop.get("Double").add(mavar);
+						}
+						if (montype == 1) {
+							prop.get("Boolean").add(mavar);
+						}
+						if (montype == 2) {
+							prop.get("Integer").add(mavar);
+						}
 					}
-				}).reduce(new Function2<Boolean, Boolean, Boolean>(){
-					@Override
-					public Boolean call(Boolean b1, Boolean b2) {
-						return b1 & b2;
-					}
-				});
-				System.out.println(mavar+ " "+montype+ "  "+ temp);
-				if (temp) {
-					find = true;
-					if (montype == 0) {
-						prop.get("Double").add(mavar);
-					}
-					if (montype == 1) {
-						prop.get("Boolean").add(mavar);
-					}
-					if (montype == 2) {
-						prop.get("Integer").add(mavar);
-					}
+
+					if (!find)
+						prop.get("String").add(mavar);				
 				}
-			
-			if (!find)
-				prop.get("String").add(mavar);				
 			}
-			
-				
+
+
+
 		}
 		return prop;
 	}
-	
+
 	public ArrayList<String> knowTypes(JavaRDD<List<String>> col,HashMap<String, List<Integer>> prop) {
 
 		ArrayList<String> index = new ArrayList<String>();
 		for (String var: col.first()) {
 			index.add(" ");
 		}
-		
+
 		for (String key : prop.keySet()) {
 			for ( int i = 0 ; i < prop.get(key).size(); i++) {
 				index.set(prop.get(key).get(i), key);
@@ -160,7 +165,7 @@ public class Adapter {
 		}
 		return index;
 	}
-	
+
 	public ArrayList<Set<String>> knowModalites(ArrayList<String> index,JavaRDD<List<String>> col ){
 		ArrayList<Set<String>> modalites = new ArrayList<Set<String>>();
 		for (int i =0; i < index.size(); i++) {
@@ -188,12 +193,13 @@ public class Adapter {
 		}
 		return modalites;
 	}
-	
-	
+
+
 	public ArrayList<HashMap<String, Double>> convModalites(ArrayList<Set<String>> modalites) {
 		ArrayList<HashMap<String, Double>> mesModaRecodes = new ArrayList<HashMap<String, Double>>();
 		for (Set<String> mesModas : modalites) {
 			HashMap<String, Double> tmp = new HashMap<String, Double>();
+			
 			Iterator<String> it = mesModas.iterator();
 			double compteur = 0;
 			while(it.hasNext()) {
@@ -204,8 +210,8 @@ public class Adapter {
 		}
 		return mesModaRecodes;
 	}
-	
-	
+
+
 	public JavaRDD<Double[]> recodage(ArrayList<String> index, JavaRDD<List<String>> col, ArrayList<HashMap<String, Double>> mesModaRecodes){
 		JavaRDD<Double[]> vecteur = col.map(new Function<List<String>, Double[]>(){
 			@Override
@@ -237,7 +243,7 @@ public class Adapter {
 		}
 		return vecteur;
 	}
-	
+
 	public JavaRDD<LabeledPoint> convertIntoLabeledPoint(JavaRDD<Double[]> vecteur, int varY){
 
 		JavaRDD<LabeledPoint> res = vecteur.map(new Function<Double[], LabeledPoint>(){
@@ -256,12 +262,34 @@ public class Adapter {
 		});
 		return res;
 	}
-	
-	
-	
-	
+
+
+	public Set<String> varYModalites(int varY,JavaRDD<List<String>> col ){
+		Set<String> mesModa = col.map(new Function<List<String>, Set<String>>(){
+			@Override
+			public Set<String> call(List<String> s) {
+				Set<String> res = new HashSet<String>();
+				res.add(s.get(varY).toString());
+				return res;
+			}
+		}).reduce(new Function2<Set<String>, Set<String>, Set<String>>(){
+			@Override
+			public Set<String> call(Set<String> set1, Set<String> set2){
+				Iterator<String> it = set2.iterator();
+				while(it.hasNext()) {
+					set1.add(it.next());
+				}
+				return set1;
+			}
+		});
+		return mesModa;
+	}
+
+
+
+
 	public Object fit(JavaRDD<LabeledPoint> train, String y,String... args) {
-		int numClasses = 3;
+		int numClasses = 4;
 		Map<Integer, Integer> categoricalFeaturesInfo = new HashMap<>();
 		String impurity = "gini";
 		int maxDepth = 5;
@@ -271,16 +299,20 @@ public class Adapter {
 				categoricalFeaturesInfo, impurity, maxDepth, maxBins);
 		return model;
 	}
-	
+
 	public static void main(String[] args) {
+		/*
 		Adapter a = new Adapter();
 		JavaRDD<String> linesData = sc.textFile("resources/train_iris.csv");
-				
+
 		// on retire la première ligne (le header) 
 		String header = linesData.first();
 		System.out.println(a.chooseY("Species", header, ",", true));
-		
-		/*
+
+
+
+
+
 		JavaRDD<String> col2 = (JavaRDD) linesData.filter(new Function<String, Boolean>(){
 			@Override
 			public Boolean call(String s) {
@@ -288,7 +320,7 @@ public class Adapter {
 			}
 		});
 		System.out.println(col2.collect().get(0));
-		
+
 		JavaRDD<List<String>> col = col2.map(new Function<String, List<String>>(){
 			@Override
 			public List<String> call(String s){
@@ -296,7 +328,7 @@ public class Adapter {
 			}
 		});
 		System.out.println(col.collect().get(0));
-		
+
 		JavaRDD<ArrayList<ArrayList<Boolean>>> col1 = col.map(new Function<List<String>, ArrayList<ArrayList<Boolean>>>(){
 			@Override
 			public ArrayList<ArrayList<Boolean>> call(List<String> s) {
@@ -322,7 +354,7 @@ public class Adapter {
 			}
 		});
 		System.out.println(col1.collect().get(0));
-		
+
 		System.out.println(col1.collect().get(1));
 		System.out.println(col1.collect().get(2));
 		HashMap<String, List<Integer>> prop = new HashMap<String, List<Integer>>();
@@ -361,27 +393,27 @@ public class Adapter {
 						prop.get("Integer").add(mavar);
 					}
 				}
-			
+
 			if (!find)
 				prop.get("String").add(mavar);				
 			}
-			
-				
+
+
 		}
 		System.out.println(prop);
-		
+
 		ArrayList<String> index = new ArrayList<String>();
 		for (String var: col.first()) {
 			index.add(" ");
 		}
-		
+
 		for (String key : prop.keySet()) {
 			for ( int i = 0 ; i < prop.get(key).size(); i++) {
 				index.set(prop.get(key).get(i), key);
 			}
 		}
-		
-		
+
+
 		System.out.println(index);
 		ArrayList<Set<String>> modalites = new ArrayList<Set<String>>();
 		for (int i =0; i < index.size(); i++) {
@@ -408,7 +440,7 @@ public class Adapter {
 			}
 		}
 		System.out.println(modalites);
-		
+
 		ArrayList<HashMap<String, Double>> mesModaRecodes = new ArrayList<HashMap<String, Double>>();
 		for (Set<String> mesModas : modalites) {
 			HashMap<String, Double> tmp = new HashMap<String, Double>();
@@ -421,8 +453,8 @@ public class Adapter {
 			mesModaRecodes.add(tmp);
 		}
 		System.out.println(mesModaRecodes);
-		
-		
+
+
 		// création du jeu de données
 		JavaRDD<Double[]> vecteur = col.map(new Function<List<String>, Double[]>(){
 			@Override
@@ -452,14 +484,14 @@ public class Adapter {
 		for (Double val : maLigne) {
 			System.out.println(val);
 		}
-		
+
 		// choix du Y
 		int varY = 4;
-		
-		
+
+
 		// création des LabeledPoint
-		
-		
+
+
 		JavaRDD<LabeledPoint> res = vecteur.map(new Function<Double[], LabeledPoint>(){
 			@Override
 			public LabeledPoint call(Double[] monvec) {
@@ -475,10 +507,46 @@ public class Adapter {
 			}
 		});
 		System.out.println(res.collect().get(0));
-		
-		a.fit(res, "Species");
-		*/
 
+		a.fit(res, "Species");
+		 */
+
+		Adapter a = new Adapter();
+		JavaRDD<String> linesData = sc.textFile("resources/train_statsFSEVary.csv");
+
+		// on retire la première ligne (le header) 
+		String header = a.getHeader(linesData);
+		int varY = a.chooseY("sizePDF", header, ",", true);
+		System.out.println(varY);
+		
+		JavaRDD<String> dataWithoutHeader = a.removeHeader(linesData, header);
+		JavaRDD<List<String>> data = a.splitData(dataWithoutHeader);
+		System.out.println(data.collect().get(0));
+		JavaRDD<ArrayList<ArrayList<Boolean>>> hypo = a.typeOfDataByIndividu(data);
+		System.out.println(hypo.collect().get(0));
+		
+		
+		HashMap<String, List<Integer>> prop = a.typeOfVar(data, hypo,varY+1);
+		System.out.println(prop);
+		
+		ArrayList<String> monVecteurDeType = a.knowTypes(data, prop);
+		System.out.println(monVecteurDeType);
+		ArrayList<Set<String>> mesModas = a.knowModalites(monVecteurDeType, data);
+		System.out.println(mesModas);
+		ArrayList<HashMap<String, Double>> mesModasRecodes= a.convModalites(mesModas);
+		System.out.println(mesModasRecodes);
+		
+		
+		
+		JavaRDD<Double[]> myDataAlmostClean= a.recodage(monVecteurDeType, data, mesModasRecodes);
+		Double[] maLigne = myDataAlmostClean.collect().get(0);
+		for (Double val : maLigne) {
+			System.out.println(val);
+		}
+		JavaRDD<LabeledPoint> train = a.convertIntoLabeledPoint(myDataAlmostClean, varY);
+		System.out.println(train.collect().get(0));
+		System.out.println(train.collect().get(0).label());
+		a.fit(train, "sizePDF"); 
 		sc.stop();
 
 	}
