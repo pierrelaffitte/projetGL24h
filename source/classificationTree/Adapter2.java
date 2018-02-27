@@ -27,7 +27,7 @@ import scala.Tuple2;
 
 
 // TODO : à généraliser à n'importe quel CSV
-public class Adapter {
+public class Adapter2 {
 
 	public static Adapter sparkML = new Adapter();
 	public static SparkConf conf = new SparkConf().setAppName("Workshop").setMaster("local[*]");
