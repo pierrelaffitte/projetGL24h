@@ -2,8 +2,6 @@ package algorithmes;
 
 import java.util.Enumeration;
 
-import weka.filters.unsupervised.attribute.NumericToNominal;
-
 import weka.core.Instances;
 import weka.core.Attribute;
 import weka.core.converters.ConverterUtils.DataSource;
@@ -79,8 +77,6 @@ public class Weka implements algoInterface {
 		
 	}
 	
-	
-	
 	public static void main(String[] args) throws Exception {
 		int fold = 10; // nombre k de groupes pour la cross validation
 		int seed = 1; //graine pour la reproductibilité des résultats
@@ -132,9 +128,7 @@ public class Weka implements algoInterface {
 		//J48 tree = (J48) weka.fit("resources/train_iris.csv","Species");
 		// evaluate on test echantillon
 		//weka.evaluate(tree, "resources/test_iris.csv","Species");
-		weka.evaluate("resources/train_statsFSEVary.csv","resources/test_statsFSEVary.csv","ACK");
-		
-		
+		weka.evaluate("resources/train_iris.csv","resources/test_iris.csv","Species");
 	}
 
 }

@@ -1,4 +1,4 @@
-package algorithmes;
+package classificationTree;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,12 +16,51 @@ import scala.Tuple2;
 import org.apache.spark.mllib.tree.DecisionTree;
 import org.apache.spark.mllib.tree.model.DecisionTreeModel;
 
-public class SparkML {
+import interfaces.algoInterface;
 
+// TODO : à généraliser à n'importe quel CSV
+public class SparkML_CT implements algoInterface{
+
+	public static SparkML_CT sparkML = new SparkML_CT();
+	public static SparkConf conf = new SparkConf().setAppName("Workshop").setMaster("local[*]");
+	public static JavaSparkContext sc = new JavaSparkContext(conf);
+	
 	public Object importer(String path) {
+		JavaRDD<String> linesData = sc.textFile(path);
+		JavaRDD<LabeledPoint> data = sc.parallelize((ArrayList)sparkML.convert(linesData));
+		return data;
+	}
+	
+	@Override
+	public Object fit(String train, String y,String... args) {
+		SparkML_CT sp = new SparkML_CT();
+		JavaRDD<LabeledPoint> train2 = (JavaRDD<LabeledPoint>) sp.importer(train);
+		
+		int numClasses = 3;
+		Map<Integer, Integer> categoricalFeaturesInfo = new HashMap<>();
+		String impurity = "gini";
+		int maxDepth = 5;
+		int maxBins = 32;	
 
-		return null;
+		DecisionTreeModel model = DecisionTree.trainClassifier(train2, numClasses,
+				categoricalFeaturesInfo, impurity, maxDepth, maxBins);
+		return model;
+	}
 
+	@Override
+	public Object evaluate(String train, String test, String y,String... args) {
+		SparkML_CT sp = new SparkML_CT();
+		JavaRDD<LabeledPoint> test2 = (JavaRDD<LabeledPoint>) sp.importer(test);
+		
+		DecisionTreeModel model = (DecisionTreeModel) fit(train, y);
+		JavaPairRDD<Double, Double> predictionAndLabel =
+				test2.mapToPair(p -> new Tuple2<>(model.predict(p.features()), p.label()));
+		double testErr =
+				predictionAndLabel.filter(pl -> !pl._1().equals(pl._2())).count() / (double) test2.count();
+
+		/*System.out.println("Test Error: " + (1-testErr));
+		System.out.println("Learned classification tree model:\n" + model.toDebugString());*/
+		return 1-testErr;
 	}
 
 	public List<LabeledPoint> convert(JavaRDD<String> lines){
@@ -47,7 +86,7 @@ public class SparkML {
 	}
 
 	public static void main(String[] args) {
-
+		/*
 		SparkML sparkML = new SparkML();
 		SparkConf conf = new SparkConf().setAppName("Workshop").setMaster("local[*]");
 		JavaSparkContext sc = new JavaSparkContext(conf);
@@ -55,7 +94,9 @@ public class SparkML {
 		//Path path = Paths.get(TentativePierreSparkML.class.getResource("resources/train_iris.csv").getPath());
 		JavaRDD<String> linesTrain = sc.textFile("resources/train_iris.csv");
 		JavaRDD<String> linesTest = sc.textFile("resources/test_iris.csv");
-
+		*/
+		SparkML_CT sp = new SparkML_CT();
+		System.out.println(sp.evaluate("resources/train_iris.csv","resources/test_iris.csv", "Species"));
 		/*
 		System.out.println("Lines count: " + lines.count());
 		//colnames
@@ -65,7 +106,7 @@ public class SparkML {
 		 */
 		//recodage
 		// exemple de labeledpoint
-
+		/*
 		JavaRDD<LabeledPoint> train = sc.parallelize((ArrayList)sparkML.convert(linesTrain));
 		System.out.println(train.collect().get(1));
 		JavaRDD<LabeledPoint> test = sc.parallelize((ArrayList)sparkML.convert(linesTest));
@@ -85,6 +126,8 @@ public class SparkML {
 
 		System.out.println("Test Error: " + (1-testErr));
 		System.out.println("Learned classification tree model:\n" + model.toDebugString());
+		
+		*/
 		//ArrayList<String> var = (ArrayList<String>) lines.collect();
 		/*
 		SparkSession spark = SparkSession.builder().appName("JavaModelSelectionViaCrossValidation").getOrCreate();
@@ -137,6 +180,7 @@ public class SparkML {
 		sc.stop();
 
 	}
+
 
 }
 
