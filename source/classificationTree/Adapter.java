@@ -6,17 +6,24 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import javax.swing.plaf.synth.SynthSpinnerUI;
+
 import org.apache.spark.SparkConf;
+import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.Function2;
 import org.apache.spark.mllib.linalg.Vectors;
 import org.apache.spark.mllib.regression.LabeledPoint;
+import org.apache.spark.mllib.tree.DecisionTree;
+import org.apache.spark.mllib.tree.model.DecisionTreeModel;
 
 import breeze.linalg.Vector;
+import scala.Tuple2;
 
 
 // TODO : à généraliser à n'importe quel CSV
@@ -26,34 +33,31 @@ public class Adapter {
 	public static SparkConf conf = new SparkConf().setAppName("Workshop").setMaster("local[*]");
 	public static JavaSparkContext sc = new JavaSparkContext(conf);
 	
-	public Object importer(String path) {
-		JavaRDD<String> linesData = sc.textFile(path);
-		JavaRDD<LabeledPoint> data = sc.parallelize((ArrayList)sparkML.convert(linesData));
-		return data;
-	}
-	
-	public List<LabeledPoint> convert(JavaRDD<String> lines){
-		ArrayList<LabeledPoint> temp = new ArrayList<LabeledPoint>();
-		for (int i=1; i < lines.count(); i++) {
-			String[] parts = lines.collect().get(i).split(",");
-			Double varY = null;
-			switch (parts[5]) {
-			case "setosa" : 
-				varY = 0.0;
-				break;
-			case "versicolor" :
-				varY = 1.0;
-				break;
-			case "virginica" :
-				varY = 2.0;
-				break;
-			}
-			//System.out.println(varY);
-			temp.add(new LabeledPoint(varY, Vectors.dense(Double.parseDouble(parts[1]),Double.parseDouble(parts[2]),Double.parseDouble(parts[3]),Double.parseDouble(parts[4]))));
-		}
-		return temp;
-	}
+	public Object fit(JavaRDD<LabeledPoint> train, String y,String... args) {
+		int numClasses = 3;
+		Map<Integer, Integer> categoricalFeaturesInfo = new HashMap<>();
+		String impurity = "gini";
+		int maxDepth = 5;
+		int maxBins = 32;	
 
+		DecisionTreeModel model = DecisionTree.trainClassifier(train, numClasses,
+				categoricalFeaturesInfo, impurity, maxDepth, maxBins);
+		return model;
+	}
+	/*
+	public Object evaluate(JavaRDD train, String test, String y,String... args) {
+		
+		DecisionTreeModel model = (DecisionTreeModel) fit(train, y);
+		JavaPairRDD<Double, Double> predictionAndLabel =
+				test2.mapToPair(p -> new Tuple2<>(model.predict(p.features()), p.label()));
+		double testErr =
+				predictionAndLabel.filter(pl -> !pl._1().equals(pl._2())).count() / (double) test2.count();
+
+		//System.out.println("Test Error: " + (1-testErr));
+		//System.out.println("Learned classification tree model:\n" + model.toDebugString());
+		return 1-testErr;
+	}
+	*/
 	public static void main(String[] args) {
 		Adapter a = new Adapter();
 		JavaRDD<String> linesData = sc.textFile("resources/train_iris.csv");
@@ -66,10 +70,7 @@ public class Adapter {
 				return !s.equals(header);
 			}
 		});
-		//JavaRDD<String>col3 = sc.parallelize(col2);
-		
 		System.out.println(col2.collect().get(0));
-		
 		
 		JavaRDD<List<String>> col = col2.map(new Function<String, List<String>>(){
 			@Override
@@ -78,8 +79,6 @@ public class Adapter {
 			}
 		});
 		System.out.println(col.collect().get(0));
-		
-		
 		
 		JavaRDD<ArrayList<ArrayList<Boolean>>> col1 = col.map(new Function<List<String>, ArrayList<ArrayList<Boolean>>>(){
 			@Override
@@ -107,37 +106,6 @@ public class Adapter {
 		});
 		System.out.println(col1.collect().get(0));
 		
-		/*
-		ArrayList<ArrayList<Boolean>> res = new ArrayList<ArrayList<Boolean>>();
-		ArrayList<Boolean> inter = new ArrayList<Boolean>();
-		inter.add(false);
-		inter.add(false);
-		inter.add(false);
-		res.add(inter);
-		res.add(inter);
-		res.add(inter);
-		res.add(inter);
-		res.add(inter);
-		System.out.println("nb de var : "+col.collect().get(0).size());
-
-		
-		for (int ind = 0; ind < col1.collect().size(); ind++) {
-			for (int var = 1; var < col1.collect().get(0).size(); var++) {
-				for (int type = 0; type <3 ; type ++) {
-					Boolean b = (res.get(var-1).get(type) & col1.collect().get(ind).get(var).get(type));
-					res.get(var-1).set(type, b);
-				}
-			}
-		}
-		System.out.println(res);
-		
-		*/
-		
-		
-		
-		
-		
-		System.out.println(col1.collect().get(0));
 		System.out.println(col1.collect().get(1));
 		System.out.println(col1.collect().get(2));
 		HashMap<String, List<Integer>> prop = new HashMap<String, List<Integer>>();
@@ -224,11 +192,11 @@ public class Adapter {
 		}
 		System.out.println(modalites);
 		
-		ArrayList<HashMap<String, Integer>> mesModaRecodes = new ArrayList<HashMap<String, Integer>>();
+		ArrayList<HashMap<String, Double>> mesModaRecodes = new ArrayList<HashMap<String, Double>>();
 		for (Set<String> mesModas : modalites) {
-			HashMap<String, Integer> tmp = new HashMap<String, Integer>();
+			HashMap<String, Double> tmp = new HashMap<String, Double>();
 			Iterator<String> it = mesModas.iterator();
-			int compteur = 1;
+			double compteur = 0;
 			while(it.hasNext()) {
 				tmp.put(it.next(), compteur);
 				compteur++;
@@ -239,57 +207,57 @@ public class Adapter {
 		
 		
 		// création du jeu de données
-		col.map(new Function<List<String>, E>(){
+		JavaRDD<Double[]> vecteur = col.map(new Function<List<String>, Double[]>(){
 			@Override
-			public E call(List<String> s) {
-				double[] ligne = new double[s.size()-1];
+			public Double[] call(List<String> s) {
+				Double[] ligne = new Double[s.size()-1];
+				int j = 0;
 				for (int i=1; i < s.size(); i++) {
 					if (index.get(i).equals("Double")) {
-						ligne[i] = Double.parseDouble(s.get(i));
+						ligne[i-1] = Double.parseDouble(s.get(i));
 					}
 					if (index.get(i).equals("Boolean")) {
-						
+						if (s.get(i).equals("true")){
+							ligne[i-1] = 1.0;
+						}else {
+							ligne[i-1] = 0.0;
+						}
+					}
+					if (index.get(i).equals("String")) {
+						ligne[i-1] = mesModaRecodes.get(j).get(s.get(i));
+						j++;
 					}
 				}
+				return ligne;
 			}
 		});
-		
-		/*
-		
-		int compteurD = 0;
-		for (int type =0 ; type <index.size(); type++) {
-			if (index.get(type).equals("Double")) {
-				compteurD++;
-			}
-			if (index.get(type).equals("Integer")) {
-				compteurD++;
-			}
+		Double[] maLigne = vecteur.collect().get(0);
+		for (Double val : maLigne) {
+			System.out.println(val);
 		}
-		double[] valDou = new double[compteurD];
-		*/
 		
-		/*
-		ArrayList<LabeledPoint> temp = new ArrayList<LabeledPoint>();
-		col.map(new Function<List<String>, LabeledPoint>(){
+		// création des LabeledPoint
+		int varY = 4;
+		
+		JavaRDD<LabeledPoint> res = vecteur.map(new Function<Double[], LabeledPoint>(){
 			@Override
-			public LabeledPoint call(List<String> row) {
-				double[] valDou = new double[compteurD];
-				int cD = 0;
-				for (int type =0 ; type <index.size(); type++) {
-					if (index.get(type).equals("Double") | index.get(type).equals("Integer")) {
-						valDou[cD] = Integer.parseInt(row.get(type));7
-						cD++;
+			public LabeledPoint call(Double[] monvec) {
+				double[] x = new double[monvec.length];
+				int j = 0;
+				for (int i = 0; i< monvec.length; i++) {
+					if (i != varY) {
+						x[j] = monvec[i];
+						j++;
 					}
 				}
-				
-				return new LabeledPoint(varY, Vectors.dense(valDou));
+				return new LabeledPoint(monvec[varY], Vectors.dense(x));
 			}
 		});
-		*/
+		System.out.println(res.collect().get(0));
 		
+		a.fit(res, "Species");
 		
-		//JavaRDD<LabeledPoint> data = (JavaRDD<LabeledPoint>) a.importer("resources/train_iris.csv");
-		//System.out.println(data);
+
 		sc.stop();
 
 	}
