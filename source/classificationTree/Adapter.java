@@ -3,6 +3,7 @@ package classificationTree;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -211,6 +212,27 @@ public class Adapter implements Serializable{
 		return mesModaRecodes;
 	}
 
+	public ArrayList<HashMap<String, Double>> convModalites2(ArrayList<Set<String>> modalites) {
+		ArrayList<HashMap<String, Double>> mesModaRecodes = new ArrayList<HashMap<String, Double>>();
+		for (Set<String> mesModas : modalites) {
+			mesModaRecodes.add(convModa(mesModas));
+		}
+		return mesModaRecodes;
+	}
+	
+	public HashMap<String, Double> convModa(Set<String> modalites) {
+		HashMap<String, Double> mesModaRecodes = new HashMap<String, Double>();
+		ArrayList<String> mesModasOrdonnees = new ArrayList<String>();
+		mesModasOrdonnees.addAll(modalites);
+		Collections.sort(mesModasOrdonnees);
+		System.out.println(mesModasOrdonnees);
+		Double compteur = 0.0;
+		for (String moda : mesModasOrdonnees) {
+			mesModaRecodes.put(moda, compteur);
+			compteur++;
+		}
+		return mesModaRecodes;
+	}	
 
 	public JavaRDD<Double[]> recodage(ArrayList<String> index, JavaRDD<List<String>> col, ArrayList<HashMap<String, Double>> mesModaRecodes){
 		JavaRDD<Double[]> vecteur = col.map(new Function<List<String>, Double[]>(){
@@ -285,7 +307,40 @@ public class Adapter implements Serializable{
 		return mesModa;
 	}
 
-
+	public JavaRDD<LabeledPoint> convert(JavaRDD<String> linesData, String y, String sep){
+		// on retire la première ligne (le header) 
+		String header = getHeader(linesData);
+		int varY = chooseY(y, header, sep, true);
+		System.out.println(varY);
+		
+		JavaRDD<String> dataWithoutHeader = removeHeader(linesData, header);
+		JavaRDD<List<String>> data = splitData(dataWithoutHeader);
+		System.out.println(data.collect().get(0));
+		JavaRDD<ArrayList<ArrayList<Boolean>>> hypo = typeOfDataByIndividu(data);
+		System.out.println(hypo.collect().get(0));
+		
+		
+		HashMap<String, List<Integer>> prop = typeOfVar(data, hypo,varY+1);
+		System.out.println(prop);
+		
+		ArrayList<String> monVecteurDeType = knowTypes(data, prop);
+		System.out.println(monVecteurDeType);
+		ArrayList<Set<String>> mesModas = knowModalites(monVecteurDeType, data);
+		System.out.println(mesModas);
+		ArrayList<HashMap<String, Double>> mesModasRecodes= convModalites2(mesModas);
+		System.out.println(mesModasRecodes);
+		
+		
+		
+		JavaRDD<Double[]> myDataAlmostClean= recodage(monVecteurDeType, data, mesModasRecodes);
+		Double[] maLigne = myDataAlmostClean.collect().get(0);
+		for (Double val : maLigne) {
+			System.out.println(val);
+		}
+		JavaRDD<LabeledPoint> train = convertIntoLabeledPoint(myDataAlmostClean, varY);
+		return train;
+	}
+	
 
 
 	public Object fit(JavaRDD<LabeledPoint> train, String y,String... args) {
@@ -298,6 +353,15 @@ public class Adapter implements Serializable{
 		DecisionTreeModel model = DecisionTree.trainClassifier(train, numClasses,
 				categoricalFeaturesInfo, impurity, maxDepth, maxBins);
 		return model;
+	}
+	
+	public JavaRDD<LabeledPoint> importer(String name, String y, String sep){
+		JavaRDD<String> linesData = sc.textFile(name);
+		return convert(linesData, y, sep);
+	}
+	
+	public int comptNbClassesY() {
+		return 0;
 	}
 
 	public static void main(String[] args) {
@@ -513,7 +577,9 @@ public class Adapter implements Serializable{
 
 		Adapter a = new Adapter();
 		JavaRDD<String> linesData = sc.textFile("resources/train_statsFSEVary.csv");
-
+		//JavaRDD<LabeledPoint> train = a.convert(linesData);
+		
+		/*
 		// on retire la première ligne (le header) 
 		String header = a.getHeader(linesData);
 		int varY = a.chooseY("sizePDF", header, ",", true);
@@ -533,7 +599,7 @@ public class Adapter implements Serializable{
 		System.out.println(monVecteurDeType);
 		ArrayList<Set<String>> mesModas = a.knowModalites(monVecteurDeType, data);
 		System.out.println(mesModas);
-		ArrayList<HashMap<String, Double>> mesModasRecodes= a.convModalites(mesModas);
+		ArrayList<HashMap<String, Double>> mesModasRecodes= a.convModalites2(mesModas);
 		System.out.println(mesModasRecodes);
 		
 		
@@ -546,7 +612,8 @@ public class Adapter implements Serializable{
 		JavaRDD<LabeledPoint> train = a.convertIntoLabeledPoint(myDataAlmostClean, varY);
 		System.out.println(train.collect().get(0));
 		System.out.println(train.collect().get(0).label());
-		a.fit(train, "sizePDF"); 
+		*/
+		//a.fit(train, "sizePDF"); 
 		sc.stop();
 
 	}
