@@ -13,7 +13,7 @@ public class Convertisseur  implements Serializable{
 	public JavaRDD<LabeledPoint> convert(Header header, JavaRDD<List<String>> dataToConvert, String y) {
 		int varY = header.getVar(y);
 		int nb =header.compteVarExplicatives(varY);
-		System.out.println("colY : "+nb+", nb var explicatives : "+nb);
+		System.out.println("colY : "+varY+", nb var explicatives : "+nb);
 		return dataToConvert.map(new Function<List<String>, LabeledPoint>(){
 			@Override
 			public LabeledPoint call(List<String> row) {
@@ -24,14 +24,19 @@ public class Convertisseur  implements Serializable{
 				int pos = 0; 
 				for (int colonne = 0; colonne < row.size(); colonne ++) {
 					if (colonne == varY) {
-						valY = Convertisseur.convertValue(row.get(colonne), header.get().get(colonne), varY);
+						try {
+							valY = Convertisseur.convertValue(row.get(colonne), header.get().get(colonne), varY);	
+						}catch(Exception e) {
+							System.out.println(header.get().get(colonne).getMesModasRecodees());
+							System.out.println("varY : "+varY+",variable : "+row.get(colonne)+", colonne :"+colonne);
+						}
 					}else {
 						if(colonne != 0){
 							try {
 								varExplicatives[pos] = Convertisseur.convertValue(row.get(colonne), header.get().get(colonne), varY);;
 								pos++;
 							}catch(Exception e) {
-								System.out.println("varY : "+varY+",variable : "+row.get(colonne)+"pos : "+pos+", colonne :"+colonne);
+								System.out.println("varY : "+varY+",variable : "+row.get(colonne)+", pos : "+pos+", colonne :"+colonne);
 							}
 						}
 					}
@@ -45,7 +50,7 @@ public class Convertisseur  implements Serializable{
 
 	public static Double convertValue(String value, Variable var, int varY) {
 		if (varY == var.getPos()) {
-			return var.getMesModasRecodees().get(value);
+			return var.getMesModasRecodees().get("\""+value+"\"");
 		}else {
 			if (var.getMonType() == MonType.Boolean) {
 				if (value.equals("\"true\"")) {
@@ -58,7 +63,7 @@ public class Convertisseur  implements Serializable{
 				return Double.parseDouble(value);
 			}
 			if (var.getMonType() == MonType.Y) {
-				return var.getMesModasRecodees().get(value);
+				return var.getMesModasRecodees().get("\""+value+"\"");
 			} 
 		}
 		return 0.0;
