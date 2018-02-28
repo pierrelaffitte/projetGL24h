@@ -2,7 +2,6 @@ package pierre2;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -14,11 +13,6 @@ import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.Function2;
-import org.apache.spark.mllib.linalg.Vectors;
-import org.apache.spark.mllib.regression.LabeledPoint;
-import org.apache.spark.mllib.stat.correlation.CorrelationNames;
-
-import com.google.common.collect.Lists;
 
 import java.io.Serializable;
 
@@ -144,73 +138,28 @@ public class Scrawler implements Serializable {
 			}
 			
 			Variable colI = new Variable(montype, i, colnames.get(i));
+			colI.setMesModas(temp.get().get(i));
+			/*
 			if (colI.getMonType()== MonType.Y) {
 				colI.setMesModas(temp.get().get(i));
-			}
+			}*/
 			cols.add(colI);
 		}
 		return cols;
 	}
 
-	/*
-	public void createModalites(Header colnames) {
-		modasY = new HashMap<String, Integer>();
-		for (Variable variable : colnames.getMesVars()) {
-			if (variable.getMonType() == MonType.Y) {
-				Iterator<String> it = variable.getMesModas().iterator();
-				List<String> myList = Lists.newArrayList(it);
-				Collections.sort(myList);
-				int compteur = 0;
-				for (String moda : myList) {
-					modasY.put(moda, compteur);
-					compteur++;
-				}
-			}
-		}
-	}
-
-	public JavaRDD<LabeledPoint> convert(JavaRDD<List<String>> dataSplit, Header cols, Scrawler a){
-		JavaRDD<LabeledPoint> data = dataSplit.map(new Function<List<String>, LabeledPoint>(){
-			@Override
-			public LabeledPoint call(List<String> ligne) {
-				double[] vec = new double[a.nbX];
-				int pos = 0;
-				double monY = 0.0;
-				for (int i = 0; i < ligne.size(); i++) {
-					if (cols.getMesVars().get(i).getMonType() == MonType.Boolean) {
-						if (ligne.get(i).equals("true")) {
-							vec[i] = 1.0;
-						}else {
-							vec[i] = 0.0;
-						}
-					}
-					if (cols.getMesVars().get(i).getMonType() == MonType.Double) {
-						vec[i] = Double.parseDouble(ligne.get(i));
-					}
-					if (cols.getMesVars().get(i).getMonType() == MonType.Y) {
-						monY = a.modasY.get(ligne.get(i));
-					}
-				}
-				return new LabeledPoint(monY, Vectors.dense(vec));
-			}
-		});
-		return data;
-	}*/
-
-
 	public static void main(String[] args) {
 		Scrawler a = new Scrawler();
 		JavaRDD<String> linesData = a.load("resources/train_statsFSEVary.csv");
 		JavaRDD<List<String>> dataSplit = a.splitCols(linesData);
+		
 		System.out.println(dataSplit.collect().get(0));
 		List<String> header = a.getHeader(dataSplit);
 		System.out.println(header);
+		
 		JavaRDD<List<String>> dataWithoutHeader = a.removeHeader(dataSplit, a.getHeader(dataSplit));
 		System.out.println(dataWithoutHeader.collect().get(0));
-				
-		//a.createColnames(header, ",");
-		//System.out.println(a.colnames);
-
+		
 		JavaRDD<Row> temp = a.getInfosFromData(dataWithoutHeader);
 		Row ind = temp.collect().get(0);
 		System.out.println(ind);
@@ -220,16 +169,6 @@ public class Scrawler implements Serializable {
 
 		Header cols = a.knowtypes(temp2, header);
 		System.out.println("cols = \n "+cols);
-		
-		System.out.println(cols.getY());
-		/*
-		a.createModalites(cols); 
-		System.out.println(a.modasY);
-
-		//a.knowNumbersOfClasses(cols);
-		JavaRDD<LabeledPoint> data = a.convert(dataSplit, cols, a);
-		System.out.println(data.collect().get(0));
-		*/
 		sc.stop();
 	}
 

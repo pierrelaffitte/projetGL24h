@@ -16,7 +16,7 @@ public class Variable implements Serializable{
 	private int pos;
 	private String name;
 	private Set<String> mesModas;
-	private HashMap<String, Integer> mesModasRecodees;
+	private HashMap<String, Double> mesModasRecodees;
 	private int nbModas;
 	
 	public Variable(MonType type, int pos,String name) {
@@ -62,18 +62,18 @@ public class Variable implements Serializable{
 		return res;
 	}
 
-	public HashMap<String, Integer> getMesModasRecodees() {
+	public HashMap<String, Double> getMesModasRecodees() {
 		return mesModasRecodees;
 	}
 
 	public void fillMesModasRecodees() {
-		mesModasRecodees = new HashMap<String, Integer>();
+		mesModasRecodees = new HashMap<String, Double>();
 		Iterator<String> it= getMesModas().iterator();
 		List<String> myList = Lists.newArrayList(it);
 		Collections.sort(myList);
-		int compteur = 0;
+		double compteur = 0;
 		for (String moda : myList) {
-			mesModasRecodees.put(moda, compteur);
+			mesModasRecodees.put(moda.toString(), compteur);
 			compteur++;
 		}
 	}
@@ -84,6 +84,29 @@ public class Variable implements Serializable{
 
 	public void setNbModas() {
 		this.nbModas = mesModas.size();
+	}
+	
+	public void checkBool() {
+		System.out.println(name);
+		if (type.equals(MonType.Y)) {
+			boolean res = true;
+			
+			for(String moda : mesModas) {
+				String maModa = moda.replaceAll("\"", "");
+				System.out.println(moda + " : "+ ( maModa.equals("true") | maModa.equals("false")) );
+				if (  !(maModa.equals("true") | maModa.equals("false"))) {
+					res = false;
+				}
+				
+			}
+			System.out.println(res);
+			if (res) {
+				type = MonType.Boolean;
+			}
+		}
+		
+		
+		
 	}
 	
 }
