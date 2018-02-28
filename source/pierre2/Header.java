@@ -1,4 +1,4 @@
-package pierre;
+package pierre2;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,36 +11,33 @@ import com.google.common.collect.Lists;
 
 import java.io.Serializable;
 
-public class MesVars implements Serializable{
+public class Header implements Serializable{
 
-	private List<MaVar> mesVars = new ArrayList<MaVar>();
+	private List<Variable> variables = new ArrayList<Variable>();
 	private HashMap<String, Integer> modasY;
-
-	public List<MaVar> getMesVars() {
-		return mesVars;
+	private List<String> colnames;
+	
+	public List<Variable> get() {
+		return variables;
 	}
 
-	public void setMesVars(List<MaVar> mesVars) {
-		this.mesVars = mesVars;
-	}
-
-	public void add(MaVar t) {
-		mesVars.add(t);
+	public void add(Variable t) {
+		variables.add(t);
 	}
 
 	public static void main(String[] args) throws Exception {
-		MesVars a = new MesVars();
-		MaVar t = new MaVar(MonType.Y,1,"y");
+		Header a = new Header();
+		Variable t = new Variable(MonType.Y,1,"y");
 		t.add("setosa");
 		System.out.println(t.getMesModas());
 		a.add(t);
-		System.out.println(a.getMesVars().get(0).getMesModas());
+		System.out.println(a.get().get(0).getMesModas());
 	}
 
 	public String toString() {
 		String res = "";
-		for (int i = 0; i < mesVars.size(); i++) {
-			res = res + mesVars.get(i).toString()+"\n";
+		for (int i = 0; i < variables.size(); i++) {
+			res = res + variables.get(i).toString()+"\n";
 		}
 		return res;
 	}
@@ -48,8 +45,8 @@ public class MesVars implements Serializable{
 	public int varY() {
 		int id = 0;
 		int compteur = 0;
-		while (compteur < mesVars.size()) {
-			if (mesVars.get(compteur).getMonType() == MonType.Id) {
+		while (compteur < variables.size()) {
+			if (variables.get(compteur).getMonType() == MonType.Id) {
 				id = compteur;
 			}
 		}
@@ -59,10 +56,10 @@ public class MesVars implements Serializable{
 	public int getY() {
 		int res = 0;
 		int compteur = 0;
-		while (compteur < mesVars.size()) {
-			if (mesVars.get(compteur).getMonType() == MonType.Y) {
+		while (compteur < variables.size()) {
+			if (variables.get(compteur).getMonType() == MonType.Y) {
 				res = compteur;
-				compteur = mesVars.size();
+				compteur = variables.size();
 			}
 			compteur++;
 		}
@@ -71,7 +68,7 @@ public class MesVars implements Serializable{
 
 	public int howManyVars() {
 		int compteur = 0;
-		for (MaVar variable : mesVars) {
+		for (Variable variable : variables) {
 			if (variable.getMonType() == MonType.Boolean | variable.getMonType() == MonType.Double) {
 				compteur++;
 			}
@@ -79,19 +76,30 @@ public class MesVars implements Serializable{
 		return compteur;
 	}
 
-	public int knowNumbersOfClasses(MesVars cols) {
-		return mesVars.get(getY()).getMesModas().size();
+	public int knowNumbersOfClasses(Header cols) {
+		return variables.get(getY()).getMesModas().size();
 	}
 
 	public void knowModalitesOfY() {
 		modasY = new HashMap<String, Integer>();
-		Iterator<String> it= mesVars.get(getY()).getMesModas().iterator();
+		Iterator<String> it= variables.get(getY()).getMesModas().iterator();
 		List<String> myList = Lists.newArrayList(it);
 		Collections.sort(myList);
 		int compteur = 0;
 		for (String moda : myList) {
 			modasY.put(moda, compteur);
 			compteur++;
+		}
+	}
+
+	public List<String> getColnames() {
+		return colnames;
+	}
+
+	public void setColnames() {
+		this.colnames = new ArrayList<String>();
+		for (Variable var : variables){
+			colnames.add(var.getName());
 		}
 	}
 

@@ -10,11 +10,22 @@ import org.apache.spark.mllib.regression.LabeledPoint;
 
 public class Convertisseur  implements Serializable{
 	
-	public JavaRDD<LabeledPoint> convert(JavaRDD<List<String>> dataSplit, MesVars cols, Scrawler a){
+	private MesVars cols;
+	
+	public MesVars getCols() {
+		return cols;
+	}
+
+
+	public void cols(MesVars mesColonnes) {
+		this.cols = mesColonnes;
+	}
+	
+	public JavaRDD<LabeledPoint> convert(JavaRDD<List<String>> dataSplit){
 		JavaRDD<LabeledPoint> data = dataSplit.map(new Function<List<String>, LabeledPoint>(){
 			@Override
 			public LabeledPoint call(List<String> ligne) {
-				double[] vec = new double[a.nbX];
+				double[] vec = new double[cols.howManyVars()]; //a.nbX];
 				int pos = 0;
 				double monY = 0.0;
 				for (int i = 0; i < ligne.size(); i++) {

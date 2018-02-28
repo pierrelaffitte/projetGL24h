@@ -1,4 +1,4 @@
-package pierre;
+package pierre2;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,6 +30,15 @@ public class Scrawler implements Serializable {
 	public ArrayList<String> colnames;
 	public HashMap<String, Integer> modasY;
 	public int nbX;
+	public String sep = ",";
+	
+	public void setSep(String sep) {
+		this.sep = sep;
+	}
+	
+	public String getSep() {
+		return sep;
+	}
 
 	public void createColnames(String header, String sep) {
 		colnames  = new ArrayList<String>();
@@ -39,18 +48,18 @@ public class Scrawler implements Serializable {
 		}
 	}
 
-	public JavaRDD<String> importer(String name){
+	public JavaRDD<String> load(String name){
 		return sc.textFile(name);
 	}
 
-	public String getHeader(JavaRDD<String> data) {
+	public List<String> getHeader(JavaRDD<List<String>> data) {
 		return data.first();
 	}
 
-	public JavaRDD<String> removeHeader(JavaRDD<String> data, String header){
-		JavaRDD<String> res = (JavaRDD) data.filter(new Function<String, Boolean>(){
+	public JavaRDD<List<String>> removeHeader(JavaRDD<List<String>> data, List<String> header){
+		JavaRDD<List<String>> res = (JavaRDD) data.filter(new Function<List<String>, Boolean>(){
 			@Override
-			public Boolean call(String s) {
+			public Boolean call(List<String> s) {
 				return !s.equals(header);
 			}
 		});
@@ -61,20 +70,20 @@ public class Scrawler implements Serializable {
 		JavaRDD<List<String>> res = data.map(new Function<String, List<String>>(){
 			@Override
 			public List<String> call(String s){
-				return Arrays.asList(s.split("\\s*,\\s*"));
+				return Arrays.asList(s.split("\\s*"+sep+"\\s*"));
 			}
 		});
 		return res;
 	}
-
-	public JavaRDD<Individu2> monIter2(JavaRDD<List<String>> dataSplit){
-		JavaRDD<Individu2> temp = dataSplit.map(new Function<List<String>, Individu2>(){
+	
+	public JavaRDD<Row> getInfosFromData(JavaRDD<List<String>> data){
+		JavaRDD<Row> temp = data.map(new Function<List<String>, Row>(){
 			@Override
-			public Individu2 call(List<String> ligne) {
-				Individu2 res = new Individu2();
-				for (int i = 0; i < ligne.size(); i++ ) {
+			public Row call(List<String> ligne) {
+				Row res = new Row();
+				for (int colonne = 0; colonne < ligne.size(); colonne++ ) {
 					Set<String> tmp = new HashSet<String>();
-					tmp.add(ligne.get(i));
+					tmp.add(ligne.get(colonne));
 					res.add(tmp);
 				}
 				return res;
@@ -83,14 +92,14 @@ public class Scrawler implements Serializable {
 		return temp;
 	}
 
-	public Individu2 individu2(JavaRDD<Individu2> temp) {
-		Individu2 temp2 = temp.reduce(new Function2<Individu2, Individu2, Individu2>(){
+	public Row reduceInfosFromData(JavaRDD<Row> temp) {
+		Row temp2 = temp.reduce(new Function2<Row, Row, Row>(){
 			@Override
-			public Individu2 call(Individu2 ind1, Individu2 ind2) {
-				for (int i = 0; i < ind1.getVecteur().size(); i++) {
-					Iterator<String> it = ind2.getVecteur().get(i).iterator();
+			public Row call(Row ind1, Row ind2) {
+				for (int i = 0; i < ind1.get().size(); i++) {
+					Iterator<String> it = ind2.get().get(i).iterator();
 					while (it.hasNext()) {
-						ind1.getVecteur().get(i).add(it.next());
+						ind1.get().get(i).add(it.next());
 					}
 				}
 				return ind1;
@@ -99,10 +108,10 @@ public class Scrawler implements Serializable {
 		return temp2;
 	}
 
-	public MesVars knowtypes(Individu2 temp, List<String> colnames) {
-		MesVars cols = new MesVars();
-		for (int i = 0; i < temp.getVecteur().size(); i++) {
-			Iterator<String> it = temp.getVecteur().get(i).iterator();
+	public Header knowtypes(Row temp, List<String> colnames) {
+		Header cols = new Header();
+		for (int i = 0; i < temp.get().size(); i++) {
+			Iterator<String> it = temp.get().get(i).iterator();
 			boolean isDouble = true;
 			boolean isBoolean = true;
 			while (it.hasNext()) {
@@ -112,34 +121,41 @@ public class Scrawler implements Serializable {
 				} catch (Exception e){
 					isDouble = false;
 				}
-				isBoolean = Boolean.parseBoolean(moda);
+				if (moda.equals("true") | moda.equals("false")) {
+					isBoolean = true;
+				}else {
+					isBoolean = false;
+				}
+				
 			}
 			MonType montype = MonType.Double; 
-			if (isDouble){
-				montype = MonType.Double;
-			}
-			if (isBoolean) {
-				montype = MonType.Boolean;
-			}
 			if (i == 0) {
 				montype = MonType.Id;
+			}else {
+				if (isDouble){
+					montype = MonType.Double;
+				}else {
+					if (isBoolean) {
+						montype = MonType.Boolean;
+					}else {
+						montype = MonType.Y;
+					}
+				}
 			}
-			if (i == 5) {
-				montype = MonType.Y;
-			}
-
-			MaVar colI = new MaVar(montype, i, colnames.get(i));
-			if (i == 5) {
-				colI.setMesModas(temp.getVecteur().get(i));
+			
+			Variable colI = new Variable(montype, i, colnames.get(i));
+			if (colI.getMonType()== MonType.Y) {
+				colI.setMesModas(temp.get().get(i));
 			}
 			cols.add(colI);
 		}
 		return cols;
 	}
 
-	public void createModalites(MesVars colnames) {
+	/*
+	public void createModalites(Header colnames) {
 		modasY = new HashMap<String, Integer>();
-		for (MaVar variable : colnames.getMesVars()) {
+		for (Variable variable : colnames.getMesVars()) {
 			if (variable.getMonType() == MonType.Y) {
 				Iterator<String> it = variable.getMesModas().iterator();
 				List<String> myList = Lists.newArrayList(it);
@@ -153,7 +169,7 @@ public class Scrawler implements Serializable {
 		}
 	}
 
-	public JavaRDD<LabeledPoint> convert(JavaRDD<List<String>> dataSplit, MesVars cols, Scrawler a){
+	public JavaRDD<LabeledPoint> convert(JavaRDD<List<String>> dataSplit, Header cols, Scrawler a){
 		JavaRDD<LabeledPoint> data = dataSplit.map(new Function<List<String>, LabeledPoint>(){
 			@Override
 			public LabeledPoint call(List<String> ligne) {
@@ -179,38 +195,41 @@ public class Scrawler implements Serializable {
 			}
 		});
 		return data;
-	}
+	}*/
 
 
 	public static void main(String[] args) {
 		Scrawler a = new Scrawler();
-		JavaRDD<String> linesData = a.importer("resources/train_iris.csv");
-		String header = a.getHeader(linesData);
-		System.out.println();
-		JavaRDD<String> dataWithoutHeader = a.removeHeader(linesData, a.getHeader(linesData));
-		JavaRDD<List<String>> dataSplit = a.splitCols(dataWithoutHeader);
+		JavaRDD<String> linesData = a.load("resources/train_statsFSEVary.csv");
+		JavaRDD<List<String>> dataSplit = a.splitCols(linesData);
 		System.out.println(dataSplit.collect().get(0));
-		a.createColnames(header, ",");
-		System.out.println(a.colnames);
+		List<String> header = a.getHeader(dataSplit);
+		System.out.println(header);
+		JavaRDD<List<String>> dataWithoutHeader = a.removeHeader(dataSplit, a.getHeader(dataSplit));
+		System.out.println(dataWithoutHeader.collect().get(0));
+				
+		//a.createColnames(header, ",");
+		//System.out.println(a.colnames);
 
-		JavaRDD<Individu2> temp = a.monIter2(dataSplit);
-		Individu2 ind = temp.collect().get(0);
+		JavaRDD<Row> temp = a.getInfosFromData(dataWithoutHeader);
+		Row ind = temp.collect().get(0);
 		System.out.println(ind);
 
-
-		Individu2 temp2 = a.individu2(temp);
+		Row temp2 = a.reduceInfosFromData(temp);
 		System.out.println(temp2);
 
-
-		MesVars cols = a.knowtypes(temp2, a.colnames);
-		System.out.println("cols = "+cols);
-
+		Header cols = a.knowtypes(temp2, header);
+		System.out.println("cols = \n "+cols);
+		
+		System.out.println(cols.getY());
+		/*
 		a.createModalites(cols); 
 		System.out.println(a.modasY);
 
 		//a.knowNumbersOfClasses(cols);
 		JavaRDD<LabeledPoint> data = a.convert(dataSplit, cols, a);
 		System.out.println(data.collect().get(0));
+		*/
 		sc.stop();
 	}
 
