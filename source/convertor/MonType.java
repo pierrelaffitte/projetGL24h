@@ -1,4 +1,4 @@
-package pierre2;
+package convertor;
 
 public enum MonType {
 	Double, Id, Boolean, Y

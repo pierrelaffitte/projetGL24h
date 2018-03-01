@@ -1,24 +1,21 @@
-package pierre;
+package convertor;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.io.Serializable;
-public class Individu2 implements Serializable{
+public class Row implements Serializable{
+	
 	private List<Set<String>> vecteur = new ArrayList<Set<String>>();
 
-	public void add(Set<String> i ) {
-		vecteur.add(i);
-	}
-
-	public List<Set<String>> getVecteur(){
+	public List<Set<String>> get(){
 		return vecteur;	
 	}
 	
-	public void setVecteur(List<Set<String>> l) {
-		vecteur = l;
+	public void add(Set<String> i ) {
+		vecteur.add(i);
 	}
-
+	
 	public String toString() {
 		return vecteur.toString();
 	}
