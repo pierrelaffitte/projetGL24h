@@ -11,7 +11,7 @@ public class Main {
 		// TODO Auto-generated method stub
 
 		String file = "iris";
-		String y = "\"Species\"";
+		String y = "Species";
 		Scrawler a = new Scrawler();
 		JavaRDD<String> linesData = a.load("resources/"+file+".csv");
 		JavaRDD<List<String>> dataSplit = a.splitCols(linesData);

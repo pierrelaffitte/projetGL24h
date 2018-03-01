@@ -50,7 +50,7 @@ public class Convertisseur  implements Serializable{
 
 	public static Double convertValue(String value, Variable var, int varY) {
 		if (varY == var.getPos()) {
-			return var.getMesModasRecodees().get("\""+value+"\"");
+			return var.getMesModasRecodees().get(value);
 		}else {
 			if (var.getMonType() == MonType.Boolean) {
 				if (value.equals("\"true\"")) {
