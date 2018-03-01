@@ -6,12 +6,16 @@ import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.mllib.regression.LabeledPoint;
 
 public class Main {
+	
+	
+	
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
 		String file = "iris";
-		String y = "Species";
+		String y = "\"Species\"";
+		
 		Scrawler a = new Scrawler();
 		JavaRDD<String> linesData = a.load("resources/"+file+".csv");
 		JavaRDD<List<String>> dataSplit = a.splitCols(linesData);
@@ -35,6 +39,7 @@ public class Main {
 		System.out.println("cols = \n "+cols);
 		for (Variable var : cols.get()){
 			System.out.println(var.getMesModasRecodees());
+			System.out.println(var.getMonType());
 		}
 		
 		
@@ -47,6 +52,15 @@ public class Main {
 		JavaRDD<LabeledPoint> train = c.convert(cols, data, y);
 		
 		System.out.println(train.collect().get(0));
+		
+		
+		JavaRDD<List<String>> dataTest = a.splitCols(a.load("resources/test_"+file+".csv"));
+		List<String> headerTest = a.getHeader(dataTest);
+		data = a.removeHeader2(dataTest);
+		System.out.println("premiere ligne sans l'entete : "+data.collect().get(0));
+		JavaRDD<LabeledPoint> test = c.convert(cols, data, y);
+		System.out.println(test.collect().get(0));
+
 		//System.out.println(train.collect().get(0));
 		
 	}

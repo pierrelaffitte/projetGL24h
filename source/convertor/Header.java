@@ -3,6 +3,7 @@ package convertor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -62,8 +63,13 @@ public class Header implements Serializable{
 	
 	public void check() {
 		for (Variable var : variables) {
-			var.fillMesModasRecodees();
 			var.checkBool();
+			Set<String> mesModasCorrigees = new HashSet<String>();
+			for (String moda : var.getMesModas()) {
+				mesModasCorrigees.add(moda.replaceAll("\"", ""));
+			}
+			var.setMesModas(mesModasCorrigees);
+			var.fillMesModasRecodees();
 		}
 	}
 }

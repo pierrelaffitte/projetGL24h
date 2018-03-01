@@ -95,6 +95,7 @@ public class Variable implements Serializable{
 				String maModa = moda.replaceAll("\"", "");
 				System.out.println(moda + " : "+ ( maModa.equals("true") | maModa.equals("false")) );
 				if (  !(maModa.equals("true") | maModa.equals("false"))) {
+					System.out.println("checkBool"+ name+ ": "+moda);
 					res = false;
 				}
 				

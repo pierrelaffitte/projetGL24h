@@ -53,7 +53,7 @@ public class Convertisseur  implements Serializable{
 			return var.getMesModasRecodees().get(value);
 		}else {
 			if (var.getMonType() == MonType.Boolean) {
-				if (value.equals("\"true\"")) {
+				if (value.equals("true")) {
 					return 1.0;
 				}else {
 					return 0.0;
@@ -63,7 +63,7 @@ public class Convertisseur  implements Serializable{
 				return Double.parseDouble(value);
 			}
 			if (var.getMonType() == MonType.Y) {
-				return var.getMesModasRecodees().get("\""+value+"\"");
+				return var.getMesModasRecodees().get(value);
 			} 
 		}
 		return 0.0;
