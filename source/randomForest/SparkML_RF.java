@@ -71,8 +71,8 @@ public class SparkML_RF implements Implementation{
 
 	/**
 	 * TODO a completer
-	 * @param lines
-	 * @return
+	 * @param lines TODO
+	 * @return TODO
 	 */
 	public List<LabeledPoint> convert(JavaRDD<String> lines){
 		ArrayList<LabeledPoint> temp = new ArrayList<LabeledPoint>();
