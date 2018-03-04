@@ -44,19 +44,19 @@ public class Client {
 	public static void main(String[] args) {
 		// Choix de l'algo
 		ClassificationTree ct = new ClassificationTree();
-		//RandomForest rf = new RandomForest();
+		RandomForest rf = new RandomForest();
 		// Création du client 
 		Client c = new Client(ct);
 		// Paramètres de comparaisons
 		String nom_CSV = "iris";
 		char delimiter = ',';
 		String y = "Species";
-		String[] otherArgs = null;
+		String[] otherArgs = {"1"};
 		// Comparaison
 		c.compareLibrairies(nom_CSV, delimiter, y, otherArgs);
 		// Nouvel algo : RF
-		//c.changeAlgo(rf);
+		c.changeAlgo(rf);
 		// Nouvelle comparaison
-		//c.compareLibrairies(nom_CSV, delimiter, y, otherArgs);
+		c.compareLibrairies(nom_CSV, delimiter, y, otherArgs);
 	}
 }

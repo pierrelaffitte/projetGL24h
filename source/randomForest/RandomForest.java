@@ -12,7 +12,7 @@ import utilitaire.FichierCSV;
  */
 public class RandomForest implements Algorithme {
 
-	SparkML_RF sp = new SparkML_RF();
+	//SparkML_RF sp = new SparkML_RF();
 	Weka_RF w = new Weka_RF();
 	Renjin_RF rj = new Renjin_RF();
 	
@@ -28,13 +28,13 @@ public class RandomForest implements Algorithme {
 		String test = "resources/test_" + nom_CSV + ".csv";
 		
 		// Récup les accuracy
-		Object accuracySparkML = sp.evaluate(train, test, y, otherArgs);
+		//Object accuracySparkML = sp.evaluate(train, test, y, otherArgs);
 		Object accuracyWeka = w.evaluate(train, test, y, otherArgs);
 		Object accuracyRenjin = rj.evaluate(train, test, y, otherArgs);
 		
 		// Affichage des accuracy
 		System.out.println("Résultats Random Forest -------------");
-		System.out.println("Spark ML : " + accuracySparkML + "\n" + 
+		System.out.println(//"Spark ML : " + accuracySparkML + "\n" + 
 				"Weka : " + accuracyWeka + "\n" + 
 				"Renjin : " + accuracyRenjin);
 	}
