@@ -16,15 +16,20 @@ import scala.Tuple2;
 import org.apache.spark.mllib.tree.DecisionTree;
 import org.apache.spark.mllib.tree.model.DecisionTreeModel;
 
-import interfaces.algoInterface;
+import interfaces.Implementation;
 
-// TODO : à généraliser à n'importe quel CSV
-public class SparkML_CT implements algoInterface{
+/**
+ * Algorithme d'arbres de classification en Spark ML
+ * @author Laura Dupuis, Pierre Laffitte, Flavien Lévêque, Charlène Noé
+ *
+ */
+public class SparkML_CT implements Implementation{
 
 	public static SparkML_CT sparkML = new SparkML_CT();
 	public static SparkConf conf = new SparkConf().setAppName("Workshop").setMaster("local[*]");
 	public static JavaSparkContext sc = new JavaSparkContext(conf);
 	
+	@Override
 	public Object importer(String path) {
 		JavaRDD<String> linesData = sc.textFile(path);
 		JavaRDD<LabeledPoint> data = sc.parallelize((ArrayList)sparkML.convert(linesData));
@@ -58,11 +63,14 @@ public class SparkML_CT implements algoInterface{
 		double testErr =
 				predictionAndLabel.filter(pl -> !pl._1().equals(pl._2())).count() / (double) test2.count();
 
-		/*System.out.println("Test Error: " + (1-testErr));
-		System.out.println("Learned classification tree model:\n" + model.toDebugString());*/
 		return 1-testErr;
 	}
 
+	/**
+	 * TODO a completer
+	 * @param lines
+	 * @return
+	 */
 	public List<LabeledPoint> convert(JavaRDD<String> lines){
 		ArrayList<LabeledPoint> temp = new ArrayList<LabeledPoint>();
 		for (int i=1; i < lines.count(); i++) {
@@ -79,7 +87,6 @@ public class SparkML_CT implements algoInterface{
 				varY = 2.0;
 				break;
 			}
-			//System.out.println(varY);
 			temp.add(new LabeledPoint(varY, Vectors.dense(Double.parseDouble(parts[1]),Double.parseDouble(parts[2]),Double.parseDouble(parts[3]),Double.parseDouble(parts[4]))));
 		}
 		return temp;

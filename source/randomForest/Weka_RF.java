@@ -4,18 +4,24 @@ import java.util.Enumeration;
 
 import org.netlib.lapack.Ssycon;
 
-import interfaces.algoInterface;
+import interfaces.Implementation;
 import weka.core.Instances;
 import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.converters.ConverterUtils.DataSource;
 import weka.classifiers.evaluation.Evaluation;
-import weka.classifiers.trees.*;
+import weka.classifiers.trees.RandomForest;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.NumericToNominal;
 
-public class Weka_RF implements algoInterface {
+/**
+ * Algorithme de forêts aléatoires en Weka
+ * @author Laura Dupuis, Pierre Laffitte, Flavien Lévêque, Charlène Noé
+ *
+ */
+public class Weka_RF implements Implementation {
 
+	@Override
 	public Object importer(String file) {
 		Instances data = null;
 		try {
@@ -28,10 +34,10 @@ public class Weka_RF implements algoInterface {
 	}
 
 	/**
-	 * retourne l'indice de position de la variable Y reçue en paramètre
-	 * @param data le chemin du fichier CSV
-	 * @param y le nom de la colonne Y 
-	 * @return pos
+	 * Retourne l'indice de position de la variable Y reçue en paramètre
+	 * @param data chemin du fichier CSV
+	 * @param y nom de la colonne Y 
+	 * @return position de la variable Y
 	 */
 	public int posY(Instances data, String y) {
 		Enumeration<Attribute> liste= data.enumerateAttributes();
@@ -47,29 +53,34 @@ public class Weka_RF implements algoInterface {
 		return pos;
 	}
 
+	/**
+	 * Renvoie "true" si la variable à expliquer Y est une variable qualitative
+	 * @param data chemin du fichier CSV
+	 * @param y nom de la colonne Y
+	 * @return booleen
+	 */
 	public static boolean isString(Instances data, String y) {
 		Weka_RF weka = new Weka_RF();
 		Instance row = data.get(0);
 		int pos = weka.posY(data, y);
-		System.out.println(row.attribute(pos).isNumeric());
 		return row.attribute(pos).isString();
 	}
 
+	@Override
 	public Object fit(String train, String y,String...args){
 		RandomForest rf = null;
-		int nbtrees = Integer.valueOf(args[0]);
-		System.out.println(nbtrees);
+		//int nbtrees = Integer.valueOf(args[0]);
+		
 		try {
 			Instances train1 = ((Instances) importer(train));
-			if (!Weka_RF.isString(train1, y) ){
-				System.err.println("do conversion");
+			if (!isString(train1, y) ){
+				
 				train1 = this.convertNumToString(train1, y);
 			}
 			train1.setClassIndex(posY(train1,y));
-			//train1.setClassIndex(train1.numAttributes()-1);
 			rf = new RandomForest();
-			//rf.;
 			rf.buildClassifier(train1);
+			
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -77,27 +88,26 @@ public class Weka_RF implements algoInterface {
 		return rf;
 	}
 
+	/**
+	 * //TODO Pierre : à finir/revoir
+	 * @param data chemin du fichier CSV
+	 * @param y nom de la variable à expliquer
+	 * @return dataframe convertit
+	 */
 	public  Instances convertNumToString(Instances data, String y) {
 		/* change la variable y de quantitative à qualitative*/
 		Instances res = null;
-		int pos = this.posY(data, y);
-		System.err.println(pos);
 		NumericToNominal convert= new NumericToNominal();
+		int pos = this.posY(data, y);
+
 		String[] options= new String[2];
 		options[0]="-R";
 		options[1]= String.valueOf(pos+1);  //range of variables to make numeric
-		System.out.println(options[1]);
+
 		try {
-			//this.test(data);
 			convert.setOptions(options);
 			convert.setInputFormat(data);			
 			res = Filter.useFilter(data, convert);
-
-			// on s'assure que la conversion est bien faite
-			Instance row = res.get(1);
-
-
-			System.out.println(row.attribute(pos).isString());
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -105,6 +115,7 @@ public class Weka_RF implements algoInterface {
 		return res;
 	}
 
+	//TODO cette classe sert à quelque chose ??
 	public void test(Instances data) throws Exception{
 		NumericToNominal convert= new NumericToNominal();
 		String[] options= new String[2];
@@ -122,25 +133,22 @@ public class Weka_RF implements algoInterface {
 		System.out.println("Nominal? "+newData.attribute(11).isNominal());
 	}
 
-
+	@Override
 	public Object evaluate(String train, String test, String y,String...args) {
-		//Object model=fit(train,y);
+		Evaluation eval;
 		Object resultat = null;
 		RandomForest rf = (RandomForest) fit(train,y, args);
 		rf.setNumIterations(10);
 		Instances test1 = (Instances) importer(test);
-		if (!this.isString(test1, y) ){
+		
+		if (!isString(test1, y) ){
 			test1 = this.convertNumToString(test1, y);
 		}
 		test1.setClassIndex(posY(test1,y));
-		//test1.setClassIndex(test1.numAttributes()-1); // indique le y => inclure le string y
-		Evaluation eval;
 		try {
 			eval = new Evaluation(test1);
 			eval.evaluateModel(rf, test1);
 			resultat = eval.correct()*100.0/test1.size();
-			//System.out.println(eval.correct()*100.0/test1.size());
-			//System.out.println(eval.toSummaryString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
