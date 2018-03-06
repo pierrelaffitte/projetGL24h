@@ -4,17 +4,17 @@ import java.util.Enumeration;
 
 import org.netlib.lapack.Ssycon;
 
-import interfaces.algoInterface;
+import interfaces.Implementation;
 import weka.core.Instances;
 import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.converters.ConverterUtils.DataSource;
-import weka.classifiers.Evaluation;
+import weka.classifiers.evaluation.Evaluation;
 import weka.classifiers.trees.*;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.NumericToNominal;
 
-public class Weka_RF implements algoInterface {
+public class Weka_RF implements Implementation {
 
 	public Object importer(String file) {
 		Instances data = null;
