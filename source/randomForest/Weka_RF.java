@@ -10,7 +10,7 @@ import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.converters.ConverterUtils.DataSource;
 import weka.classifiers.evaluation.Evaluation;
-import weka.classifiers.trees.*;
+import weka.classifiers.trees.RandomForest;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.NumericToNominal;
 

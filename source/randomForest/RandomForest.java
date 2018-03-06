@@ -10,7 +10,7 @@ import utilitaire.FichierCSV;
  * @author Laura Dupuis, Pierre Laffitte, Flavien Lévêque, Charlène Noé
  *
  */
-public class RF implements Algorithme {
+public class RandomForest implements Algorithme {
 
 	//SparkML_RF sp = new SparkML_RF();
 	Weka_RF w = new Weka_RF();
