@@ -9,7 +9,7 @@ import weka.core.Instances;
 import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.converters.ConverterUtils.DataSource;
-import weka.classifiers.evaluation.Evaluation;
+import weka.classifiers.Evaluation;
 import weka.classifiers.trees.*;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.NumericToNominal;
@@ -50,15 +50,16 @@ public class Weka_RF implements algoInterface {
 	public static boolean isString(Instances data, String y) {
 		Weka_RF weka = new Weka_RF();
 		Instance row = data.get(0);
+		//Instance row = data.instance(0);
 		int pos = weka.posY(data, y);
-		System.out.println(row.attribute(pos).isNumeric());
+		//System.out.println(row.attribute(pos).isNumeric());
 		return row.attribute(pos).isString();
 	}
 
 	public Object fit(String train, String y,String...args){
 		RandomForest rf = null;
 		int nbtrees = Integer.valueOf(args[0]);
-		System.out.println(nbtrees);
+		//System.out.println(nbtrees);
 		try {
 			Instances train1 = ((Instances) importer(train));
 			if (!Weka_RF.isString(train1, y) ){
@@ -68,7 +69,8 @@ public class Weka_RF implements algoInterface {
 			train1.setClassIndex(posY(train1,y));
 			//train1.setClassIndex(train1.numAttributes()-1);
 			rf = new RandomForest();
-			//rf.;
+			rf.setNumIterations(100);
+			//rf.setNumTrees(4);
 			rf.buildClassifier(train1);
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -86,7 +88,7 @@ public class Weka_RF implements algoInterface {
 		String[] options= new String[2];
 		options[0]="-R";
 		options[1]= String.valueOf(pos+1);  //range of variables to make numeric
-		System.out.println(options[1]);
+		//System.out.println(options[1]);
 		try {
 			//this.test(data);
 			convert.setOptions(options);
@@ -95,9 +97,10 @@ public class Weka_RF implements algoInterface {
 
 			// on s'assure que la conversion est bien faite
 			Instance row = res.get(1);
+			//Instance row = res.instance(1);
 
 
-			System.out.println(row.attribute(pos).isString());
+			//System.out.println(row.attribute(pos).isString());
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -116,10 +119,10 @@ public class Weka_RF implements algoInterface {
 
 		Instances newData=Filter.useFilter(data, convert);
 
-		System.out.println("Before");
-		System.out.println("Nominal? "+data.attribute(11).isNominal());
-		System.out.println("After");
-		System.out.println("Nominal? "+newData.attribute(11).isNominal());
+		//System.out.println("Before");
+		//System.out.println("Nominal? "+data.attribute(11).isNominal());
+		//System.out.println("After");
+		//System.out.println("Nominal? "+newData.attribute(11).isNominal());
 	}
 
 
@@ -127,7 +130,9 @@ public class Weka_RF implements algoInterface {
 		//Object model=fit(train,y);
 		Object resultat = null;
 		RandomForest rf = (RandomForest) fit(train,y, args);
-		rf.setNumIterations(10);
+		//rf.setNumIterations(105);
+		//rf.setNumTrees(4);
+		
 		Instances test1 = (Instances) importer(test);
 		if (!this.isString(test1, y) ){
 			test1 = this.convertNumToString(test1, y);
@@ -139,6 +144,7 @@ public class Weka_RF implements algoInterface {
 			eval = new Evaluation(test1);
 			eval.evaluateModel(rf, test1);
 			resultat = eval.correct()*100.0/test1.size();
+			//resultat = eval.correct()*100.0/test1.numInstances();
 			//System.out.println(eval.correct()*100.0/test1.size());
 			//System.out.println(eval.toSummaryString());
 		} catch (Exception e) {
