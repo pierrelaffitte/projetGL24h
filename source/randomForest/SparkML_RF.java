@@ -16,15 +16,20 @@ import scala.Tuple2;
 import org.apache.spark.mllib.tree.RandomForest;
 import org.apache.spark.mllib.tree.model.RandomForestModel;
 
-import interfaces.algoInterface;
+import interfaces.Implementation;
 
-
-public class SparkML_RF implements algoInterface{
+/**
+ * Algorithme de forêts aléatoires en SparkML
+ * @author Laura Dupuis, Pierre Laffitte, Flavien Lévêque, Charlène Noé
+ *
+ */
+public class SparkML_RF implements Implementation{
 
 	public static SparkML_RF sparkML = new SparkML_RF();
 	public static SparkConf conf = new SparkConf().setAppName("Workshop").setMaster("local[*]");
 	public static JavaSparkContext sc = new JavaSparkContext(conf);
 	
+	@Override
 	public Object importer(String path) {
 		JavaRDD<String> linesData = sc.textFile(path);
 		JavaRDD<LabeledPoint> data = sc.parallelize((ArrayList)sparkML.convert(linesData));
@@ -61,11 +66,14 @@ public class SparkML_RF implements algoInterface{
 		double testErr =
 				predictionAndLabel.filter(pl -> !pl._1().equals(pl._2())).count() / (double) test2.count();
 
-		/*System.out.println("Test Error: " + (1-testErr));
-		System.out.println("Learned classification tree model:\n" + model.toDebugString());*/
 		return 1-testErr;
 	}
 
+	/**
+	 * TODO a completer
+	 * @param lines TODO
+	 * @return TODO
+	 */
 	public List<LabeledPoint> convert(JavaRDD<String> lines){
 		ArrayList<LabeledPoint> temp = new ArrayList<LabeledPoint>();
 		for (int i=1; i < lines.count(); i++) {
