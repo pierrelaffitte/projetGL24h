@@ -3,7 +3,7 @@ package utilitaire;
 import java.io.IOException;
 import classificationTree.ClassificationTree;
 import interfaces.Algorithme;
-import randomForest.RF;
+import randomForest.RandomForest;
 
 /**
  * Modélisation des fonctionnalités du client
@@ -44,7 +44,7 @@ public class Client {
 	public static void main(String[] args) {
 		// Choix de l'algo
 		ClassificationTree ct = new ClassificationTree();
-		RF rf = new RF();
+		RandomForest rf = new RandomForest();
 		// Création du client 
 		Client c = new Client(ct);
 		// Paramètres de comparaisons
