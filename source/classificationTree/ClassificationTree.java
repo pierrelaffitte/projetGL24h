@@ -2,6 +2,7 @@ package classificationTree;
 
 import java.io.IOException;
 
+import convertor.Main;
 import interfaces.Algorithme;
 import utilitaire.FichierCSV;
 
@@ -12,9 +13,10 @@ import utilitaire.FichierCSV;
  */
 public class ClassificationTree implements Algorithme {
 
-	private SparkML_CT sp = new SparkML_CT();
+	//private SparkML_CT sp = new SparkML_CT();
 	private Weka_CT w = new Weka_CT();
 	private Renjin_CT rj = new Renjin_CT();
+	private Main ma = new Main();
 	
 	@Override
 	public void getAccuracy(String nom_CSV, char delimiter, String y, String...otherArgs) throws IOException {
@@ -28,7 +30,8 @@ public class ClassificationTree implements Algorithme {
 		String test = "resources/test_" + nom_CSV + ".csv";
 		
 		// Récup les accuracy
-		Object accuracySparkML = sp.evaluate(train, test, y, otherArgs);
+		//Object accuracySparkML = sp.evaluate(train, test, y, otherArgs);
+		Object accuracySparkML = ma.evaluate(train, test, y, "resources/"+nom_CSV+".csv");
 		Object accuracyWeka = w.evaluate(train, test, y, otherArgs);
 		Object accuracyRenjin = rj.evaluate(train, test, y, otherArgs);
 		

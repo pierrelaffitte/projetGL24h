@@ -20,6 +20,7 @@ public class Main {
 	
 	public void setHeader(String train) {
 		header = prepareHeader(readDatas(train));
+		System.out.println(header.colnames());
 	}
 	
 	
@@ -95,8 +96,8 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		String file = "statsFSEVary";
-		String y = "sizePDF";
+		String file = "iris";
+		String y = "Species";
 		
 		Main m = new Main();
 		//System.out.println(m.fit(file, y));

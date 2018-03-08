@@ -27,7 +27,7 @@ public class Header implements Serializable{
 	public List<String> colnames(){
 		List<String> names = new ArrayList<String>();
 		for (Variable var : variables) {
-			names.add(var.getName());
+			names.add(var.getName().replaceAll("\"", ""));
 		}
 		return names;
 	}
