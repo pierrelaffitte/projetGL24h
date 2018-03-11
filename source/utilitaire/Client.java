@@ -47,16 +47,53 @@ public class Client {
 		RandomForest rf = new RandomForest();
 		// Création du client 
 		Client c = new Client(ct);
-		// Paramètres de comparaisons
-		String nom_CSV = "statsFSEVary";
+		
+		// Fichier 1 : iris
+		String nom_CSV = "iris";
 		char delimiter = ',';
-		String y = "sizePDF";
+		String y = "Species";
 		String[] otherArgs = {"1"};
-		// Comparaison
+		System.out.println("Fichier 1 : iris ---------------");
+		// Arbre de classification
 		c.compareLibrairies(nom_CSV, delimiter, y, otherArgs);
-		// Nouvel algo : RF
+		// Random Forest
 		c.changeAlgo(rf);
-		// Nouvelle comparaison
+		c.compareLibrairies(nom_CSV, delimiter, y, otherArgs);
+		
+		// Fichier 2 : statsFSEVary
+		nom_CSV = "statsFSEVary";
+		delimiter = ',';
+		y = "sizePDF";
+		System.out.println("Fichier 2 : statsFSEVary ---------------");
+		// Arbre de classification
+		c.changeAlgo(ct);
+		c.compareLibrairies(nom_CSV, delimiter, y, otherArgs);
+		// Random Forest
+		c.changeAlgo(rf);
+		c.compareLibrairies(nom_CSV, delimiter, y, otherArgs);
+		
+		// Fichier 3 : winequality
+		nom_CSV = "winequality";
+		delimiter = ',';
+		y = "quality";
+		System.out.println("Fichier 3 : winequality ---------------");
+		// Arbre de classification
+		c.changeAlgo(ct);
+		c.compareLibrairies(nom_CSV, delimiter, y, otherArgs);
+		// Random Forest
+		c.changeAlgo(rf);
+		c.compareLibrairies(nom_CSV, delimiter, y, otherArgs);
+		
+		// Fichier 4 : mushrooms
+		nom_CSV = "winequality";
+		delimiter = ',';
+		y = "class";
+		System.out.println("Fichier 4 : mushrooms ---------------");
+		// Arbre de classification
+		c.changeAlgo(ct);
+		c.compareLibrairies(nom_CSV, delimiter, y, otherArgs);
+		// Random Forest
+		c.changeAlgo(rf);
 		c.compareLibrairies(nom_CSV, delimiter, y, otherArgs);
 	}
 }
