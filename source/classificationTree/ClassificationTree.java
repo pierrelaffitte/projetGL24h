@@ -2,7 +2,6 @@ package classificationTree;
 
 import java.io.IOException;
 
-import convertor.Main;
 import interfaces.Algorithme;
 import utilitaire.FichierCSV;
 
@@ -16,7 +15,7 @@ public class ClassificationTree implements Algorithme {
 	//private SparkML_CT sp = new SparkML_CT();
 	private Weka_CT w = new Weka_CT();
 	private Renjin_CT rj = new Renjin_CT();
-	private Main ma = new Main();
+	private SparkML_CT ma = new SparkML_CT();
 	
 	@Override
 	public void getAccuracy(String nom_CSV, char delimiter, String y, String...otherArgs) throws IOException {

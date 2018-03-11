@@ -2,7 +2,6 @@ package randomForest;
 
 import java.io.IOException;
 
-import convertor.Main_RF;
 import interfaces.Algorithme;
 import utilitaire.FichierCSV;
 
@@ -14,7 +13,7 @@ import utilitaire.FichierCSV;
 public class RandomForest implements Algorithme {
 
 	//SparkML_RF sp = new SparkML_RF();
-	Main_RF sp = new Main_RF();
+	SparkML_RF sp = new SparkML_RF();
 	Weka_RF w = new Weka_RF();
 	Renjin_RF rj = new Renjin_RF();
 	
