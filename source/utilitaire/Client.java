@@ -50,10 +50,10 @@ public class Client {
 		Client c = new Client(ct);
 		
 		// Fichier 1 : iris
-		String nom_CSV = "iris";
+		String nom_CSV = "statsFSEVary";
 		// Paramètres de comparaisons
 		char delimiter = ',';
-		String y = "Species";
+		String y = "sizePDF";
 		String[] otherArgs = {"10"};
 		System.out.println("Fichier 1 : iris ---------------");
 		// Arbre de classification
