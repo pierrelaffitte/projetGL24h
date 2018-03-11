@@ -50,6 +50,8 @@ public class Client {
 		
 		// Fichier 1 : iris
 		String nom_CSV = "iris";
+		// Paramètres de comparaisons
+		String nom_CSV = "iris";
 		char delimiter = ',';
 		String y = "Species";
 		String[] otherArgs = {"1"};
