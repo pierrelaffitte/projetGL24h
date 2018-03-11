@@ -57,7 +57,7 @@ public class Renjin_RF implements Implementation {
 		
 		String code = "library(randomForest)\n" +
 				      "col <- which(colnames(data) ==\""+ y +"\")\n" +
-					  "randomForest(y ~ ., data = data_train[c(-col)], ntree = nb_tree, mtry = 2, na.action = na.omit)";
+					  "randomForest(y ~ ., data = data_train[c(-col)], ntree = nb_tree)";
 		
 		try {
 			engine.put("nb_tree", Double.valueOf(otherArgs[0]));
