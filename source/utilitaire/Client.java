@@ -54,7 +54,7 @@ public class Client {
 		// Paramètres de comparaisons
 		char delimiter = ',';
 		String y = "Species";
-		String[] otherArgs = {"1"};
+		String[] otherArgs = {"10"};
 		System.out.println("Fichier 1 : iris ---------------");
 		// Arbre de classification
 		c.compareLibrairies(nom_CSV, delimiter, y, otherArgs);
@@ -62,40 +62,17 @@ public class Client {
 		c.changeAlgo(rf);
 		c.compareLibrairies(nom_CSV, delimiter, y, otherArgs);
 		
+		/*
 		// Fichier 2 : statsFSEVary
 		nom_CSV = "statsFSEVary";
-		delimiter = ',';
 		y = "sizePDF";
-		System.out.println("Fichier 2 : statsFSEVary ---------------");
-		// Arbre de classification
-		c.changeAlgo(ct);
-		c.compareLibrairies(nom_CSV, delimiter, y, otherArgs);
-		// Random Forest
-		c.changeAlgo(rf);
-		c.compareLibrairies(nom_CSV, delimiter, y, otherArgs);
 		
 		// Fichier 3 : winequality
 		nom_CSV = "winequality";
-		delimiter = ',';
 		y = "quality";
-		System.out.println("Fichier 3 : winequality ---------------");
-		// Arbre de classification
-		c.changeAlgo(ct);
-		c.compareLibrairies(nom_CSV, delimiter, y, otherArgs);
-		// Random Forest
-		c.changeAlgo(rf);
-		c.compareLibrairies(nom_CSV, delimiter, y, otherArgs);
-		
 		// Fichier 4 : mushrooms
-		nom_CSV = "winequality";
-		delimiter = ',';
+		nom_CSV = "mushrooms";
 		y = "class";
-		System.out.println("Fichier 4 : mushrooms ---------------");
-		// Arbre de classification
-		c.changeAlgo(ct);
-		c.compareLibrairies(nom_CSV, delimiter, y, otherArgs);
-		// Random Forest
-		c.changeAlgo(rf);
-		c.compareLibrairies(nom_CSV, delimiter, y, otherArgs);
+		*/
 	}
 }
