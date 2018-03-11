@@ -29,7 +29,7 @@ public class RandomForest implements Algorithme {
 		String test = "resources/test_" + nom_CSV + ".csv";
 		
 		// Récup les accuracy
-		Object accuracySparkML = sp.evaluate(train, test, y, "resources/"+nom_CSV+".csv");
+		Object accuracySparkML = sp.evaluate(train, test, y, otherArgs);
 		Object accuracyWeka = w.evaluate(train, test, y, otherArgs);
 		Object accuracyRenjin = rj.evaluate(train, test, y, otherArgs);
 		

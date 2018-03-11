@@ -33,7 +33,7 @@ public class SparkML_RF implements Implementation{
 	public static SparkConf conf = new SparkConf().setAppName("Workshop").setMaster("local[*]");
 	public static JavaSparkContext sc = new JavaSparkContext(conf);
 	*/
-	public Convertisseur main = new Convertisseur(); 
+	private Convertisseur main = new Convertisseur(); 
 
 
 	@Override
@@ -45,7 +45,9 @@ public class SparkML_RF implements Implementation{
 
 	@Override
 	public Object fit(String train, String y,String... args) {
-		
+		if (!main.isLoad()) {
+			main.setHeader(args[0]);
+		}
 		JavaRDD<LabeledPoint> train2 = main.prepareData((JavaRDD<List<String>>)importer(train),y);
 		int vary = main.header.getVar(y);
 		System.out.println(y+ " : "+ vary);
@@ -56,7 +58,7 @@ public class SparkML_RF implements Implementation{
 		int maxDepth = 5;
 		int maxBins = 32;	
 
-		int numTrees = 100;
+		int numTrees = Integer.valueOf(args[0]);
 		String featureSubsetStrategy = "auto";
 		Integer seed = 1;
 
@@ -67,11 +69,12 @@ public class SparkML_RF implements Implementation{
 
 	@Override
 	public Object evaluate(String train, String test, String y,String... args) {
-		String entete = args[0];
-		main.setHeader(entete);
+		if (!main.isLoad()) {
+			main.setHeader(train.replaceAll("train_", ""));
+		}
 		System.out.println(main.header);
 		JavaRDD<LabeledPoint> test2 = main.prepareData((JavaRDD<List<String>>)importer(test),y);	
-		RandomForestModel model = (RandomForestModel) fit(train, y);
+		RandomForestModel model = (RandomForestModel) fit(train, y, args[0]);
 		JavaPairRDD<Double, Double> predictionAndLabel =
 				test2.mapToPair(p -> new Tuple2<>(model.predict(p.features()), p.label()));
 		double testErr =

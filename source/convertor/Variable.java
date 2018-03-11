@@ -56,7 +56,7 @@ public class Variable implements Serializable{
 	
 	public String toString() {
 		String res = name+" : "+ type.toString() +", " + Integer.toString(pos);
-		if(type == MonType.Y) {
+		if(type == MonType.Qualitative) {
 			res = res + ", "+ mesModas ;
 		}
 		return res;
@@ -88,7 +88,7 @@ public class Variable implements Serializable{
 	
 	public void checkBool() {
 		System.out.println(name);
-		if (type.equals(MonType.Y)) {
+		if (type.equals(MonType.Qualitative)) {
 			boolean res = true;
 			
 			for(String moda : mesModas) {

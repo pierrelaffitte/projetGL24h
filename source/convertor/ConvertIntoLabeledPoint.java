@@ -10,7 +10,7 @@ import org.apache.spark.mllib.regression.LabeledPoint;
 
 public class ConvertIntoLabeledPoint  implements Serializable{
 
-	public JavaRDD<LabeledPoint> convert(Header header, JavaRDD<List<String>> dataToConvert, String y) {
+	public static JavaRDD<LabeledPoint> convert(Header header, JavaRDD<List<String>> dataToConvert, String y) {
 		int varY = header.getVar(y);
 		int nb =header.compteVarExplicatives(varY);
 		System.out.println("colY : "+varY+", nb var explicatives : "+nb);
@@ -62,7 +62,7 @@ public class ConvertIntoLabeledPoint  implements Serializable{
 			if (var.getMonType() == MonType.Double) {
 				return Double.parseDouble(value);
 			}
-			if (var.getMonType() == MonType.Y) {
+			if (var.getMonType() == MonType.Qualitative) {
 				return var.getMesModasRecodees().get(value);
 			} 
 		}

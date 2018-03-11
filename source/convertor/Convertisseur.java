@@ -10,16 +10,16 @@ import org.apache.spark.mllib.regression.LabeledPoint;
 public class Convertisseur {
 	public Scrawler scrawler = new Scrawler();
 	public Header header;
-	private String headerOfData;
-	
-	public String getHeaderOfData() {
+	private Boolean headerOfData = false;
+		
+	public boolean isLoad() {
 		return headerOfData;
 	}
 
 	public void setHeader(String train) {
 		header = prepareHeader(readDatas(train));
 		System.out.println(header.colnames());
-		headerOfData = train;
+		headerOfData = true;
 	}
 
 

@@ -48,9 +48,9 @@ public class Client {
 		// Création du client 
 		Client c = new Client(ct);
 		// Paramètres de comparaisons
-		String nom_CSV = "iris";
+		String nom_CSV = "winequality";
 		char delimiter = ',';
-		String y = "Species";
+		String y = "quality";
 		String[] otherArgs = {"1"};
 		// Comparaison
 		c.compareLibrairies(nom_CSV, delimiter, y, otherArgs);

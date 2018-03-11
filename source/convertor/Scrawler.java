@@ -143,7 +143,7 @@ public class Scrawler implements Serializable {
 					if (isBoolean) {
 						montype = MonType.Boolean;
 					}else {
-						montype = MonType.Y;
+						montype = MonType.Qualitative;
 					}
 				}
 			}

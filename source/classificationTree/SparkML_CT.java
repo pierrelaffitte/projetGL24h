@@ -41,18 +41,13 @@ public class SparkML_CT {
 	}
 	
 	public JavaRDD<LabeledPoint> prepareData(JavaRDD<List<String>> data, String y) {
-		ConvertIntoLabeledPoint c = new ConvertIntoLabeledPoint();
-		JavaRDD<LabeledPoint> train = c.convert(header, data, y);
-		return train;
+		return ConvertIntoLabeledPoint.convert(header, data, y);
 	}
 	
 	public Header prepareHeader(JavaRDD<List<String>> data) {
 		List<String> header = scrawler.getHeader(data);
-		System.out.println(header);
 		JavaRDD<List<String>> dataWithoutHeader = scrawler.removeHeader(data, header);
 		JavaRDD<Row> temp = scrawler.getInfosFromData(dataWithoutHeader);
-		Row ind = temp.collect().get(0);
-		System.out.println(ind);
 		Row temp2 = scrawler.reduceInfosFromData(temp);
 		System.out.println(temp2);
 		Header cols = scrawler.knowtypes(temp2, header);
@@ -60,7 +55,6 @@ public class SparkML_CT {
 		return cols;
 	}
 		
-	/* SparkML*/
 	public DecisionTreeModel fit(String train, String y,String... args) {
 		JavaRDD<LabeledPoint> train2 = prepareData(importer(train),y);
 		int vary = header.getVar(y);
@@ -99,62 +93,11 @@ public class SparkML_CT {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-
 		String file = "iris";
 		String y = "Species";
-		
 		SparkML_CT m = new SparkML_CT();
-		//System.out.println(m.fit(file, y));
 		System.out.println(m.evaluate("resources/train_"+file+".csv", "resources/test_"+file+".csv", y, "resources/"+file+".csv"));
 		
-		
-		/*
-		Scrawler a = new Scrawler();
-		JavaRDD<String> linesData = a.load("resources/"+file+".csv");
-		JavaRDD<List<String>> dataSplit = a.splitCols(linesData);
-		
-		System.out.println(dataSplit.collect().get(0));
-		List<String> header = a.getHeader(dataSplit);
-		System.out.println(header);
-		
-		JavaRDD<List<String>> dataWithoutHeader = a.removeHeader(dataSplit, a.getHeader(dataSplit));
-		System.out.println(dataWithoutHeader.collect().get(0));
-		
-		JavaRDD<Row> temp = a.getInfosFromData(dataWithoutHeader);
-		Row ind = temp.collect().get(0);
-		System.out.println(ind);
-
-		Row temp2 = a.reduceInfosFromData(temp);
-		System.out.println(temp2);
-
-		Header cols = a.knowtypes(temp2, header);
-		cols.check();
-		System.out.println("cols = \n "+cols);
-		for (Variable var : cols.get()){
-			System.out.println(var.getMesModasRecodees());
-			System.out.println(var.getMonType());
-		}
-		
-		
-		JavaRDD<List<String>> data = a.splitCols(a.load("resources/train_"+file+".csv"));
-		List<String> headerTrain = a.getHeader(data);
-		data = a.removeHeader2(data);
-		System.out.println("premiere ligne sans l'entete : "+data.collect().get(0));
-		Convertisseur c = new Convertisseur();
-		//System.out.println(cols.colnames().get(1));
-		JavaRDD<LabeledPoint> train = c.convert(cols, data, y);
-		
-		System.out.println(train.collect().get(0));
-		
-		
-		JavaRDD<List<String>> dataTest = a.splitCols(a.load("resources/test_"+file+".csv"));
-		List<String> headerTest = a.getHeader(dataTest);
-		data = a.removeHeader2(dataTest);
-		System.out.println("premiere ligne sans l'entete : "+data.collect().get(0));
-		JavaRDD<LabeledPoint> test = c.convert(cols, data, y);
-		System.out.println(test.collect().get(0));
-
-		*/
 	}
 
 }
