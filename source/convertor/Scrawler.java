@@ -16,6 +16,11 @@ import org.apache.spark.api.java.function.Function2;
 
 import java.io.Serializable;
 
+/**
+ * Parcours un jeu de données pour en ressortir la structure
+ * @author Laura Dupuis, Pierre Laffitte, Flavien Lévêque, Charlène Noé
+ *
+ */
 public class Scrawler implements Serializable {
 
 	public static Scrawler sparkML = new Scrawler();
@@ -34,6 +39,11 @@ public class Scrawler implements Serializable {
 		return sep;
 	}
 
+	/**
+	 * récupère le nom des colonnes du fichier csv reçu en paramètre
+	 * @param header la chaine de caractère qui contient la première ligne du fichier csv
+	 * @param sep le séparateur
+	 */
 	public void createColnames(String header, String sep) {
 		colnames  = new ArrayList<String>();
 		String[] names = header.split(sep);
@@ -42,14 +52,30 @@ public class Scrawler implements Serializable {
 		}
 	}
 
+	/**
+	 * charge le fichier csv reçu en paramètre
+	 * @param name le chemin du fichier
+	 * @return le fichier
+	 */
 	public JavaRDD<String> load(String name){
 		return sc.textFile(name);
 	}
 
+	/**
+	 * renvoie l'entête du jeu de données reçu en paramètre
+	 * @param data le jeu de données
+	 * @return la première ligne, soit l'entête
+	 */
 	public List<String> getHeader(JavaRDD<List<String>> data) {
 		return data.first();
 	}
 
+	/**
+	 * renvoie le jeu de données sans l'entête 
+	 * @param data le jeu de données
+	 * @param header l'entête
+	 * @return le jeu de données mis au propre
+	 */
 	public JavaRDD<List<String>> removeHeader(JavaRDD<List<String>> data, List<String> header){
 		JavaRDD<List<String>> res = (JavaRDD) data.filter(new Function<List<String>, Boolean>(){
 			@Override
@@ -60,6 +86,7 @@ public class Scrawler implements Serializable {
 		return res;
 	}
 
+	/*
 	public JavaRDD<List<String>> removeHeader2(JavaRDD<List<String>> data){
 		List<String> header = data.first();
 		JavaRDD<List<String>> res = (JavaRDD) data.filter(new Function<List<String>, Boolean>(){
@@ -70,7 +97,13 @@ public class Scrawler implements Serializable {
 		});
 		return res;
 	}
+	*/
 	
+	/**
+	 * transforme le jeu de données en séparant les colonnes avec le séparateur déjà initialisé
+	 * @param data le jeu de données à transformer
+	 * @return le jeu de données mis au propre
+	 */
 	public JavaRDD<List<String>> splitCols(JavaRDD<String> data){
 		JavaRDD<List<String>> res = data.map(new Function<String, List<String>>(){
 			@Override
@@ -81,6 +114,11 @@ public class Scrawler implements Serializable {
 		return res;
 	}
 	
+	/**
+	 * renvoie les informations sur les individus du jeu de données reçu en paramètre
+	 * @param data le jeu de données
+	 * @return les informations
+	 */
 	public JavaRDD<Row> getInfosFromData(JavaRDD<List<String>> data){
 		JavaRDD<Row> temp = data.map(new Function<List<String>, Row>(){
 			@Override
@@ -97,8 +135,13 @@ public class Scrawler implements Serializable {
 		return temp;
 	}
 
-	public Row reduceInfosFromData(JavaRDD<Row> temp) {
-		Row temp2 = temp.reduce(new Function2<Row, Row, Row>(){
+	/**
+	 * agrège l'information de l'individu à la variable. Pour chaque variable, on a l'ensemble des valeurs prises
+	 * @param data le jeu de données 
+	 * @return la liste des variables avec l'ensemble des valeurs prises
+	 */
+	public Row reduceInfosFromData(JavaRDD<Row> data) {
+		Row res = data.reduce(new Function2<Row, Row, Row>(){
 			@Override
 			public Row call(Row ind1, Row ind2) {
 				for (int i = 0; i < ind1.get().size(); i++) {
@@ -110,13 +153,19 @@ public class Scrawler implements Serializable {
 				return ind1;
 			}
 		});
-		return temp2;
+		return res;
 	}
 
-	public Header knowtypes(Row temp, List<String> colnames) {
+	/**
+	 * renvoie le Header associé au Row
+	 * @param data le row contenant
+	 * @param colnames le nom des colonnes
+	 * @return le header
+	 */
+	public Header knowtypes(Row data, List<String> colnames) {
 		Header cols = new Header();
-		for (int i = 0; i < temp.get().size(); i++) {
-			Iterator<String> it = temp.get().get(i).iterator();
+		for (int i = 0; i < data.get().size(); i++) {
+			Iterator<String> it = data.get().get(i).iterator();
 			boolean isDouble = true;
 			boolean isBoolean = true;
 			while (it.hasNext()) {
@@ -149,38 +198,9 @@ public class Scrawler implements Serializable {
 			}
 			
 			Variable colI = new Variable(montype, i, colnames.get(i));
-			colI.setMesModas(temp.get().get(i));
-			/*
-			if (colI.getMonType()== MonType.Y) {
-				colI.setMesModas(temp.get().get(i));
-			}*/
+			colI.setMesModas(data.get().get(i));
 			cols.add(colI);
 		}
 		return cols;
 	}
-
-	public static void main(String[] args) {
-		Scrawler a = new Scrawler();
-		JavaRDD<String> linesData = a.load("resources/train_statsFSEVary.csv");
-		JavaRDD<List<String>> dataSplit = a.splitCols(linesData);
-		
-		System.out.println(dataSplit.collect().get(0));
-		List<String> header = a.getHeader(dataSplit);
-		System.out.println(header);
-		
-		JavaRDD<List<String>> dataWithoutHeader = a.removeHeader(dataSplit, a.getHeader(dataSplit));
-		System.out.println(dataWithoutHeader.collect().get(0));
-		
-		JavaRDD<Row> temp = a.getInfosFromData(dataWithoutHeader);
-		Row ind = temp.collect().get(0);
-		System.out.println(ind);
-
-		Row temp2 = a.reduceInfosFromData(temp);
-		System.out.println(temp2);
-
-		Header cols = a.knowtypes(temp2, header);
-		System.out.println("cols = \n "+cols);
-		sc.stop();
-	}
-
 }

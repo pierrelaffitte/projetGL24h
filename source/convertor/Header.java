@@ -12,6 +12,11 @@ import com.google.common.collect.Lists;
 
 import java.io.Serializable;
 
+/**
+ * Classe qui contient la structure des données
+ * @author Laura Dupuis, Pierre Laffitte, Flavien Lévêque, Charlène Noé
+ *
+ */
 public class Header implements Serializable{
 
 	private List<Variable> variables = new ArrayList<Variable>();
@@ -19,11 +24,19 @@ public class Header implements Serializable{
 	public List<Variable> get() {
 		return variables;
 	}
-
+	
+	/**
+	 * ajoute la variable t dans le Header
+	 * @param t la variable à ajouter
+	 */
 	public void add(Variable t) {
 		variables.add(t);
 	}
 	
+	/**
+	 * renvoie la liste des noms des colonnes
+	 * @return la liste des noms de colonne
+	 */
 	public List<String> colnames(){
 		List<String> names = new ArrayList<String>();
 		for (Variable var : variables) {
@@ -40,6 +53,11 @@ public class Header implements Serializable{
 		return res;
 	}
 	
+	/**
+	 * renvoie le numéro de la colonne de la variable reçue
+	 * @param name le nom de la variable
+	 * @return le numéro de la colonne
+	 */
 	public int getVar(String name) {
 		int res = 0;
 		for (String nameVar : colnames()) {
@@ -51,6 +69,11 @@ public class Header implements Serializable{
 		return res;
 	}
 	
+	/**
+	 * compte le nombre de variables explicatives en écartant la variable d'intérêt
+	 * @param n numéro de la colonne de la variable d'intêret
+	 * @return le nombre de variables explicatives
+	 */
 	public int compteVarExplicatives(int n) {
 		int compteur = 0;
 		for (Variable var : variables) {
@@ -61,6 +84,9 @@ public class Header implements Serializable{
 		return compteur;
 	}
 	
+	/**
+	 * vérifie pour chaque variable si son type correspond bien à celui déterminer de manière automatique
+	 */
 	public void check() {
 		for (Variable var : variables) {
 			var.checkBool();

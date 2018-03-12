@@ -10,6 +10,11 @@ import java.util.Set;
 import com.google.common.collect.Lists;
 
 import java.io.Serializable;
+/**
+ * Classe qui contient l'information sur la variable
+ * @author Laura Dupuis, Pierre Laffitte, Flavien Lévêque, Charlène Noé
+ *
+ */
 public class Variable implements Serializable{
 
 	private MonType type;
@@ -50,6 +55,10 @@ public class Variable implements Serializable{
 	public void setMesModas(Set<String> mesModas) {
 		this.mesModas = mesModas;
 	}
+	/**
+	 * ajoute la modalité à l'ensemble des modalités existantes
+	 * @param moda la modalité à ajouter
+	 */
 	public void add(String moda) {
 		this.mesModas.add(moda);
 	}
@@ -66,6 +75,9 @@ public class Variable implements Serializable{
 		return mesModasRecodees;
 	}
 
+	/**
+	 * recode les modalités (ordonnées par ordre alphabétique) en 0, 1, ... 
+	 */
 	public void fillMesModasRecodees() {
 		mesModasRecodees = new HashMap<String, Double>();
 		Iterator<String> it= getMesModas().iterator();
@@ -86,6 +98,9 @@ public class Variable implements Serializable{
 		this.nbModas = mesModas.size();
 	}
 	
+	/**
+	 * vérifie si la variable n'est pas du type booléen
+	 */
 	public void checkBool() {
 		System.out.println(name);
 		if (type.equals(MonType.Qualitative)) {
@@ -105,9 +120,5 @@ public class Variable implements Serializable{
 				type = MonType.Boolean;
 			}
 		}
-		
-		
-		
-	}
-	
+	}	
 }
