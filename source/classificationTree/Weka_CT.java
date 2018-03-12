@@ -85,10 +85,10 @@ public class Weka_CT implements Implementation {
 	}
 
 	/**
-	 * TODO Pierre : à finir/revoir
+	 *  convertit la variable y de numeric en String
 	 * @param data chemin du fichier CSV
 	 * @param y nom de la variable à expliquer
-	 * @return dataframe convertit
+	 * @return dataframe converti
 	 */
 	public  Instances convertNumToString(Instances data, String y) {
 		Instances res = null;
@@ -108,24 +108,6 @@ public class Weka_CT implements Implementation {
 		}
 
 		return res;
-	}
-
-	//TODO cette classe sert à quelque chose ??
-	public void test(Instances data) throws Exception{
-		NumericToNominal convert= new NumericToNominal();
-		String[] options= new String[2];
-		options[0]="-R";
-		options[1]="11";  //range of variables to make numeric
-
-		convert.setOptions(options);
-		convert.setInputFormat(data);
-
-		Instances newData=Filter.useFilter(data, convert);
-
-		System.out.println("Before");
-		System.out.println("Nominal? "+data.attribute(11).isNominal());
-		System.out.println("After");
-		System.out.println("Nominal? "+newData.attribute(11).isNominal());
 	}
 	
 	@Override
@@ -149,73 +131,4 @@ public class Weka_CT implements Implementation {
 		}
 		return resultat;
 	}
-
-	public static void main(String[] args) throws Exception {
-		int fold = 10; // nombre k de groupes pour la cross validation
-		int seed = 1; //graine pour la reproductibilité des résultats
-
-		/*
-		String file = "resources/iris.csv";
-		Weka weka = new Weka();
-		Instances data = weka.importer(file);
-		data.setClassIndex(data.numAttributes()-1);
-
-		// le choix du modele : J48 = C4.5
-		// http://weka.sourceforge.net/doc.dev/weka/classifiers/trees/package-summary.html
-		J48 tree = new J48();
-
-		// on mélange notre jeu de données
-		Random rand = new Random(seed);
-		Instances randData = new Instances(data);
-		randData.randomize(rand);
-		if (randData.classAttribute().isNominal())
-			randData.stratify(fold);
-		double averagecorrect = 0;
-
-		// split train and test
-		System.out.println(randData.size());
-		Instances train = randData.trainCV(5, 4);
-		Instances test = randData.testCV(5, 4);		
-		System.out.println(train);
-		System.out.println("\n\n\n");
-		System.out.println(test);
-		System.out.println("\n\n\n");
-
-
-		// CV
-		for (int n=0;n<fold;n++){
-			Evaluation eval = new Evaluation(randData);
-			Instances app = train.trainCV(fold, n); // construit train sur data sauf nieme fold
-			Instances val = train.testCV(fold, n); // construit test sur data avec nieme fold
-
-			tree.buildClassifier(app);
-			eval.evaluateModel(tree, val);
-			double correct = eval.pctCorrect();
-			averagecorrect = averagecorrect + correct;
-			System.out.println("the "+n+"th cross validation:"+eval.toSummaryString());
-		}
-		System.out.println("the average correction rate of "+fold+" cross validation: "+averagecorrect/fold);
-		 */
-
-		Weka_CT weka = new Weka_CT();
-		//J48 tree = (J48) weka.fit("resources/train_iris.csv","Species");
-		// evaluate on test echantillon
-		//weka.evaluate(tree, "resources/test_iris.csv","Species");
-		/*
-		Instances data = (Instances)weka.importer("resources/train_winequality.csv");
-		Instance row = data.get(1);
-		int pos = weka.posY(data, "quality");
-		System.out.println(row.attribute(pos).isString());
-		 */
-
-		/*
-		 * Instances data = (Instances)weka.importer("resources/train_winequality.csv");
-		 */
-		/*
-		System.out.println(weka.posY(data, "quality"));
-		System.out.println(data.get(11));
-		Weka.isString(data, "quality");*/
-		System.out.println(weka.evaluate("resources/train_winequality.csv","resources/test_winequality.csv","quality"));
-	}
-
 }
