@@ -138,7 +138,7 @@ public class Scrawler implements Serializable {
 	/**
 	 * agrège l'information de l'individu à la variable. Pour chaque variable, on a l'ensemble des valeurs prises
 	 * @param data le jeu de données 
-	 * @return 
+	 * @return la liste des variables avec l'ensemble des valeurs prises
 	 */
 	public Row reduceInfosFromData(JavaRDD<Row> data) {
 		Row res = data.reduce(new Function2<Row, Row, Row>(){

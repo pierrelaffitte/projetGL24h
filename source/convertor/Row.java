@@ -21,7 +21,7 @@ public class Row implements Serializable{
 	
 	/**
 	 * ajoute la valeur prise par la modalité 
-	 * @param moda 
+	 * @param moda la modalité à ajouter
 	 */
 	public void add(Set<String> moda ) {
 		vecteur.add(moda);

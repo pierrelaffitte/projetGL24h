@@ -35,7 +35,7 @@ public class Header implements Serializable{
 	
 	/**
 	 * renvoie la liste des noms des colonnes
-	 * @return
+	 * @return la liste des noms de colonne
 	 */
 	public List<String> colnames(){
 		List<String> names = new ArrayList<String>();

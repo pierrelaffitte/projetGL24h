@@ -16,11 +16,11 @@ import org.apache.spark.mllib.regression.LabeledPoint;
 public class ConvertIntoLabeledPoint  implements Serializable{
 
 	/**
-	 * transforme en JavaRDD<LabeledPoint> le jeu de données reçu à partir des informations du Header et de la variable d'intérêt y
+	 * transforme en JavaRDD\<LabeledPoint\> le jeu de données reçu à partir des informations du Header et de la variable d'intérêt y
 	 * @param header la structure de données du jeu à transformer
 	 * @param dataToConvert le jeu de données à transformer
 	 * @param y la variable d'intêret
-	 * @return le jeu de données en JavaRDD<LabeledPoint>
+	 * @return le jeu de données en JavaRDD\<LabeledPoint\>
 	 */
 	public static JavaRDD<LabeledPoint> convert(Header header, JavaRDD<List<String>> dataToConvert, String y) {
 		int varY = header.getVar(y);
