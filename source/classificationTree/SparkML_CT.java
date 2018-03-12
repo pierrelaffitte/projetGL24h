@@ -1,22 +1,16 @@
 package classificationTree;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.mllib.linalg.Vectors;
 import org.apache.spark.mllib.regression.LabeledPoint;
 import scala.Tuple2;
 
 import org.apache.spark.mllib.tree.DecisionTree;
-import org.apache.spark.mllib.tree.RandomForest;
 import org.apache.spark.mllib.tree.model.DecisionTreeModel;
-import org.apache.spark.mllib.tree.model.RandomForestModel;
 
 import convertor.Convertisseur;
 import interfaces.Implementation;

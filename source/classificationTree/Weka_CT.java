@@ -2,8 +2,6 @@ package classificationTree;
 
 import java.util.Enumeration;
 
-import org.netlib.lapack.Ssycon;
-
 import interfaces.Implementation;
 import weka.core.Instances;
 import weka.core.Attribute;

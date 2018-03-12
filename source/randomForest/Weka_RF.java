@@ -2,8 +2,6 @@ package randomForest;
 
 import java.util.Enumeration;
 
-import org.netlib.lapack.Ssycon;
-
 import interfaces.Implementation;
 import weka.core.Instances;
 import weka.core.Attribute;
@@ -110,7 +108,7 @@ public class Weka_RF implements Implementation {
 		Object resultat = null;
 		RandomForest rf = (RandomForest) fit(train,y, args);
 		Instances test1 = (Instances) importer(test);
-		if (!this.isString(test1, y) ){
+		if (!Weka_RF.isString(test1, y) ){
 			test1 = this.convertNumToString(test1, y);
 		}
 		test1.setClassIndex(posY(test1,y));
