@@ -54,8 +54,11 @@ public class Client {
 		// Paramètres de comparaisons
 		char delimiter = ',';
 		String y = "Species";
-		String[] otherArgs = {"10"};
-		System.out.println("Fichier 1 : iris ---------------");
+		String[] otherArgs = {"100"};
+		
+		nom_CSV = "statsFSEVary";
+		y = "sizePDF";
+		
 		// Arbre de classification
 		c.compareLibrairies(nom_CSV, delimiter, y, otherArgs);
 		// Random Forest

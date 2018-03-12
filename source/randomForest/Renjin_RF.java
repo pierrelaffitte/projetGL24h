@@ -60,7 +60,7 @@ public class Renjin_RF implements Implementation {
 					  "randomForest(y ~ ., data = data_train[c(-col)], ntree = nb_tree)";
 		
 		try {
-			engine.put("nb_tree", Double.valueOf(otherArgs[0]));
+			engine.put("nb_tree", Integer.valueOf(otherArgs[0]));
 			engine.put("data_train", trainCSV);
 			engine.put("y", returnVar(trainCSV,y));
 			modCart = engine.eval(code);
@@ -97,21 +97,21 @@ public class Renjin_RF implements Implementation {
 		
 		System.out.println("Fichier 1 : iris ---------------------------------------");
 		//Object modRF = rj.fit("resources/train_iris.csv","Species");
-		Object accuracy = rj.evaluate("resources/train_iris.csv", "resources/test_iris.csv","Species","1");
+		Object accuracy = rj.evaluate("resources/train_iris.csv", "resources/test_iris.csv","Species","20");
 		System.out.println(accuracy);
 		
 		System.out.println("Fichier 2 : statsFSEVary ---------------------------------------");
 		//Object modRF2 = rj.fit("resources/train_statsFSEVary.csv","nbPages");
-		accuracy = rj.evaluate("resources/train_statsFSEVary.csv", "resources/test_statsFSEVary.csv","nbPages","1");
+		accuracy = rj.evaluate("resources/train_statsFSEVary.csv", "resources/test_statsFSEVary.csv","nbPages","20");
 		System.out.println(accuracy);
 		
 		System.out.println("Fichier 3 : winequality ---------------------------------------");
 		//Object modRF3 = rj.fit("resources/train_winequality.csv","quality");
-		accuracy = rj.evaluate("resources/train_winequality.csv", "resources/test_winequality.csv","quality","1");
+		accuracy = rj.evaluate("resources/train_winequality.csv", "resources/test_winequality.csv","quality","20");
 		System.out.println(accuracy);
 		
 		System.out.println("Fichier 4 : mushrooms ---------------------------------------");
-		accuracy = rj.evaluate("resources/train_mushrooms.csv", "resources/test_mushrooms.csv","class","1");
+		accuracy = rj.evaluate("resources/train_mushrooms.csv", "resources/test_mushrooms.csv","class","20");
 		System.out.println(accuracy);
 	}
 }
