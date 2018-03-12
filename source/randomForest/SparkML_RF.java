@@ -28,13 +28,7 @@ import interfaces.Implementation;
  */
 public class SparkML_RF implements Implementation{
 
-	/*
-	public static Main_RF sparkML = new Main_RF();
-	public static SparkConf conf = new SparkConf().setAppName("Workshop").setMaster("local[*]");
-	public static JavaSparkContext sc = new JavaSparkContext(conf);
-	*/
 	private Convertisseur main = new Convertisseur(); 
-
 
 	@Override
 	public Object importer(String path) {
@@ -82,15 +76,5 @@ public class SparkML_RF implements Implementation{
 
 		return 1-testErr;
 	}
-
-	public static void main(String[] args) {
-		String file = "statsFSEVary";
-		String y = "sizePDF";
-		SparkML_RF m = new SparkML_RF();
-		System.out.println(m.evaluate("resources/train_"+file+".csv", "resources/test_"+file+".csv", y, "resources/"+file+".csv"));
-		//sc.stop();
-	}
-
-
 }
 
