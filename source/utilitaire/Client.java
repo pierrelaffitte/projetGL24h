@@ -1,7 +1,10 @@
 
 package utilitaire;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+
 import classificationTree.ClassificationTree;
 import interfaces.Algorithme;
 import randomForest.RandomForest;
@@ -14,11 +17,11 @@ import randomForest.RandomForest;
 public class Client {
 
 	private Algorithme algo;
-	
+
 	public Client(Algorithme choixAlgo) {
 		this.algo = choixAlgo;
 	}
-	
+
 	/**
 	 * Affiche les différents taux d'erreur selon l'algo choisi
 	 * @param nom_CSV nom du fichier CSV à comparer
@@ -33,7 +36,7 @@ public class Client {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Importe un fichier .csv dans le projet
 	 * @param name nom du fichier
@@ -47,7 +50,7 @@ public class Client {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Setter de l'algorithme choisi
 	 * @param nouveauChoixAlgo nouvel algo
@@ -55,41 +58,84 @@ public class Client {
 	public void changeAlgo(Algorithme nouveauChoixAlgo) {
 		this.algo = nouveauChoixAlgo;
 	}
-	
-	public static void main(String[] args) {
+
+	public static void main(String[] args) throws IOException {
+		/*
+		Client c = new Client(new ClassificationTree());
+		System.out.print("What do you want to do ?:");
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		String action = br.readLine();
+		System.out.println(action);
+		if (action.equals("importer")) {
+			System.out.println("Insert the name file (you don't need to precise .csv): ");
+			String nom_CSV = br.readLine();
+			System.out.println("Insert the path file : ");
+			String path = br.readLine();
+			c.importerData(nom_CSV, path);
+		}
+
+		String nom_CSV;
+		String y;
+		String nbTrees = "10";
+		if (action.equals("run")) {
+			System.out.println("Insert the name file (you don't need to precise .csv) : ");
+			 br.readLine();
+			System.out.println("Insert the target variable : ");
+			y = br.readLine();
+			System.out.println("Select the method (1 : Decision Tree, 2 : RandomForest)  : ");
+			String method = br.readLine();
+			String tmp  = "10";
+			if (method.equals("2")) {
+				System.out.println("Do you want to select the number of trees (Y/N) : ");
+				String opt = br.readLine();
+				if (opt.equals("Y")) {
+					System.out.println("Select the number of trees (Y/N) : ");
+					nbTrees = br.readLine();
+				}
+				c.changeAlgo(new RandomForest());
+			}	
+		}	
+		String[] otherArgs = {nbTrees};
+		
+		c.compareLibrairies(nom_CSV, ",", y, otherArgs);
+		*/
 		// Choix de l'algo
 		ClassificationTree ct = new ClassificationTree();
 		RandomForest rf = new RandomForest();
 		// Création du client 
 		Client c = new Client(ct);
-		
+
 		// Importation du fichier
-		c.importerData("iris", "/home/charlene/Téléchargements/");
-		
+		//c.importerData("iris", "/home/charlene/Téléchargements/");
+
 		// Fichier 1 : iris
 		String nom_CSV = "iris";
 		// Paramètres de comparaisons
 		char delimiter = ',';
 		String y = "Species";
-		String[] otherArgs = {"10"};
+		String tmp = "10";
+		if(args.length == 10) {
+			tmp = "100";
+		}
+		String[] otherArgs = {tmp};
 		System.out.println("Fichier 1 : iris ---------------");
 		// Arbre de classification
 		c.compareLibrairies(nom_CSV, delimiter, y, otherArgs);
 		// Random Forest
 		c.changeAlgo(rf);
 		c.compareLibrairies(nom_CSV, delimiter, y, otherArgs);
-		
+		 
 		/*
 		// Fichier 2 : statsFSEVary
 		nom_CSV = "statsFSEVary";
 		y = "sizePDF";
-		
+
 		// Fichier 3 : winequality
 		nom_CSV = "winequality";
 		y = "quality";
 		// Fichier 4 : mushrooms
 		nom_CSV = "mushrooms";
 		y = "class";
-		*/
+		 */
 	}
 }
