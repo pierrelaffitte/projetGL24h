@@ -1,5 +1,7 @@
 package utilitaire;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,6 +15,8 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 /**
  * Gestion des fichiers CSV
@@ -126,11 +130,40 @@ public class FichierCSV {
 		writeCSV("resources/train_" + nameFile +".csv",headers,fichierApp);
 	}
 	
+	/**
+	 * Importe un fichier dans le projet à partir du chemin et du nom du fichier
+	 * @param path chemin du fichier
+	 * @throws IOException si fichier pas trouvé
+	 */
+	public void importCSV(String path) throws IOException {
+		// Lecture du fichier
+		File file = new File(path + nameFile + ".csv");
+		FileReader fr = new FileReader(file);
+		CSVReader cv = new CSVReader(fr,',');
+		
+		// Ecriture du fichier
+		FileWriter out = new FileWriter("resources/" + nameFile + ".csv");
+		CSVPrinter printer = new CSVPrinter(out, CSVFormat.DEFAULT);
+		
+		List<String[]> records = cv.readAll();
+		for (String[] tabS : records ) {
+			for (String s :  tabS) {
+		    	printer.print(s);
+			}
+			printer.println();
+	    }
+		printer.close();
+	}
+	
 	public static void main(String[] args) throws Exception {
-		FichierCSV f = new FichierCSV("winequality");
 		// Split des fichiers
 		//f.splitCSV("resources/iris.csv", ',', "iris");
 		//f.splitCSV("resources/statsFSEVary.csv", ',', "statsFSEVary");
-		f.splitCSV(',');
+		
+		//FichierCSV f = new FichierCSV("winequality");
+		//f.splitCSV(',');
+		
+		FichierCSV f = new FichierCSV("iris");
+		f.importCSV("/home/charlene/Téléchargements/");
 	}
 }

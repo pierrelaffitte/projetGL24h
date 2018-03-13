@@ -35,6 +35,20 @@ public class Client {
 	}
 	
 	/**
+	 * Importe un fichier .csv dans le projet
+	 * @param name nom du fichier
+	 * @param path emplacement du fichier
+	 */
+	public void importerData(String name, String path) {
+		FichierCSV f = new FichierCSV(name);
+		try {
+			f.importCSV(path);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
 	 * Setter de l'algorithme choisi
 	 * @param nouveauChoixAlgo nouvel algo
 	 */
@@ -49,11 +63,14 @@ public class Client {
 		// Création du client 
 		Client c = new Client(ct);
 		
+		// Importation du fichier
+		c.importerData("iris", "/home/charlene/Téléchargements/");
+		
 		// Fichier 1 : iris
-		String nom_CSV = "statsFSEVary";
+		String nom_CSV = "iris";
 		// Paramètres de comparaisons
 		char delimiter = ',';
-		String y = "sizePDF";
+		String y = "Species";
 		String[] otherArgs = {"10"};
 		System.out.println("Fichier 1 : iris ---------------");
 		// Arbre de classification
