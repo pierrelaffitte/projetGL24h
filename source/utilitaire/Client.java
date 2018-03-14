@@ -60,45 +60,6 @@ public class Client {
 	}
 
 	public static void main(String[] args) throws IOException {
-		/*
-		Client c = new Client(new ClassificationTree());
-		System.out.print("What do you want to do ?:");
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		String action = br.readLine();
-		System.out.println(action);
-		if (action.equals("importer")) {
-			System.out.println("Insert the name file (you don't need to precise .csv): ");
-			String nom_CSV = br.readLine();
-			System.out.println("Insert the path file : ");
-			String path = br.readLine();
-			c.importerData(nom_CSV, path);
-		}
-
-		String nom_CSV;
-		String y;
-		String nbTrees = "10";
-		if (action.equals("run")) {
-			System.out.println("Insert the name file (you don't need to precise .csv) : ");
-			 br.readLine();
-			System.out.println("Insert the target variable : ");
-			y = br.readLine();
-			System.out.println("Select the method (1 : Decision Tree, 2 : RandomForest)  : ");
-			String method = br.readLine();
-			String tmp  = "10";
-			if (method.equals("2")) {
-				System.out.println("Do you want to select the number of trees (Y/N) : ");
-				String opt = br.readLine();
-				if (opt.equals("Y")) {
-					System.out.println("Select the number of trees (Y/N) : ");
-					nbTrees = br.readLine();
-				}
-				c.changeAlgo(new RandomForest());
-			}	
-		}	
-		String[] otherArgs = {nbTrees};
-		
-		c.compareLibrairies(nom_CSV, ",", y, otherArgs);
-		*/
 		// Choix de l'algo
 		ClassificationTree ct = new ClassificationTree();
 		RandomForest rf = new RandomForest();
@@ -113,12 +74,7 @@ public class Client {
 		// Paramètres de comparaisons
 		char delimiter = ',';
 		String y = "Species";
-		String tmp = "10";
-		if(args.length == 10) {
-			tmp = "100";
-		}
-		String[] otherArgs = {tmp};
-		System.out.println("Fichier 1 : iris ---------------");
+		String[] otherArgs = {"10"};
 		// Arbre de classification
 		c.compareLibrairies(nom_CSV, delimiter, y, otherArgs);
 		// Random Forest
