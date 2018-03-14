@@ -160,9 +160,6 @@ public class FichierCSV {
 		//f.splitCSV("resources/iris.csv", ',', "iris");
 		//f.splitCSV("resources/statsFSEVary.csv", ',', "statsFSEVary");
 		
-		//FichierCSV f = new FichierCSV("winequality");
-		//f.splitCSV(',');
-		
 		FichierCSV f = new FichierCSV("iris");
 		f.importCSV("/home/charlene/Téléchargements/");
 	}
