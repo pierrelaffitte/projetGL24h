@@ -38,9 +38,7 @@ public class SparkML_CT implements Implementation{
 		}
 		JavaRDD<LabeledPoint> train2 = main.prepareData((JavaRDD<List<String>>)importer(train),y);
 		int vary = main.header.getVar(y);
-		System.out.println(y+ " : "+ vary);
 		int numClasses = main.header.get().get(vary).getMesModas().size();
-		System.out.println(numClasses);
 		Map<Integer, Integer> categoricalFeaturesInfo = new HashMap<>();
 		String impurity = "gini";
 		int maxDepth = 5;
@@ -56,7 +54,6 @@ public class SparkML_CT implements Implementation{
 		if (!main.isLoad()) {
 			main.setHeader(train.replaceAll("train_", ""));
 		}
-		System.out.println(main.header);
 		JavaRDD<LabeledPoint> test2 = main.prepareData((JavaRDD<List<String>>)importer(test),y);	
 		DecisionTreeModel model = (DecisionTreeModel) fit(train, y, args[0]);
 		JavaPairRDD<Double, Double> predictionAndLabel =

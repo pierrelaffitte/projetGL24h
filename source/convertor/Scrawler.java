@@ -85,19 +85,6 @@ public class Scrawler implements Serializable {
 		});
 		return res;
 	}
-
-	/*
-	public JavaRDD<List<String>> removeHeader2(JavaRDD<List<String>> data){
-		List<String> header = data.first();
-		JavaRDD<List<String>> res = (JavaRDD) data.filter(new Function<List<String>, Boolean>(){
-			@Override
-			public Boolean call(List<String> s) {
-				return !s.equals(header);
-			}
-		});
-		return res;
-	}
-	*/
 	
 	/**
 	 * transforme le jeu de données en séparant les colonnes avec le séparateur déjà initialisé

@@ -60,6 +60,75 @@ public class Client {
 	}
 
 	public static void main(String[] args) throws IOException {
+		
+		String action = args[0];
+		if (action.equals("importer")) {
+			String nom_CSV = args[1];
+			String path = args[2];
+			Client c = new Client(new ClassificationTree());
+			c.importerData(nom_CSV, path);
+		}
+		if (action.equals("run")) {
+			String nom_CSV = args[1];
+			String y = args[2];
+			String method = args[3];
+			String opt  = "10";
+			if (args.length == 5) {
+				opt = args[4];
+			}
+			String[] otherArgs = {opt};
+			if (method.equals("RandomForest")) {
+				Client c = new Client(new RandomForest());
+				c.compareLibrairies(nom_CSV, ',', y, otherArgs);
+			}
+			if (method.equals("DecisionTree")) {
+				Client c = new Client(new ClassificationTree());
+				c.compareLibrairies(nom_CSV, ',', y, otherArgs);
+			}
+			
+		}
+		/*
+		Client c = new Client(new ClassificationTree());
+		System.out.print("What do you want to do ?:");
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		String action = br.readLine();
+		System.out.println(action);
+		if (action.equals("importer")) {
+			System.out.println("Insert the name file (you don't need to precise .csv): ");
+			String nom_CSV = br.readLine();
+			System.out.println("Insert the path file : ");
+			String path = br.readLine();
+			c.importerData(nom_CSV, path);
+		}
+
+		if (action.equals("run")) {
+			String nom_CSV;
+			String y;
+			String nbTrees = "10";
+			String tmp  = "10";
+			System.out.println("Insert the name file (you don't need to precise .csv) : ");
+			nom_CSV = br.readLine();
+			System.out.println("Insert the target variable : ");
+			y = br.readLine();
+			System.out.println("Select the method (1 : Decision Tree, 2 : RandomForest)  : ");
+			String method = br.readLine();
+			if (method.equals("2")) {
+				System.out.println("Do you want to select the number of trees (Y/N) : ");
+				String opt = br.readLine();
+				if (opt.equals("Y")) {
+					System.out.println("Select the number of trees (Y/N) : ");
+					tmp = br.readLine();
+				}
+				c.changeAlgo(new RandomForest());
+			}
+			String[] otherArgs = {tmp};
+
+			c.compareLibrairies(nom_CSV, ',', y, otherArgs);
+		}	
+*/
+
+
+/*
 		// Choix de l'algo
 		ClassificationTree ct = new ClassificationTree();
 		RandomForest rf = new RandomForest();
@@ -70,17 +139,21 @@ public class Client {
 		//c.importerData("iris", "/home/charlene/Téléchargements/");
 
 		// Fichier 1 : iris
-		String nom_CSV = "iris";
+		//String nom_CSV = "iris";
 		// Paramètres de comparaisons
 		char delimiter = ',';
-		String y = "Species";
-		String[] otherArgs = {"10"};
+		//String y = "Species";
+		String tmp = "10";
+		if (args.length == 4) {
+			tmp = args[3];
+		}
+		String[] otherArgs = {tmp};
 		// Arbre de classification
 		c.compareLibrairies(nom_CSV, delimiter, y, otherArgs);
 		// Random Forest
 		c.changeAlgo(rf);
 		c.compareLibrairies(nom_CSV, delimiter, y, otherArgs);
-		 
+*/
 		/*
 		// Fichier 2 : statsFSEVary
 		nom_CSV = "statsFSEVary";

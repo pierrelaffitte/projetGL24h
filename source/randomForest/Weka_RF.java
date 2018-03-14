@@ -116,7 +116,7 @@ public class Weka_RF implements Implementation {
 		try {
 			eval = new Evaluation(test1);
 			eval.evaluateModel(rf, test1);
-			resultat = eval.correct()*100.0/test1.size();
+			resultat = eval.correct()*1.0/test1.size();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

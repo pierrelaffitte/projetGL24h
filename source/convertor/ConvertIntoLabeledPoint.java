@@ -25,7 +25,6 @@ public class ConvertIntoLabeledPoint  implements Serializable{
 	public static JavaRDD<LabeledPoint> convert(Header header, JavaRDD<List<String>> dataToConvert, String y) {
 		int varY = header.getVar(y);
 		int nb =header.compteVarExplicatives(varY);
-		System.out.println("colY : "+varY+", nb var explicatives : "+nb);
 		return dataToConvert.map(new Function<List<String>, LabeledPoint>(){
 			@Override
 			public LabeledPoint call(List<String> row) {

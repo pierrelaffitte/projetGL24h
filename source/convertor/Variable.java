@@ -102,15 +102,12 @@ public class Variable implements Serializable{
 	 * vérifie si la variable n'est pas du type booléen
 	 */
 	public void checkBool() {
-		System.out.println(name);
 		if (type.equals(MonType.Qualitative)) {
 			boolean res = true;
 			
 			for(String moda : mesModas) {
 				String maModa = moda.replaceAll("\"", "");
-				System.out.println(moda + " : "+ ( maModa.equals("true") | maModa.equals("false")) );
 				if (  !(maModa.equals("true") | maModa.equals("false"))) {
-					System.out.println("checkBool"+ name+ ": "+moda);
 					res = false;
 				}
 				
