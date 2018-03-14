@@ -12,6 +12,11 @@ import weka.classifiers.trees.RandomForest;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.NumericToNominal;
 
+/**
+ * Algorithme de forêts aléatoires en Weka
+ * @author Laura Dupuis, Pierre Laffitte, Flavien Lévêque, Charlène Noé
+ *
+ */
 public class Weka_RF implements Implementation {
 
 	@Override

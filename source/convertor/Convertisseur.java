@@ -8,7 +8,7 @@ import org.apache.spark.mllib.linalg.Vectors;
 import org.apache.spark.mllib.regression.LabeledPoint;
 
 /**
- * Classe qui prépare le jeu de données pour le convertir en JavaRDD\<LabeledPoint\>
+ * Classe qui prépare le jeu de données pour le convertir en JavaRDD LabeledPoint
  * @author Laura Dupuis, Pierre Laffitte, Flavien Lévêque, Charlène Noé
  *
  */
@@ -46,7 +46,7 @@ public class Convertisseur {
 	}
 	
 	/**
-	 * transforme le jeu de données en JavaRDD\<LabeledPoint\>
+	 * transforme le jeu de données en JavaRDD LabeledPoint
 	 * @param data le jeu de données à transformer
 	 * @param y la variable d'intérêt
 	 * @return le jeu de données mis au propre

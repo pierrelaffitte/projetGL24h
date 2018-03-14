@@ -16,7 +16,7 @@ import convertor.Convertisseur;
 import interfaces.Implementation;
 
 /**
- * Algorithme de forêts aléatoires en SparkML
+ * Algorithme d'arbres de classification en SparkML
  * @author Laura Dupuis, Pierre Laffitte, Flavien Lévêque, Charlène Noé
  *
  */
