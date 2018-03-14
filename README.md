@@ -14,4 +14,5 @@ Le package interfaces détient nos deux interfaces Algorithme et Implementation.
 
 Le package utilitaire est l'interface avec l'utilisateur. C'est ce package qui va permettre à l'utilisateur d'importer ses propres données et de les tester sur nos différents algorithmes de Machine Learning. Il pourra également voir les différences entre les trois librairies à l'aide de l'accuracy affichée. 
 
-Le lancement de notre projet est expliqué ici : http://hackmd.diverse-team.fr/BwBgjCDGCcwGwFowCMCs0EBYQkQQzWQQHYAmYyZSSOAEwGZoBTIA?view
+Le lancement de notre projet est expliqué ici : 
+http://hackmd.diverse-team.fr/BwBgjCDGCcwGwFowCMCs0EBYQkQQzWQQHYAmYyZSSOAEwGZoBTIA?view
