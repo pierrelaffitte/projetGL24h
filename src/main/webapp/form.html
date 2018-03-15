@@ -35,7 +35,9 @@
       "<option value='mushrooms.csv' onclick=\"setValue('mushrooms.csv');\">mushrooms.csv</option></select>";
     }
     if(choix == "import"){
-      document.getElementById("champ1").innerHTML ="<input type='file' id='myFile' name='myFile' required='required' accept='.csv'></input>";
+      document.getElementById("champ1").innerHTML ="<input type='file' id='myFile' name='myFile' required='required' accept='.csv'></input>"+
+      "</br>Precise your path file : </br>"+
+      "<input type='text' name='path'></input>";
     }
   }
   function selectNumOfTrees(choix){
@@ -50,5 +52,3 @@
   </script>
   </body>
 </html>
-Écrivez un message...
-
