@@ -25,7 +25,9 @@ public class Info2 extends HttpServlet {
 		String res = "Select your target variable : </br>"
 				+ "<select name='y'>";
 		for (String col : head) {
-			res += "<option value="+col+">"+col+"</option>";
+			if(! col.equals("")){
+				res += "<option value="+col+">"+col+"</option>";
+			}
 		}
 		res += "</select></br>";
 		return res;
@@ -53,15 +55,14 @@ public class Info2 extends HttpServlet {
 					"  </head>\n" + 
 					"  <body>\n" + 
 					"  <form name=\"formulaire\" id=\"formulaire\" action=\"/Run\" method=\"POST\">\n" + 
-					"    <input type='text' value='"+myFile+"' disabled=\"disabled\" ></input></br>"+
+					"    <input type='text' name='myFile' value='"+myFile+"'/></br>"+
 					"    Select your method of Machine Learning :\n" + 
 					"    </br>\n" + 
-					"    <input type=\"radio\" name=\"Methode\" value=\"CT\" cheched=\"checked\" required=\"required\" onclick=\"selectNumOfTrees('CT')\"> Classification Tree<br>\n" + 
-					"    <input type=\"radio\" name=\"Methode\" value=\"RF\" onclick=\"selectNumOfTrees('RF')\" > Random Forest\n" + 
+					"    <input type=\"radio\" name=\"methode\" value=\"CT\" cheched=\"checked\" required=\"required\" onclick=\"selectNumOfTrees('CT')\"> Classification Tree<br>\n" + 
+					"    <input type=\"radio\" name=\"methode\" value=\"RF\" onclick=\"selectNumOfTrees('RF')\" > Random Forest\n" + 
 					"    <div id=\"pritNumTrees\"></div>\n" +
 					var+
 					"    <input type=\"submit\" value=\"run\"></input></br>\n" + 
-					"    <div id=\"monchoix\"><div>\n" + 
 					"  </form>\n" +					
 					"  <script type=\"text/javascript\">\n" + 
 					"  function selectNumOfTrees(choix){\n" + 

@@ -1,6 +1,7 @@
 package randomForest;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import interfaces.Algorithme;
 import utilitaire.FichierCSV;
@@ -39,5 +40,20 @@ public class RandomForest implements Algorithme {
 				"Weka : " + accuracyWeka + "\n" + 
 				"Renjin : " + accuracyRenjin);
 	}
+	
+	@Override
+	public ArrayList<Object> run(String nom_CSV, char delimiter, String y, String...otherArgs) throws IOException{
+		ArrayList<Object> res = new ArrayList<Object>();
+		FichierCSV f = new FichierCSV(nom_CSV);
+		f.splitCSV(delimiter);
+		// Def du train et test
+		String train = "resources/train_"+ nom_CSV + ".csv";
+		String test = "resources/test_" + nom_CSV + ".csv";
 		
+		// Récup les accuracy
+		res.add(sp.evaluate(train, test, y, otherArgs));
+		res.add(w.evaluate(train, test, y, otherArgs));
+		res.add(rj.evaluate(train, test, y, otherArgs));
+		return res;		
+	}
 }

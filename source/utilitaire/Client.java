@@ -4,6 +4,7 @@ package utilitaire;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 import classificationTree.ClassificationTree;
 import interfaces.Algorithme;
@@ -31,6 +32,15 @@ public class Client {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public ArrayList<Object> run(String nom_CSV, char delimiter, String y, String...otherArgs) {
+		try {
+			return algo.run(nom_CSV, delimiter, y,otherArgs);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**

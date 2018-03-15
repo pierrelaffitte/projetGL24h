@@ -1,6 +1,7 @@
 package interfaces;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Interface des différents algorithmes
@@ -18,5 +19,7 @@ public interface Algorithme {
 	 * @throws IOException exception de lecture
 	 */
 	public void getAccuracy(String nom_CSV, char delimiter, String y, String...otherArgs) throws IOException;
+	
+	public ArrayList<Object> run(String nom_CSV, char delimiter, String y, String...otherArgs) throws IOException;
 }
 
