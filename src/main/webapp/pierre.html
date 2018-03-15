@@ -5,18 +5,25 @@
     <title>Les Forets.com</title>
   </head>
   <body>
-  <form name="formulaire" id="formulaire" action="/Info2" method="POST">
+  <form name="formulaire" id="formulaire" action="/Run" method="post">
     Choose your data :</br>
     <input type="radio" required="required" name="choix" onclick="afficher('choose');" value ="choose" checked="checked">choose
     <input type="radio" name="choix" onclick="afficher('import');" value="import">import
     <div id="champ1">
       <select id='monselect' name ="myFile" required="required">
         <option disabled selected value> -- select an option -- </option>
-        <option value='iris.csv'>iris.csv</option>
-        <option value='statsFSEVary.csv' >statsFSEVary.csv</option>
-        <option value='mushrooms.csv'>mushrooms.csv</option>
+        <option value='iris.csv' onclick=\"setValue('iris.csv');\">iris.csv</option>
+        <option value='statsFSEVary.csv' onclick=\"setValue('statsFSEVary.csv');\">statsFSEVary.csv</option>
+        <option value='mushrooms.csv' onclick=\"setValue('mushrooms.csv');\">mushrooms.csv</option>
       </select>
-    </div> <input type="submit" value="run"></input></br>
+    </div></br>
+    Select your method of Machine Learning :
+    </br>
+    <input type="radio" name="Methode" value="CT" cheched="checked" required="required" onclick="selectNumOfTrees('CT')"> Classification Tree<br>
+    <input type="radio" name="Methode" value="RF" onclick="selectNumOfTrees('RF')" > Random Forest
+    <div id="pritNumTrees"></div>
+    <input type="submit" value="run"></input></br>
+    <div id="monchoix"><div>
   </form>
   <script type="text/javascript">
   function afficher(choix)
@@ -31,6 +38,15 @@
       document.getElementById("champ1").innerHTML ="<input type='file' id='myFile' name='myFile' required='required' accept='.csv'></input>"+
       "</br>Precise your path file : </br>"+
       "<input type='text' name='path'></input>";
+    }
+  }
+  function selectNumOfTrees(choix){
+    if(choix == "RF"){
+      document.getElementById("pritNumTrees").innerHTML = "insert the number of trees to do the random forest :</br>"+
+      "<input type='number' id='numTrees' name='numTrees' value='10' min='1' max='100'></input>";
+    }
+    if (choix == "CT"){
+        document.getElementById("pritNumTrees").innerHTML = "";
     }
   }
   </script>
