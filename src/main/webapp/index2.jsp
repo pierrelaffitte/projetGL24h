@@ -1,22 +1,36 @@
-<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+"http://www.w3.org/TR/html4/loose.dtd">
 <html>
-  <head>
-    <meta name="author" content="Pierre Laffite">
-    <title>Les Forets.com</title>
-  </head>
-  <body>
-  <form name="formulaire" id="formulaire" action="/Info2" method="POST">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>jQuery, Ajax and Servlet/JSP integration example</title>
+
+<script src="http://code.jquery.com/jquery-1.10.2.js"
+	type="text/javascript"></script>
+<script src="form1.js" type="text/javascript"></script>
+</head>
+<body>
+
+	<table>
+	<tr><td>
+	<table>
+	<tr><td><form>
+		Enter Your Name: <input type="text" id="userName" />
+	</form>
+	<form name="formulaire" id="formulaire">
     Choose your data :</br>
     <input type="radio" required="required" name="choix" onclick="afficher('choose');" value ="choose" checked="checked">choose
     <input type="radio" name="choix" onclick="afficher('import');" value="import">import
     <div id="champ1">
-      <select id='monselect' name ="myFile" required="required">
+      <select id='myFile' name ="myFile" required="required">
         <option disabled selected value> -- select an option -- </option>
         <option value='iris.csv'>iris.csv</option>
         <option value='statsFSEVary.csv' >statsFSEVary.csv</option>
         <option value='mushrooms.csv'>mushrooms.csv</option>
       </select>
-    </div> <input type="submit" value="run"></input></br>
+    </div> <input type="submit" value="run" id="form1"></input></br>
   </form>
   <script type="text/javascript">
   function afficher(choix)
@@ -33,6 +47,18 @@
       "<input type='text' name='path'></input>";
     }
   }
-  </script>
-  </body>
+  </script></td></tr>
+	<tr><td>form2</td></tr>
+	</table>
+	</td><td> results</td></tr>
+	</table>
+	
+	<br>
+	<br>
+
+	<strong>Ajax Response</strong>:
+	<div id="form2"></div>
+	
+	
+</body>
 </html>

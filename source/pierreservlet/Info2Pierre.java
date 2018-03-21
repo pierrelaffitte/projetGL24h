@@ -1,4 +1,4 @@
-package servlet;
+package pierreservlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -10,16 +10,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import servlet.Scan;
 import utilitaire.Client;
 
-@WebServlet(name="info2", urlPatterns={"/Info2"})
-public class Info2 extends HttpServlet {
+@WebServlet("/Info2Pierre")
+public class Info2Pierre extends HttpServlet {
+	private static final long serialVersionUID = 1L;
 
 	public ArrayList<String> getColnames(String path, String name, char delimiter) throws IOException{
 		Scan s = new Scan();
 		return s.read(path, name, delimiter);
 	}
-	
+
 	public String setY(String myFile) throws IOException {
 		ArrayList<String> head = getColnames("resources/", myFile, ',');
 		String res = "Select your target variable : </br>"
@@ -32,9 +34,9 @@ public class Info2 extends HttpServlet {
 		res += "</select></br>";
 		return res;
 	}
-	
-	
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String greetings = "";
 		String choix = request.getParameter("choix");
 		String myFile = request.getParameter("myFile");
 		String end = myFile.substring(myFile.length()-4, myFile.length());
@@ -48,13 +50,7 @@ public class Info2 extends HttpServlet {
 			String var = setY(myFile);		
 			response.setContentType("text/html");
 			PrintWriter out = response.getWriter();
-			out.println("<html>\n" + 
-					"  <head>\n" + 
-					"    <meta name=\"author\" content=\"Pierre Laffite\">\n" + 
-					"    <title>Les Forets.com</title>\n" + 
-					"  </head>\n" + 
-					"  <body>\n" + 
-					"  <form name=\"formulaire\" id=\"formulaire\" action=\"/Run\" method=\"POST\">\n" + 
+			greetings = "  <form name=\"formulaire\" id=\"formulaire\" action=\"/Run\" method=\"POST\">\n" + 
 					"    <input type='text' name='myFile' value='"+myFile+"'/></br>"+
 					"    Select your method of Machine Learning :\n" + 
 					"    </br>\n" + 
@@ -74,17 +70,17 @@ public class Info2 extends HttpServlet {
 					"        document.getElementById(\"pritNumTrees\").innerHTML = \"\";\n" + 
 					"    }\n" + 
 					"  }\n" + 
-					"  </script>\n" + 
-					"  </body>\n" + 
-					"</html>\n");
+					"  </script>\n";
 		}else {
-			response.setContentType("text/html");
-			PrintWriter out = response.getWriter();
-			out.println("<HTML>\n<BODY>\n" +
+			greetings = "<HTML>\n<BODY>\n" +
 					"<H1>L'import a échoué</H1>\n" +
 					"<p>L'extension du fichier"+end+" n'est pas autorisé.</p>" +                
-					"</BODY></HTML>");
+					"</BODY></HTML>";
 		}
-
+		response.setContentType("text/plain");
+		response.getWriter().write(greetings);
 	}
+
+
+
 }
