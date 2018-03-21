@@ -52,6 +52,7 @@ public class Info extends HttpServlet {
 		String choix = request.getParameter("choix");
 		String myFile = request.getParameter("myFile");
 		String end = myFile.substring(myFile.length()-4, myFile.length());
+
 		if (end.equals(".csv")) {
 			myFile = myFile.replaceAll(".csv", "");
 			if (choix.equals("import")) {
