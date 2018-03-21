@@ -71,7 +71,7 @@ public class Run extends HttpServlet {
 				"   	<img src=\"image.jpg\" id=\"logo\">\n" + 
 				"    	<img src=\"image.jpg\" id=\"logo2\">\n" + 
 				"    	<h1> Les forêts.com </h1>\n" + 
-				"    	<h2> Compare and model smart </h2>\n" + 
+				"    	<h2> Compare and model smartly </h2>\n" + 
 				"  	</div>\n" +
 				"	<div id=\"menu\">\n" +
 				"		<ul id=\"onglets\">\n" +
