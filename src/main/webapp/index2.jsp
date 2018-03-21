@@ -17,7 +17,7 @@
 	<tr><td>
 	<table>
 	<tr><td>
-	<form name="formulaire" id="formulaire">
+	<form name="formulaire1" id="formulaire1">
     Choose your data :</br>
     <input type="radio" required="required" name="choix" onclick="afficher('choose');" value ="choose" checked="checked">choose
     <input type="radio" name="choix" onclick="afficher('import');" value="import">import

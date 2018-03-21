@@ -60,7 +60,7 @@ public class SparkML_CT implements Implementation{
 				test2.mapToPair(p -> new Tuple2<>(model.predict(p.features()), p.label()));
 		double testErr =
 				predictionAndLabel.filter(pl -> !pl._1().equals(pl._2())).count() / (double) test2.count();
-
+		
 		return 1-testErr;
 	}
 

@@ -11,54 +11,46 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import classificationTree.ClassificationTree;
+import randomForest.RandomForest;
 import utilitaire.Client;
 
 @WebServlet(name="run2", urlPatterns={"/Run2"})
 public class Run2 extends HttpServlet {
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//Client c = new Client();
-		System.out.println("tpdfdrgkbedflvdfvjkxfv,kdfmgkpkdrjg");
+		Client c = new Client();
 		String myFile = request.getParameter("myFile");
-		//String method = request.getParameter("methode");
+		String method = request.getParameter("methode");
 		String y = request.getParameter("y");
-		
-		String greetings = myFile + " "+y;
-		
-		response.setContentType("text/plain");
-		response.getWriter().write(greetings);
-		/*
+		response.setContentType("text/html");
+		String greetings = myFile+" "+method+" "+y;
 		if (method.equals("CT")) {
+			System.out.println("CT");
 			c.setAlgo(new ClassificationTree());
 			String[] otherArgs = {myFile};
 			ArrayList<Object> vec = c.run(myFile, ',', y, otherArgs);
 			String var = "<UL>\n";
 			for (Object res : vec) {
-				var += "<LI>Nom: "+ res+"\n";
+				var += "<LI>Nom: "+ res+"</Li>	\n";
 			}
-			var += "<UL>\n";
-			response.setContentType("text/html");
-			PrintWriter out = response.getWriter();
-			out.println("<HTML>\n<BODY>\n" +
-					"<H1>Recapitulatif des informations</H1>\n" +
-					var+                
-					"</BODY></HTML>");
+			var += "</UL>\n";
+			greetings +="\n"+var;
 		}
 		if (method.equals("RF")) {
-			c.setAlgo(new ClassificationTree());
+			System.out.println("RF");
+			c.setAlgo(new RandomForest());
 			String[] otherArgs = {request.getParameter("numTrees")};
 			ArrayList<Object> vec = c.run(myFile, ',', y, otherArgs);
 			String var = "<UL>\n";
 			for (Object res : vec) {
-				var += "<LI>Nom: "+ res+"\n";
+				var += "<LI>Nom: "+ res+"</Li>\n";
 			}
-			var += "<UL>\n";
-			response.setContentType("text/html");
-			PrintWriter out = response.getWriter();
-			out.println("<HTML>\n<BODY>\n" +
-					"<H1>Recapitulatif des informations</H1>\n" +
-					var+                
-					"</BODY></HTML>");
-		}*/
+			var += "</UL>\n";
+			greetings +=otherArgs[0]+"\n"+var;
+		}
+		c = new Client();
+		response.setContentType("text/html");
+		response.getWriter().write(greetings);
+		
 	}
 }
