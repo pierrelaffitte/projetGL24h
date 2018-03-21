@@ -38,10 +38,22 @@ public class Info2Pierre extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String greetings = "";
 		String myFile = request.getParameter("myFile");
+		String choix = request.getParameter("choix");
 		String end = myFile.substring(myFile.length()-4, myFile.length());
 		if (end.equals(".csv")) {
 			myFile = myFile.replaceAll(".csv", "");
-			String var = setY(myFile);		
+			if (choix.equals("import")) {
+				myFile = myFile.replaceAll("\\\\","/");
+				String name = myFile.replaceAll("C:/fakepath/", "");
+				System.out.println(name);
+				System.out.println("on importe les données");
+				Client c = new Client();
+				String path = request.getParameter("path");
+				System.out.println(path);
+				c.importerData(name, path);
+				myFile = name;
+			}
+			String var = setY(myFile);	
 			greetings = "  <form name=\"formulaire2\" id=\"formulaire2\">\n" + 
 					"    <input type='text' name='myFile' value='"+myFile+"'/ disabled=\"disabled\" id=\"monFichierNonModifiable\"></br>"+
 					"    Select your method of Machine Learning :\n" + 
@@ -64,11 +76,9 @@ public class Info2Pierre extends HttpServlet {
 					"    }\n" + 
 					"  };\n" + 
 					"  function runModels(){\n" + 
-					"    alert('les modeles');\n" + 
-					"   	var monfichier = $('#monFichierNonModifiable').val();\n" + 
+					"    var monfichier = $('#monFichierNonModifiable').val();\n" + 
 					"    var mony = $('#y').val();\n" + 
 					"    var mamethode = $('input[name=methode]:checked', '#formulaire2').val();\n" + 
-					"    alert(mamethode);\n" + 
 					"    if (mamethode == \"CT\"){\n" + 
 					"      $.get('Run2', {\n" + 
 					"        myFile : monfichier,\n" + 

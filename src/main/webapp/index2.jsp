@@ -9,7 +9,7 @@
 
 <script src="http://code.jquery.com/jquery-1.10.2.js"
 	type="text/javascript"></script>
-<script src="form1.js" type="text/javascript"></script>
+<!-- <script src="form1.js" type="text/javascript"></script> -->
 </head>
 <body>
 
@@ -28,13 +28,14 @@
         <option value='statsFSEVary.csv' >statsFSEVary.csv</option>
         <option value='mushrooms.csv'>mushrooms.csv</option>
       </select>
-    </div> <input type="submit" value="run" id="form1"></input></br>
+    </div>
+    <button type="button" onclick="loadDatas()">Load</button></br>
   </form>
   <script type="text/javascript">
   function afficher(choix)
   {
     if(choix == "choose"){
-      document.getElementById("champ1").innerHTML = "<select id='monselect' name='myFile' required='required'><option disabled selected value> -- select an option -- </option>"+
+      document.getElementById("champ1").innerHTML = "<select id='myFile' name='myFile' required='required'><option disabled selected value> -- select an option -- </option>"+
       "<option value='iris.csv' onclick=\"setValue('iris.csv');\">iris.csv</option>"+
       "<option value='statsFSEVary.csv' onclick=\"setValue('statsFSEVary.csv');\">statsFSEVary.csv</option>"+
       "<option value='mushrooms.csv' onclick=\"setValue('mushrooms.csv');\">mushrooms.csv</option></select>";
@@ -42,8 +43,34 @@
     if(choix == "import"){
       document.getElementById("champ1").innerHTML ="<input type='file' id='myFile' name='myFile' required='required' accept='.csv'></input>"+
       "</br>Precise your path file : </br>"+
-      "<input type='text' name='path'></input>";
+      "<input type='text' name='path' id='path'></input>";
     }
+  };
+  function loadDatas(){
+  	alert('load');
+    var monchoix = $('input[name=choix]:checked', '#formulaire1').val();
+    alert(monchoix);
+	var monfichier = $('#myFile').val();
+	alert(monfichier);
+	if (monchoix == "import"){
+		var monchemin = $('#path').val();
+		alert(monchemin);
+		$.get('Info2Pierre', {
+	        choix : monchoix,
+			myFile : monfichier,
+			path : monchemin
+	        }, function(responseText) {
+	                $('#form2').html(responseText);
+	        	});
+	
+	}else{
+		$.get('Info2Pierre', {
+	        choix : monchoix,
+		myFile : monfichier,
+	        }, function(responseText) {
+	                $('#form2').html(responseText);
+	        	});
+	}
   }
   </script></td></tr>
 	<tr><td><strong>Formulaire 2</strong>:
