@@ -34,7 +34,7 @@ public class Info2 extends HttpServlet {
 	}
 	
 	
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String choix = request.getParameter("choix");
 		String myFile = request.getParameter("myFile");
 		String end = myFile.substring(myFile.length()-4, myFile.length());

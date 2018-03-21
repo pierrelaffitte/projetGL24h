@@ -24,8 +24,20 @@ public class Info2Pierre extends HttpServlet {
 
 	public String setY(String myFile) throws IOException {
 		ArrayList<String> head = getColnames("resources/", myFile, ',');
+		String js = "$('#y').blur(function(event) {\n" + 
+				"                var monfichier = $('#monFichierNonModifiable').val();\n" + 
+				"		var mony = $('#y').val();\n" + 
+				"		$.get('Run2', {\n" + 
+				"		        myFile : monfichier,\n" + 
+				"			y : mony,\n" + 
+				"                }, function(responseText) {\n" + 
+				"                        $('#results').text(responseText);\n" + 
+				"                	});	\n" + 
+				"		}\n" + 
+				"                \n" + 
+				"        });";
 		String res = "Select your target variable : </br>"
-				+ "<select name='y'>";
+				+ "<select name='y' id='y' blur=\""+js+"\">";
 		for (String col : head) {
 			if(! col.equals("")){
 				res += "<option value="+col+">"+col+"</option>";
@@ -37,28 +49,20 @@ public class Info2Pierre extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String greetings = "";
-		String choix = request.getParameter("choix");
 		String myFile = request.getParameter("myFile");
 		String end = myFile.substring(myFile.length()-4, myFile.length());
 		if (end.equals(".csv")) {
 			myFile = myFile.replaceAll(".csv", "");
-			if (choix.equals("import")) {
-				Client c = new Client();
-				String path = request.getParameter("path");
-				c.importerData(myFile, path);
-			}	
 			String var = setY(myFile);		
-			response.setContentType("text/html");
-			PrintWriter out = response.getWriter();
-			greetings = "  <form name=\"formulaire\" id=\"formulaire\" action=\"/Run\" method=\"POST\">\n" + 
-					"    <input type='text' name='myFile' value='"+myFile+"'/></br>"+
+			greetings = "  <form name=\"formulaire\" id=\"formulaire\">\n" + 
+					"    <input type='text' name='myFile' value='"+myFile+"'/ disabled=\"disabled\" id=\"monFichierNonModifiable\"></br>"+
 					"    Select your method of Machine Learning :\n" + 
 					"    </br>\n" + 
 					"    <input type=\"radio\" name=\"methode\" value=\"CT\" cheched=\"checked\" required=\"required\" onclick=\"selectNumOfTrees('CT')\"> Classification Tree<br>\n" + 
 					"    <input type=\"radio\" name=\"methode\" value=\"RF\" onclick=\"selectNumOfTrees('RF')\" > Random Forest\n" + 
 					"    <div id=\"pritNumTrees\"></div>\n" +
 					var+
-					"    <input type=\"submit\" value=\"run\"></input></br>\n" + 
+					"    <button value=\"run\" id=\"bouton2\" type=\"button\">RunModel</button></br>\n" + 
 					"  </form>\n" +					
 					"  <script type=\"text/javascript\">\n" + 
 					"  function selectNumOfTrees(choix){\n" + 
@@ -69,15 +73,12 @@ public class Info2Pierre extends HttpServlet {
 					"    if (choix == \"CT\"){\n" + 
 					"        document.getElementById(\"pritNumTrees\").innerHTML = \"\";\n" + 
 					"    }\n" + 
-					"  }\n" + 
-					"  </script>\n";
+					"  }\n";
 		}else {
-			greetings = "<HTML>\n<BODY>\n" +
-					"<H1>L'import a échoué</H1>\n" +
-					"<p>L'extension du fichier"+end+" n'est pas autorisé.</p>" +                
-					"</BODY></HTML>";
+			greetings = "<H1>L'import a échoué</H1>\n" +
+					"<p>L'extension du fichier"+end+" n'est pas autorisé.</p>" ;
 		}
-		response.setContentType("text/plain");
+		response.setContentType("text/html");
 		response.getWriter().write(greetings);
 	}
 

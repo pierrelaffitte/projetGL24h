@@ -1,8 +1,8 @@
 $(document).ready(function() {
-        $('#form1').onclick(function(event) {
+        $('#myFile').blur(function(event) {
                 var monchoix = $('#monselect').val();
 		var monfichier = $('#myFile').val();
-		if (monchoix == "choose"){
+		if (monchoix == "import"){
 			var monchemin = $('#path').val();
 			$.get('Info2Pierre', {
 		        choix : monchoix,
@@ -17,17 +17,10 @@ $(document).ready(function() {
 		        choix : monchoix,
 			myFile : monfichier,
                 }, function(responseText) {
-                        $('#form2').text(responseText);
+                        $('#form2').html(responseText);
                 	});	
 		}
                 
         });
-        $('#userName').blur(function(event) {
-                var name = $('#userName').val();
-                $.get('GetUserServlet', {
-                        userName : name
-                }, function(responseText) {
-                        $('#form2').text(responseText);
-                });
-        });
 });
+/*	*/

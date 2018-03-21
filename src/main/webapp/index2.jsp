@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>jQuery, Ajax and Servlet/JSP integration example</title>
+<title>Forets.com</title>
 
 <script src="http://code.jquery.com/jquery-1.10.2.js"
 	type="text/javascript"></script>
@@ -16,9 +16,7 @@
 	<table>
 	<tr><td>
 	<table>
-	<tr><td><form>
-		Enter Your Name: <input type="text" id="userName" />
-	</form>
+	<tr><td>
 	<form name="formulaire" id="formulaire">
     Choose your data :</br>
     <input type="radio" required="required" name="choix" onclick="afficher('choose');" value ="choose" checked="checked">choose
@@ -48,17 +46,12 @@
     }
   }
   </script></td></tr>
-	<tr><td>form2</td></tr>
+	<tr><td><strong>Formulaire 2</strong>:
+	<div id="form2"></div></td></tr>
 	</table>
-	</td><td> results</td></tr>
-	</table>
-	
-	<br>
-	<br>
-
-	<strong>Ajax Response</strong>:
-	<div id="form2"></div>
-	
-	
+	</td><td> <strong>Results 2</strong>:
+	<div id="results"><input id='y' name="y" type="hidden"></div></div>
+	</td></tr>
+	</table>	
 </body>
 </html>

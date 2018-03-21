@@ -20,6 +20,6 @@
 	<br>
 
 	<strong>Ajax Response</strong>:
-	<div id="ajaxGetUserServletResponse"></div>
+	<div id="form2"></div>
 </body>
 </html>
