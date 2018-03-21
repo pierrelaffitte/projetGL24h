@@ -1,18 +1,3 @@
-.entete {
- background: #FFF5F8;
- height:200px;
- width:100%;
- display: table-cell;
- vertical-align: middle;
- position: absolute;
- top: 0; left: 0;
-}
-footer{
-  background: #FFF5F8;
-  display : table-row;
-  height:100px;
-  width:100%;
-}
 body {
  font-family:"trebuchet ms",sans-serif;
  font-size:90%;
@@ -20,6 +5,15 @@ body {
  display : table;
  width: 100%;
  }
+footer{
+  background: #FFF5F8;
+  display : table-row;
+  height:100px;
+  width:100%;
+}
+fieldset {
+ border:none;
+}
 form {
  background-color:#B8B8B8;
  padding:20px 150px 20px 150px;
@@ -31,35 +25,10 @@ form {
  -webkit-border-radius:8px;
  border-radius:8px;
 }
-fieldset {
- border:none;
- /*padding:0 150px 150px 150px;
- margin-bottom:30px;
- border:2px solid #DF3F3F;
- -moz-border-radius:8px;
- -webkit-border-radius:8px;
- border-radius:8px;
- margin:auto;*/
-}
-.center-on-page {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%);
-}
-.text-normal{
- font-family:"trebuchet ms",sans-serif;
- font-size:18px;
- margin-bottom:5px;
-}
 legend {
  color:#DF3F3F;
  font-weight:bold;
  font-size:20px;
-}
-.select{
- margin-top=5px;
- margin-bottom=6px;
 }
 input[type=radio] {
  background-color:transparent;
@@ -69,12 +38,6 @@ input[type=radio] {
 img{
  width:200px;
  height:200px;
-}
-#logo {
- float:left;
-}
-#logo2 {
- float:right;
 }
 h1 {
  margin-top: 40px;
@@ -91,7 +54,6 @@ h2 {
  font-style:italic;
  font-size:26px;
 }
-
 /* Bouton submit */
 input[type=submit] {
  padding:6px 0 6px 0;
@@ -103,7 +65,38 @@ input[type=submit] {
  border:none;
  cursor:pointer;
 }
-
+table{
+  border:none;
+  border-collapse: separate;
+  border-spacing: 25px 10px; /* Nombre de pixels d'espace horizontal , vertical */
+}
+th{
+  text-align: left;
+}
+.entete {
+ background: #FFF5F8;
+ height:200px;
+ width:100%;
+ display: table-cell;
+ vertical-align: middle;
+ position: absolute;
+ top: 0; left: 0;
+}
+.center-on-page {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+.text-normal{
+ font-family:"trebuchet ms",sans-serif;
+ font-size:18px;
+ margin-bottom:5px;
+}
+.select{
+ margin-top=5px;
+ margin-bottom=6px;
+}
 /* Boutons radio v1 */
 .style-radio{
   width:500px;
@@ -124,17 +117,13 @@ input[type=submit] {
   -webkit-border-radius:8px;
   border-radius:8px;
 }
-table{
-  border:none;
-  border-collapse: separate;
-  border-spacing: 25px 10px; /* Nombre de pixels d'espace horizontal , vertical */
+/* Images */
+#logo {
+ float:left;
 }
-
+#logo2 {
+ float:right;
 }
-th{
-  text-align: left;
-}
-
 /* Menu */
 #onglets{
   position : absolute;
