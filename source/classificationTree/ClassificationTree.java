@@ -53,6 +53,7 @@ public class ClassificationTree implements Algorithme {
 		res.add(sp.evaluate(train, test, y, otherArgs));
 		res.add(w.evaluate(train, test, y, otherArgs));
 		res.add(rj.evaluate(train, test, y, otherArgs));
+		
 		return res;		
 	}
 	

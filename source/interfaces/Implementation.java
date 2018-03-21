@@ -7,8 +7,6 @@ package interfaces;
  */
 public interface Implementation {
 
-	// TODO : evaluateMSE, evaluateAUC
-	
 	/**
 	 * Importe le fichier CSV dont le chemin est en paramètre
 	 * @param file chemin du fichier CSV

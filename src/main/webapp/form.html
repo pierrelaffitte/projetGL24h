@@ -1,23 +1,41 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta name="author" content="Pierre Laffite">
+    <meta charset="utf-8" name="author" content="Pierre Laffite">
+    <link rel="stylesheet" href="style.css" />
     <title>Les Forets.com</title>
   </head>
   <body>
-  <form name="formulaire" id="formulaire" action="/Info2" method="POST">
-    Choose your data :</br>
-    <input type="radio" required="required" name="choix" onclick="afficher('choose');" value ="choose" checked="checked">choose
-    <input type="radio" name="choix" onclick="afficher('import');" value="import">import
-    <div id="champ1">
-      <select id='monselect' name ="myFile" required="required">
-        <option disabled selected value> -- select an option -- </option>
-        <option value='iris.csv'>iris.csv</option>
-        <option value='statsFSEVary.csv' >statsFSEVary.csv</option>
-        <option value='mushrooms.csv'>mushrooms.csv</option>
-      </select>
-    </div> <input type="submit" value="run"></input></br>
-  </form>
+  <div class="entete">
+    <img src="image.jpg" id="logo">
+    <img src="image.jpg" id="logo2">
+    <h1> Les forêts.com </h1>
+    <h2> Compare and model smart </h2>
+  </div>
+  <div class="center-on-page">
+	  <fieldset>
+	  	<legend> Select a dataset or import a new file : </legend>
+		  <form name="formulaire" id="formulaire" action="/Info" method="POST">
+		    <div class="style-radio">
+          Choose your data :
+          <input type="radio" required="required" name="choix" onclick="afficher('choose');" value ="choose" checked="checked"/>Choose
+		      <input type="radio" name="choix" onclick="afficher('import');" value="import"/>Import
+        </div>
+		    <div></br></div>
+		    <div id="champ1">
+		      <select id='monselect' name ="myFile" required="required">
+		        <option disabled selected value> -- select an option -- </option>
+		        <option value='iris.csv'>iris.csv</option>
+		        <option value='statsFSEVary.csv' >statsFSEVary.csv</option>
+		        <option value='mushrooms.csv'>mushrooms.csv</option>
+		      </select>
+		    </div>
+      </br></br>
+		    <input type="submit" value="run"></input></br>
+		  </form>
+	  </fieldset>
+  </div>
+
   <script type="text/javascript">
   function afficher(choix)
   {
@@ -29,10 +47,13 @@
     }
     if(choix == "import"){
       document.getElementById("champ1").innerHTML ="<input type='file' id='myFile' name='myFile' required='required' accept='.csv'></input>"+
-      "</br>Precise your path file : </br>"+
+      "</br></br>Precise your path file : </br>"+
       "<input type='text' name='path'></input>";
     }
   }
   </script>
   </body>
+  <footer>
+    <br>
+  </footer>
 </html>
