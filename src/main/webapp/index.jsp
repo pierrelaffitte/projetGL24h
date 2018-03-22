@@ -71,11 +71,8 @@
 			};
 
 			function loadDatas(){
-				alert('load');
 				var monchoix = $('input[name=choix]:checked', '#formulaire1').val();
-				alert(monchoix);
 				var monfichier = $('#myFile').val();
-				alert(monfichier);
 				if (monchoix == "import"){
 					var monchemin = $('#path').val();
 					alert(monchemin);
