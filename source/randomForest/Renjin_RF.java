@@ -76,7 +76,8 @@ public class Renjin_RF implements Implementation {
 		Object testCSV = importer(test);
 		Object model=fit(train, y,otherArgs);
 		Object accuracy=null;
-		String code = "modpredRF=predict(mod,data_test,type=\"class\")\n" +  
+		String code = "set.seed(1)\n"+
+				"modpredRF=predict(mod,data_test,type=\"class\")\n" +  
 				"modmatRF=table(y,modpredRF)\n" + 
 				"modtaux_err_RF= sum(modpredRF != y)/nrow(data_test)\n" + 
 				"accuracy <- 1-modtaux_err_RF\n";
