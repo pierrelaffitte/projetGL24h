@@ -55,7 +55,7 @@
 	if (monchoix == "import"){
 		var monchemin = $('#path').val();
 		alert(monchemin);
-		$.get('Info2Pierre', {
+		$.get('InfoAjax', {
 	        choix : monchoix,
 			myFile : monfichier,
 			path : monchemin
@@ -64,7 +64,7 @@
 	        	});
 	
 	}else{
-		$.get('Info2Pierre', {
+		$.get('InfoAjax', {
 	        choix : monchoix,
 		myFile : monfichier,
 	        }, function(responseText) {

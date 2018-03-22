@@ -1,4 +1,4 @@
-package pierreservlet;
+package servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -10,11 +10,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import servlet.Scan;
 import utilitaire.Client;
 
 @WebServlet("/Info2Pierre")
-public class Info2Pierre extends HttpServlet {
+public class InfoAjax extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	public ArrayList<String> getColnames(String path, String name, char delimiter) throws IOException{
@@ -80,7 +79,7 @@ public class Info2Pierre extends HttpServlet {
 					"    var mony = $('#y').val();\n" + 
 					"    var mamethode = $('input[name=methode]:checked', '#formulaire2').val();\n" + 
 					"    if (mamethode == \"CT\"){\n" + 
-					"      $.get('Run2', {\n" + 
+					"      $.get('RunAjax', {\n" + 
 					"        myFile : monfichier,\n" + 
 					"        y : mony,\n" + 
 					"        methode : mamethode\n" + 
@@ -90,7 +89,7 @@ public class Info2Pierre extends HttpServlet {
 					"    }\n" + 
 					"    if (mamethode == \"RF\"){\n" + 
 					"      var nbTrees = $(\"#numTrees\").val();\n" + 
-					"      $.get('Run2', {\n" + 
+					"      $.get('RunAjax', {\n" + 
 					"        myFile : monfichier,\n" + 
 					"        y : mony,\n" + 
 					"        methode : mamethode,\n" + 

@@ -1,4 +1,4 @@
-package pierreservlet;
+package servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,7 +15,7 @@ import randomForest.RandomForest;
 import utilitaire.Client;
 
 @WebServlet(name="run2", urlPatterns={"/Run2"})
-public class Run2 extends HttpServlet {
+public class RunAjax extends HttpServlet {
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Client c = new Client();
