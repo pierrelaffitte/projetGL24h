@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import utilitaire.Client;
 
-@WebServlet("/Info2Pierre")
+@WebServlet("/InfoAjax")
 public class InfoAjax extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -23,14 +23,14 @@ public class InfoAjax extends HttpServlet {
 
 	public String setY(String myFile) throws IOException {
 		ArrayList<String> head = getColnames("resources/", myFile, ',');
-		String res = "Select your target variable : </br>"
+		String res = "</br> Select your target variable : </br>"
 				+ "<select name='y' id='y'>";
 		for (String col : head) {
 			if(! col.equals("")){
 				res += "<option value="+col+">"+col+"</option>";
 			}
 		}
-		res += "</select></br>";
+		res += "</select></br></br>";
 		return res;
 	}
 
@@ -53,52 +53,53 @@ public class InfoAjax extends HttpServlet {
 				myFile = name;
 			}
 			String var = setY(myFile);	
-			greetings = "  <form name=\"formulaire2\" id=\"formulaire2\">\n" + 
-					"    <input type='text' name='myFile' value='"+myFile+"'/ disabled=\"disabled\" id=\"monFichierNonModifiable\"></br>"+
-					"    Select your method of Machine Learning :\n" + 
-					"    </br>\n" + 
-					"    <input type=\"radio\" name=\"methode\" value=\"CT\" cheched=\"checked\" required=\"required\" onclick=\"selectNumOfTrees('CT')\"> Classification Tree<br>\n" + 
-					"    <input type=\"radio\" name=\"methode\" value=\"RF\" onclick=\"selectNumOfTrees('RF')\" > Random Forest\n" + 
-					"    <div id=\"pritNumTrees\"></div>\n" +
-					var+
-					"    <button value=\"run\" id=\"boutonForm2\" type=\"button\" onclick='runModels()'>RunModel</button></br>\n" + 
-					"  </form>\n" +					
-					"  <script type=\"text/javascript\">\n" + 
-					"  \n" + 
-					"  function selectNumOfTrees(choix){\n" + 
-					"    if(choix == \"RF\"){\n" + 
-					"      document.getElementById(\"pritNumTrees\").innerHTML = \"insert the number of trees to do the random forest :</br>\"+\n" + 
-					"      \"<input type='number' id='numTrees' name='numTrees' value='10' min='1' max='100'></input>\";\n" + 
-					"    }\n" + 
-					"    if (choix == \"CT\"){\n" + 
-					"        document.getElementById(\"pritNumTrees\").innerHTML = \"\";\n" + 
-					"    }\n" + 
-					"  };\n" + 
-					"  function runModels(){\n" + 
-					"    var monfichier = $('#monFichierNonModifiable').val();\n" + 
-					"    var mony = $('#y').val();\n" + 
-					"    var mamethode = $('input[name=methode]:checked', '#formulaire2').val();\n" + 
-					"    if (mamethode == \"CT\"){\n" + 
-					"      $.get('RunAjax', {\n" + 
-					"        myFile : monfichier,\n" + 
-					"        y : mony,\n" + 
-					"        methode : mamethode\n" + 
-					"      }, function(responseText) {\n" + 
-					"        $('#results').html(responseText);\n" + 
-					"        });\n" + 
-					"    }\n" + 
-					"    if (mamethode == \"RF\"){\n" + 
-					"      var nbTrees = $(\"#numTrees\").val();\n" + 
-					"      $.get('RunAjax', {\n" + 
-					"        myFile : monfichier,\n" + 
-					"        y : mony,\n" + 
-					"        methode : mamethode,\n" + 
-					"        numTrees: nbTrees,\n" + 
-					"      }, function(responseText) {\n" + 
-					"        $('#results').html(responseText);\n" + 
-					"        });\n" + 
-					"    }\n" + 
-					"	}\n" + 
+			greetings = " <legend> Select a method of Machine Learning and its arguments : </legend> "+ 
+					"	<form name=\"formulaire2\" id=\"formulaire2\">\n" + 
+					"   	Selected file : <input type='text' name='myFile' value='"+ myFile +"'/ disabled=\"disabled\" id=\"monFichierNonModifiable\"></br>"+
+					" 		</br>\n"+
+					"   	Select your method of Machine Learning :\n" + 
+					"   	</br>\n" + 
+					"   	<input type=\"radio\" name=\"methode\" value=\"CT\" cheched=\"checked\" required=\"required\" onclick=\"selectNumOfTrees('CT')\"> Classification Tree<br>\n" + 
+					"   	<input type=\"radio\" name=\"methode\" value=\"RF\" onclick=\"selectNumOfTrees('RF')\" > Random Forest\n" + 
+					"   	<div id=\"pritNumTrees\"></div>\n" + var +
+					"   	<button value=\"run\" id=\"boutonForm2\" type=\"button\" onclick='runModels()'>RunModel</button></br>\n" + 
+					"   </form>\n" +					
+					"  	<script type=\"text/javascript\">\n" + 
+					"  		\n" + 
+					"  		function selectNumOfTrees(choix){\n" + 
+					"    		if(choix == \"RF\"){\n" + 
+					"      			document.getElementById(\"pritNumTrees\").innerHTML = \"Insert the number of trees to do the random forest :</br>\"+\n" + 
+					"      			\"<input type='number' id='numTrees' name='numTrees' value='10' min='1' max='100'></input>\";\n" + 
+					"    		}\n" + 
+					"    		if (choix == \"CT\"){\n" + 
+					"       	 	document.getElementById(\"pritNumTrees\").innerHTML = \"\";\n" + 
+					"    		}\n" + 
+					"  		};\n" + 
+					" 		function runModels(){\n" + 
+					"    		var monfichier = $('#monFichierNonModifiable').val();\n" + 
+					"    		var mony = $('#y').val();\n" + 
+					"    		var mamethode = $('input[name=methode]:checked', '#formulaire2').val();\n" + 
+					"    		if (mamethode == \"CT\"){\n" + 
+					"     			$.get('RunAjax', {\n" + 
+					"        		myFile : monfichier,\n" + 
+					"        		y : mony,\n" + 
+					"        		methode : mamethode\n" + 
+					"     		}, function(responseText) {\n" + 
+					"        			$('#results').html(responseText);\n" + 
+					"        		});\n" + 
+					"    		}\n" + 
+					"    		if (mamethode == \"RF\"){\n" + 
+					"      			var nbTrees = $(\"#numTrees\").val();\n" + 
+					"      			$.get('RunAjax', {\n" + 
+					"       		myFile : monfichier,\n" + 
+					"        		y : mony,\n" + 
+					"        		methode : mamethode,\n" + 
+					"        		numTrees: nbTrees,\n" + 
+					"      		}, function(responseText) {\n" + 
+					"        			$('#results').html(responseText);\n" + 
+					"        		});\n" + 
+					"    		}\n" + 
+					"		}\n" + 
 					"" + 
 					"</script>";
 		}else {

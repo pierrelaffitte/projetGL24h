@@ -81,7 +81,7 @@ public class Info extends HttpServlet {
 				    "		<fieldset>\n" + 
 				    "	 	 	<legend> Select a method of Machine Learning and its arguments : </legend>\n"+
 					"  			<form name=\"formulaire\" id=\"formulaire\" action=\"/Run\" method=\"POST\">\n" + 
-					"    			Selected file : <input type='text' name='myFile' value='"+myFile+"'/></br>"+
+					"    			Selected file : <input type='text' name='myFile' disabled='disabled' value='"+myFile+"'/></br>"+
 					" 				</br>\n"+
 					"    			Select your method of Machine Learning :</br>\n" + 
 					"    			<input type=\"radio\" name=\"methode\" value=\"CT\" cheched=\"checked\" required=\"required\" onclick=\"selectNumOfTrees('CT')\"> Classification Tree<br>\n" + 

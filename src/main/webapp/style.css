@@ -65,6 +65,16 @@ input[type=submit] {
  border:none;
  cursor:pointer;
 }
+input[type="button"] {
+ padding:6px 0 6px 0;
+ font:Bold 13px Arial;
+ background-color: #d34836;
+ color:#fff;
+ width:120px;
+ border-radius:2px;
+ border:none;
+ cursor:pointer;
+}
 table{
   border:none;
   border-collapse: separate;
@@ -84,7 +94,7 @@ th{
 }
 .center-on-page {
   position: absolute;
-  top: 50%;
+  top: 65%;
   left: 50%;
   transform: translate(-50%,-50%);
 }
@@ -116,6 +126,21 @@ th{
   -moz-border-radius:8px;
   -webkit-border-radius:8px;
   border-radius:8px;
+}
+.on-left {
+  position: absolute;
+  top: 58%;
+  left: 32%;
+  transform: translate(-50%,-50%);
+}
+.on-right {
+  position: absolute;
+  top: 40%;
+  left: 74%;
+  transform: translate(-50%,-50%);
+}
+.reduce {
+  padding:20px 90px 20px 90px;
 }
 /* Images */
 #logo {
