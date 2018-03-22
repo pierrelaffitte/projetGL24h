@@ -18,62 +18,30 @@ import utilitaire.Client;
 public class RunAjax extends HttpServlet {
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		/*Client c = new Client();
+		Client c = new Client();
 		String myFile = request.getParameter("myFile");
 		String method = request.getParameter("methode");
 		String y = request.getParameter("y");
 		response.setContentType("text/html");
 		//String greetings = myFile+" "+method+" "+y;
+		ArrayList<Object> vec = new ArrayList<Object>();
 		
 		if (method.equals("CT")) {
 			System.out.println("CT");
 			c.setAlgo(new ClassificationTree());
 			String[] otherArgs = {myFile};
-			ArrayList<Object> vec = c.run(myFile, ',', y, otherArgs);
-			String var = "<UL>\n";
-			for (Object res : vec) {
-				var += "<LI>Nom: "+ res+"</Li>	\n";
-			}
-			var += "</UL>\n";
-			greetings +="\n"+var;
+			vec = c.run(myFile, ',', y, otherArgs);
+			
 		}
 		if (method.equals("RF")) {
 			System.out.println("RF");
 			c.setAlgo(new RandomForest());
 			String[] otherArgs = {request.getParameter("numTrees")};
-			ArrayList<Object> vec = c.run(myFile, ',', y, otherArgs);
-			String var = "<UL>\n";
-			for (Object res : vec) {
-				var += "<LI>Nom: "+ res+"</Li>\n";
-			}
-			var += "</UL>\n";
-			greetings +=otherArgs[0]+"\n"+var;
-		}
-		c = new Client();
-		response.setContentType("text/html");
-		response.getWriter().write(greetings);*/
-		
-		// Définition du client
-		Client c = new Client();
-		String myFile = request.getParameter("myFile");
-		String method = request.getParameter("methode");
-		String y = request.getParameter("y");
-		ArrayList<Object> vec = new ArrayList<Object>();
-				
-		// Exécution de la méthode de ML choisie avec les arguments
-		if (method.equals("CT")) {
-			c.setAlgo(new ClassificationTree());
-			String[] otherArgs = {myFile};
 			vec = c.run(myFile, ',', y, otherArgs);
+			//greetings +=otherArgs[0];
 		}
-		if (method.equals("RF")) {
-			c.setAlgo(new ClassificationTree());
-			String[] otherArgs = {request.getParameter("numTrees")};
-			vec = c.run(myFile, ',', y, otherArgs);
-		} 
 		
-		String var = "<fieldset>\n";
-		var += "<legend> Summary of information : </legend>\n";
+		String var = "<div class=\"title\"> Summary of information : </div> ";
 		var += "<form class=\"reduce\">\n";
 		var += "<center><table>\n";
 		
@@ -97,10 +65,9 @@ public class RunAjax extends HttpServlet {
 		var += "<progress value=\"" + rj + "\" max=1></progress></td>\n";
 		var += "<td>" + rj_val + "</td></tr></table></center>\n";
 		var += "</form>\n";
-		var += "</fieldset>\n";
 		
+		c = new Client();
 		response.setContentType("text/html");
-		response.getWriter().write(var);;
-		
+		response.getWriter().write(var);
 	}
 }

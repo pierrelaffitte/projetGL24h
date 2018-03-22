@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import classificationTree.ClassificationTree;
+import randomForest.RandomForest;
 import utilitaire.Client;
 
 @WebServlet(name="run", urlPatterns={"/Run"})
@@ -22,6 +23,7 @@ public class Run extends HttpServlet {
 		String myFile = request.getParameter("myFile");
 		String method = request.getParameter("methode");
 		String y = request.getParameter("y");
+		response.setContentType("text/html");
 		ArrayList<Object> vec = new ArrayList<Object>();
 		
 		// Exécution de la méthode de ML choisie avec les arguments
@@ -31,7 +33,7 @@ public class Run extends HttpServlet {
 			vec = c.run(myFile, ',', y, otherArgs);
 		}
 		if (method.equals("RF")) {
-			c.setAlgo(new ClassificationTree());
+			c.setAlgo(new RandomForest());
 			String[] otherArgs = {request.getParameter("numTrees")};
 			vec = c.run(myFile, ',', y, otherArgs);
 		}
@@ -58,9 +60,10 @@ public class Run extends HttpServlet {
 		var += "<progress value=\"" + rj + "\" max=1></progress></td>\n";
 		var += "<td>" + rj_val + "</td></tr></table></center>\n";
 		
+		c = new Client();
 		response.setContentType("text/html");
-		PrintWriter out = response.getWriter();
-		out.println("<html>\n"+ 
+		//PrintWriter out = response.getWriter();
+		response.getWriter().write("<html>\n"+ 
 				"<head>\n" + 
 				"   <meta charset=\"utf-8\" name=\"author\" content=\"Pierre Laffite\">\n" + 
 				"   <link rel=\"stylesheet\" href=\"style.css\" />\n" + 
@@ -80,10 +83,8 @@ public class Run extends HttpServlet {
 				"		</ul>\n" +
 				"	</div>\n" +
 				"  	<div class=\"center-on-page\">\n" + 
-				"	  	<fieldset>\n" +
-				"			<legend> Summary of information : </legend>\n" +
-				"			<form>\n" + var + "</form>\n" +
-				"	  	</fieldset>\n" + 
+				" 		<div class=\"title\"> Summary of information : </div>\n " +
+				"		<form>\n" + var + "</form>\n" +
 				"  	</div>\n" +
 				"</body>\n" +
 				"<footer>\n" + 
