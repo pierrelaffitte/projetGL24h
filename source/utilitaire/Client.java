@@ -1,9 +1,7 @@
 
 package utilitaire;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import classificationTree.ClassificationTree;
@@ -34,13 +32,23 @@ public class Client {
 		}
 	}
 	
+	/**
+	 * Retourne les accuracy des trois librairies sous forme de liste
+	 * 0 : SparkML, 1 : Weka, 2 : Renjin
+	 * @param nom_CSV nom du fichier csv
+	 * @param delimiter delimiteur du fichier
+	 * @param y variable d'intérêt
+ 	 * @param otherArgs autres arguments
+	 * @return liste des accuracy
+	 */
 	public ArrayList<Object> run(String nom_CSV, char delimiter, String y, String...otherArgs) {
+		ArrayList<Object> res = new ArrayList<Object>();
 		try {
-			return algo.run(nom_CSV, delimiter, y,otherArgs);
+			res = algo.run(nom_CSV, delimiter, y,otherArgs);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return res;
 	}
 
 	/**

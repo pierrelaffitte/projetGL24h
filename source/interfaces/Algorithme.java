@@ -20,6 +20,16 @@ public interface Algorithme {
 	 */
 	public void getAccuracy(String nom_CSV, char delimiter, String y, String...otherArgs) throws IOException;
 	
+	/**
+	 * Retourne les accuracy des trois librairies sous forme de liste
+	 * 0 : SparkML, 1 : Weka, 2 : Renjin
+	 * @param nom_CSV nom du fichier csv
+	 * @param delimiter delimiteur du fichier
+	 * @param y variable d'intérêt
+ 	 * @param otherArgs autres arguments
+	 * @return liste des accuracy
+	 * @throws IOException exception de lecture
+	 */
 	public ArrayList<Object> run(String nom_CSV, char delimiter, String y, String...otherArgs) throws IOException;
 }
 

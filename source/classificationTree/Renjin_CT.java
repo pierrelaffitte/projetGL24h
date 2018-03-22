@@ -90,41 +90,4 @@ public class Renjin_CT implements Implementation {
 		}
 		return accuracy;
 	}
-
-	public static void main(String[] args) throws Exception {
-		// code R    
-		//engine.eval(new java.io.FileReader("resources/progR.R"));
-		
-		// Essai méthodes d'arbres de classification
-		Renjin_CT rj = new Renjin_CT();
-		
-		/*List<String> x = new ArrayList<String>();
-		x.add("Sepal.Length");
-		x.add("Sepal.Width");
-		x.add("Petal.Length");
-		x.add("Petal.Width");
-		*/
-		
-		System.out.println("Fichier 1 : iris ---------------------------------------");
-		Object eval = rj.evaluate("resources/train_iris.csv", "resources/test_iris.csv","Species");
-		System.out.println(eval);
-		
-		System.out.println("Fichier 2 : statsFSEVary ---------------------------------------");
-		eval = rj.evaluate("resources/train_statsFSEVary.csv", "resources/test_statsFSEVary.csv","nbPages");
-		System.out.println(eval);
-		
-		
-		System.out.println("Fichier 3 : winequality ---------------------------------------");
-		eval = rj.evaluate("resources/train_winequality.csv", "resources/test_winequality.csv","quality");
-		System.out.println(eval);
-		
-		System.out.println("Fichier 4 : mushrooms ---------------------------------------");
-		eval = rj.evaluate("resources/train_mushrooms.csv", "resources/test_mushrooms.csv","class");
-		System.out.println(eval);
-		
-		//Class objectType = modCart.getClass();
-		//System.out.println("Java class of 'res' is: " + objectType.getName());
-		//System.out.println("In R, typeof(res) would give '" + modCart.getTypeName() + "'");
-		//System.out.println(modCart);
-	}
 }
