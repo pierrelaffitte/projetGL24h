@@ -16,3 +16,9 @@ Le package utilitaire est l'interface avec l'utilisateur. C'est ce package qui v
 
 Le lancement de notre projet est expliqué ici : 
 http://hackmd.diverse-team.fr/BwBgjCDGCcwGwFowCMCs0EBYQkQQzWQQHYAmYyZSSOAEwGZoBTIA?view
+
+
+Projet web
+Le cahier des charges du site web est présent dans la source du projet Git. 
+Vous trouverez notre rapport en anglais au lien suivant : http://hackmd.diverse-team.fr/s/r13dQavtf#
+Pour lancer notre projet web, référez-vous au lien suivant : http://hackmd.diverse-team.fr/s/r1FTmylqz#
