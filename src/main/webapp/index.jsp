@@ -75,7 +75,6 @@
 				var monfichier = $('#myFile').val();
 				if (monchoix == "import"){
 					var monchemin = $('#path').val();
-					alert(monchemin);
 					$.get('InfoAjax', {
 						choix : monchoix,
 						myFile : monfichier,
